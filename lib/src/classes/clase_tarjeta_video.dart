@@ -1,0 +1,60 @@
+class TarjetaVideo {
+  late String idRegistro;
+  late String modelo;
+  late String marca;
+  late int cantidadVram;
+  late String tipoMemoria;
+  late int bits;
+  late double velocidadReloj;
+  late String tipo;
+
+  TarjetaVideo();
+
+  void setIdRegistro(String idRegistro) {
+    this.idRegistro = idRegistro;
+  }
+
+  void setModelo(String modelo) {
+    this.modelo = modelo;
+  }
+
+  void setMarca(String marca) {
+    this.marca = marca;
+  }
+
+  void setCantidadVram(int cantidadVram) {
+    this.cantidadVram = cantidadVram;
+  }
+
+  void setTipoMemoria(String tipoMemoria) {
+    this.tipoMemoria = tipoMemoria;
+  }
+
+  void setBits(int bits) {
+    this.bits = bits;
+  }
+
+  void setVelocidadReloj(double velocidadReloj) {
+    this.velocidadReloj = velocidadReloj;
+  }
+
+  void setTipo(String tipo) {
+    this.tipo = tipo;
+  }
+
+  String getIdRegistro() => idRegistro;
+  String getModelo() => modelo;
+  String getMarca() => marca;
+  int getCantidadVram() => cantidadVram;
+  String getTipoMemoria() => tipoMemoria;
+  int getBits() => bits;
+  double getVelocidadReloj() => velocidadReloj;
+  String getTipo() => tipo;
+
+  @override
+  String toString() {
+    return "Marca: $marca\nModelo: $modelo\nCantidad de Vran: $cantidadVram"
+        "\ntipo de memoria: $tipoMemoria\nBits de trabajo: $bits"
+        "Velocidad de reloj: $velocidadReloj\nTipo de grafica: $tipo";
+  }
+}
