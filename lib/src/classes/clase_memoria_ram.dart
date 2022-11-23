@@ -52,4 +52,12 @@ class MemoriaRam {
   int getCantidadMemorias() => cantidadMemorias;
   int getVelocidad() => velocidad;
   int getEcc() => ecc;
+
+  @override
+  String toString() {
+    return "Marca: $marca\nModelo: $modelo\nTipo de memoria: $tipoMemoria"
+        "\nCantidad de memoria: $cantidadMemoria"
+        "\nNumero de memorias: $cantidadMemorias\nVelocidad: $velocidad"
+        "\nECC: $ecc";
+  }
 }
