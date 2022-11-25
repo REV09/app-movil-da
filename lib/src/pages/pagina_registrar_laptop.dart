@@ -34,12 +34,13 @@ class _PaginaRegistrarLaptop extends State<PaginaRegistrarLaptop> {
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
           Container(
-              child: Text(
-                'Registrar nueva Laptop',
-                style: estiloTituloTexto,
-              ),
-              alignment: AlignmentDirectional.center,
-              margin: EdgeInsets.only(left: 30.0, top: 15.0)),
+            child: Text(
+              'Registrar nueva Laptop',
+              style: estiloTituloTexto,
+            ),
+            alignment: AlignmentDirectional.center,
+            margin: EdgeInsets.only(left: 30.0, top: 15.0),
+          ),
           Container(
             width: 980,
             height: 70,

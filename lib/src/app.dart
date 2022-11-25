@@ -11,7 +11,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(context) {
     return MaterialApp(
-      home: Center(child: PaginaEspecificarHdd()),
+      home: Center(child: PaginaInicio()),
     );
   }
 }

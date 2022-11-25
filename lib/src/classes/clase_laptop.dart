@@ -1,3 +1,7 @@
+import 'dart:async';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+
 class Laptop {
   late String idRegistro;
   late String modelo;
@@ -7,7 +11,10 @@ class Laptop {
   late String procesador;
   late String almacenamiento;
 
-  Laptop();
+  Laptop.sinParametros();
+
+  Laptop(this.idRegistro, this.modelo, this.memoriaRam, this.tarjetaVideo,
+      this.pantalla, this.procesador, this.almacenamiento);
 
   void setIdRegistro(String idRegistro) {
     this.idRegistro = idRegistro;
@@ -44,4 +51,24 @@ class Laptop {
   String getPantalla() => pantalla;
   String getProcesador() => procesador;
   String getAlmacenamiento() => almacenamiento;
+
+  @override
+  String toString() {
+    return "ID de registro: $idRegistro\nModelo: $modelo"
+        "\nMemoria Ram: $memoriaRam\nTarjeta de video: $tarjetaVideo"
+        "\nPantalla: $pantalla\nProcesador: $procesador"
+        "\nAlmacenamiento: $almacenamiento";
+  }
+
+  factory Laptop.fromJson(Map<String, dynamic> json) {
+    return Laptop(
+      json['idRegistro'],
+      json['modelo'],
+      json['memoriaRam'],
+      json['tarjetaVideo'],
+      json['pantalla'],
+      json['almacenamiento'],
+      json['procesador'],
+    );
+  }
 }
