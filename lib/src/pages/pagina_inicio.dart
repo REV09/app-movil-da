@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:web_laptops/src/classes/clase_laptop.dart';
+import 'package:web_laptops/src/pages/pagina_registrar_usuario.dart';
 import 'package:web_laptops/src/services/servicios_rest_laptop.dart';
 
 class PaginaInicio extends StatefulWidget {
@@ -8,12 +9,14 @@ class PaginaInicio extends StatefulWidget {
 }
 
 class _PaginaInicio extends State<PaginaInicio> {
-  Future<List<Laptop>> laptopsObtenidas = obtenerLaptops();
+  static List<Laptop> laptopsObtenidas = [];
+
+  Laptop detallesLaptop = Laptop.laptopVacia();
 
   BorderSide colorBordes = BorderSide(color: Colors.black);
   int selectedIndex = -1;
   Color colorSeleccion = Colors.tealAccent.shade200;
-  static const int numItems = 2;
+  static late int numItems = 4;
   List<bool> selected = List<bool>.generate(numItems, (int index) => false);
 
   TextStyle estiloTexto = TextStyle(
@@ -102,11 +105,11 @@ class _PaginaInicio extends State<PaginaInicio> {
                   children: <Widget>[
                     Container(
                       margin: EdgeInsets.all(10),
-                      width: 400,
+                      width: 250,
                       child: SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
                         child: FutureBuilder(
-                          future: laptopsObtenidas,
+                          future: obtenerLaptops(),
                           builder: (context, snapshot) {
                             if (snapshot.hasError) {
                               print(snapshot.data);
@@ -117,21 +120,23 @@ class _PaginaInicio extends State<PaginaInicio> {
                             } else if (snapshot.connectionState ==
                                 ConnectionState.done) {
                               int? numeroElementos = snapshot.data?.length;
+                              numItems = numeroElementos!;
                               return DataTable(
-                                showBottomBorder: false,
+                                showCheckboxColumn: false,
                                 headingRowColor:
                                     MaterialStatePropertyAll(Colors.black),
                                 columns: [
-                                  DataColumn(label: Text("Marca")),
                                   DataColumn(
-                                    label: Text("Modelo"),
+                                    label: Text(
+                                      "Laptop",
+                                      style: estiloEncabezadoTabla,
+                                    ),
                                   ),
                                 ],
                                 rows: List<DataRow>.generate(
-                                  numeroElementos!,
+                                  numeroElementos,
                                   (index) => DataRow(
                                     cells: <DataCell>[
-                                      DataCell(Text('Marca}')),
                                       DataCell(
                                         Text('${snapshot.data?[index].modelo}'),
                                       ),
@@ -141,6 +146,26 @@ class _PaginaInicio extends State<PaginaInicio> {
                                       setState(() {
                                         selectedIndex = index;
                                         selected[index] = value!;
+                                        detallesLaptop.setIdRegistro(snapshot
+                                            .data![index]
+                                            .getIdRegistro());
+                                        detallesLaptop.setAlmacenamiento(
+                                            snapshot.data![index]
+                                                .getAlmacenamiento());
+                                        detallesLaptop.setMemoriaRam(snapshot
+                                            .data![index]
+                                            .getMemoriaRam());
+                                        detallesLaptop.setModelo(
+                                            snapshot.data![index].getModelo());
+                                        detallesLaptop.setPantalla(snapshot
+                                            .data![index]
+                                            .getPantalla());
+                                        detallesLaptop.setProcesador(snapshot
+                                            .data![index]
+                                            .getProcesador());
+                                        detallesLaptop.setTarjetaVideo(snapshot
+                                            .data![index]
+                                            .getTarjetaVideo());
                                       });
                                     },
                                     color: MaterialStateColor.resolveWith(
@@ -175,9 +200,9 @@ class _PaginaInicio extends State<PaginaInicio> {
                                 left: colorBordes,
                               ),
                             ),
-                            margin: EdgeInsets.all(30),
+                            margin: EdgeInsets.all(20),
                             child: Text(
-                              mostrarDetallesLaptop(),
+                              detallesLaptop.toString(),
                               style: estiloTexto,
                             ),
                           ),
@@ -186,7 +211,7 @@ class _PaginaInicio extends State<PaginaInicio> {
                               minWidth: 300,
                               minHeight: 100,
                             ),
-                            margin: EdgeInsets.all(20),
+                            margin: EdgeInsets.all(5),
                             decoration: BoxDecoration(
                               border: Border(
                                 top: colorBordes,
@@ -197,11 +222,16 @@ class _PaginaInicio extends State<PaginaInicio> {
                             ),
                             child: ElevatedButton(
                               child: Text("Registrarse"),
-                              onPressed: () => {},
+                              onPressed: () {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        PaginaRegistrarUsuario(),
+                                  ),
+                                );
+                              },
                               style: ElevatedButton.styleFrom(
-                                  minimumSize: Size(30, 50),
-                                  maximumSize: Size(50, 50),
-                                  padding: EdgeInsets.all(20),
+                                  padding: EdgeInsets.all(5),
                                   backgroundColor: Colors.lightBlue.shade900),
                             ),
                           ),
@@ -210,7 +240,7 @@ class _PaginaInicio extends State<PaginaInicio> {
                               minWidth: 300,
                               minHeight: 100,
                             ),
-                            margin: EdgeInsets.all(20),
+                            margin: EdgeInsets.all(5),
                             decoration: BoxDecoration(
                               border: Border(
                                 top: colorBordes,
@@ -223,8 +253,6 @@ class _PaginaInicio extends State<PaginaInicio> {
                               child: Text("Iniciar Sesion"),
                               onPressed: () => {},
                               style: ElevatedButton.styleFrom(
-                                minimumSize: Size(30, 50),
-                                maximumSize: Size(50, 50),
                                 padding: EdgeInsets.all(20),
                                 backgroundColor: Colors.teal.shade900,
                               ),
@@ -242,50 +270,4 @@ class _PaginaInicio extends State<PaginaInicio> {
       ),
     );
   }
-
-  String mostrarDetallesLaptop() {
-    Laptop laptop = Laptop.sinParametros();
-    laptop.setIdRegistro("idRegistro");
-    laptop.setModelo("modelo");
-    laptop.setMemoriaRam("Memoria ram");
-    laptop.setProcesador("procesador");
-    laptop.setPantalla("pantalla");
-    laptop.setTarjetaVideo("tarjeta de video");
-    laptop.setAlmacenamiento("almacenamiento");
-    return laptop.toString();
-  }
-
-  /*void obtenerRegistrosLaptops() {
-    obtenerLaptops().then((value) {
-      setState((() => laptopsObtenidas.addAll(value)));
-    });
-  }*/
-
-  /*List<DataRow> agregarInformacion() {
-    List<DataRow> listaFilas = [];
-    for (int index = 0; index < laptopsObtenidas.length; index++) {
-      DataRow fila = DataRow(
-        cells: <DataCell>[
-          DataCell(Text('Marca}')),
-          DataCell(Text('${laptopsObtenidas[index].modelo}')),
-        ],
-        selected: selectedIndex == index,
-        onSelectChanged: (bool? value) {
-          setState(() {
-            selectedIndex = index;
-            selected[index] = value!;
-          });
-        },
-        color: MaterialStateColor.resolveWith(
-          (states) {
-            return index == selectedIndex
-                ? Colors.blueGrey.shade400
-                : Colors.white;
-          },
-        ),
-      );
-      listaFilas.add(fila);
-    }
-    return listaFilas;
-  }*/
 }

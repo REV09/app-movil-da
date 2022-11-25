@@ -16,3 +16,43 @@ Future<List<Laptop>> obtenerLaptops() async {
   }
   throw Exception('No fue posible recuperar la informacion');
 }
+
+Future<List<Laptop>> obtenerLaptopPorId(String idRegistro) async {
+  final respuesta = await http.get(
+      Uri.parse('https://fastapi-laptops.herokuapp.com/laptop/$idRegistro'));
+  if (respuesta.statusCode == 200) {
+    return convertirLaptops(respuesta.body);
+  }
+  throw Exception('No fue posible recuperar la informacion');
+}
+
+Future<List<Laptop>> obtenerLaptopPorModelo(String modelo) async {
+  final respuesta = await http
+      .get(Uri.parse('https://fastapi-laptops.herokuapp.com/laptop/$modelo'));
+  if (respuesta.statusCode == 200) {
+    return convertirLaptops(respuesta.body);
+  }
+  throw Exception('No fue posible recuperar la informacion');
+}
+
+Future<Laptop> agregarLaptop(Laptop laptop) async {
+  final respuesta = await http.post(
+    Uri.parse('https://fastapi-laptops.herokuapp.com/laptop'),
+    headers: <String, String>{
+      'Content-Type': 'application/json',
+    },
+    body: jsonEncode(<String, String>{
+      "idRegistro": "",
+      "modelo": laptop.getModelo(),
+      "memoriaRam": laptop.getMemoriaRam(),
+      "tarjetaVideo": laptop.getTarjetaVideo(),
+      "pantalla": laptop.getPantalla(),
+      "almacenamiento": laptop.getAlmacenamiento(),
+      "procesador": laptop.getProcesador()
+    }),
+  );
+  if (respuesta.statusCode == 200) {
+    return Laptop.fromJson(jsonDecode(respuesta.body));
+  }
+  throw Exception('No fue posible recuperar la informacion');
+}

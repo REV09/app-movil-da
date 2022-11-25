@@ -33,21 +33,6 @@ class _PaginaDetalleComponente extends State<PaginaDetalleComponente> {
                       right: BorderSide(color: Colors.black),
                       top: BorderSide(color: Colors.black))),
             ),
-            Container(
-              margin: EdgeInsets.all(10),
-              alignment: AlignmentDirectional.center,
-              constraints: BoxConstraints(maxWidth: 400, maxHeight: 50),
-              decoration: BoxDecoration(
-                  border: Border(
-                      bottom: BorderSide(color: Colors.black),
-                      left: BorderSide(color: Colors.black),
-                      right: BorderSide(color: Colors.black),
-                      top: BorderSide(color: Colors.black))),
-              child: ElevatedButton(
-                onPressed: () => {},
-                child: Text('Modificar componente'),
-              ),
-            ),
             ElevatedButton(onPressed: () => {}, child: Text('Cerrar'))
           ],
         ));

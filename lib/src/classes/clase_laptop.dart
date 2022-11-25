@@ -13,6 +13,15 @@ class Laptop {
 
   Laptop.sinParametros();
 
+  Laptop.laptopVacia(
+      {this.idRegistro = "Sin Datos",
+      this.modelo = "Sin Datos",
+      this.memoriaRam = "Sin Datos",
+      this.tarjetaVideo = "Sin Datos",
+      this.pantalla = "",
+      this.procesador = "",
+      this.almacenamiento = "Sin Datos"});
+
   Laptop(this.idRegistro, this.modelo, this.memoriaRam, this.tarjetaVideo,
       this.pantalla, this.procesador, this.almacenamiento);
 

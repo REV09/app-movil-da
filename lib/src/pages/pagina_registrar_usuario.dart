@@ -6,6 +6,8 @@ class PaginaRegistrarUsuario extends StatefulWidget {
 }
 
 class _PaginaRegistrarUsuario extends State<PaginaRegistrarUsuario> {
+  bool confirmacionCuadroDialogo = false;
+
   InputDecoration decoracionCamposTexto = InputDecoration(
       border: OutlineInputBorder(borderRadius: BorderRadius.circular(0.0)));
 
@@ -171,7 +173,34 @@ class _PaginaRegistrarUsuario extends State<PaginaRegistrarUsuario> {
                   margin: EdgeInsets.all(25),
                   alignment: AlignmentDirectional.centerStart,
                   child: ElevatedButton(
-                    onPressed: () => {},
+                    onPressed: () async {
+                      await showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                                title: Text("Cancelar Registro"),
+                                content: Text(
+                                    "¿Estas seguro de cancelar tu registro?\n"
+                                    "\nNo se realizan cambios en el sistema"),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      confirmacionCuadroDialogo = true;
+                                      Navigator.pop(context, true);
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: Text("Aceptar"),
+                                  ),
+                                  TextButton(
+                                    onPressed: () {
+                                      confirmacionCuadroDialogo = false;
+                                      Navigator.pop(context, false);
+                                    },
+                                    child: Text("cancelar"),
+                                  )
+                                ],
+                              ),
+                          barrierDismissible: false);
+                    },
                     child: Text('Cancelar', style: estiloTexto),
                     style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.red, minimumSize: Size(40, 50)),
