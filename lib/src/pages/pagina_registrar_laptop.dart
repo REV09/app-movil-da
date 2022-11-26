@@ -1,4 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:web_laptops/src/pages/pagina_especificar_componente_hdd.dart';
+import 'package:web_laptops/src/pages/pagina_especificar_componente_pantalla.dart';
+import 'package:web_laptops/src/pages/pagina_especificar_componente_procesador.dart';
+import 'package:web_laptops/src/pages/pagina_especificar_componente_ram.dart';
+import 'package:web_laptops/src/pages/pagina_especificar_componente_tarjeta_video.dart';
+import 'package:web_laptops/src/pages/pagina_especificar_ssd.dart';
 
 class PaginaRegistrarLaptop extends StatefulWidget {
   @override
@@ -15,12 +21,6 @@ class _PaginaRegistrarLaptop extends State<PaginaRegistrarLaptop> {
       TextStyle(fontSize: 22, fontWeight: FontWeight.bold);
 
   bool? checkValue = false;
-
-  IconButton botonDetallar = IconButton(
-    onPressed: () => {},
-    icon: Icon(Icons.create),
-    color: Colors.blue,
-  );
 
   @override
   Widget build(BuildContext context) {
@@ -39,10 +39,10 @@ class _PaginaRegistrarLaptop extends State<PaginaRegistrarLaptop> {
               style: estiloTituloTexto,
             ),
             alignment: AlignmentDirectional.center,
-            margin: EdgeInsets.only(left: 30.0, top: 15.0),
+            margin: EdgeInsets.only(left: 30.0, top: 15.0, right: 15.0),
           ),
           Container(
-            width: 980,
+            width: 580,
             height: 70,
             margin: EdgeInsets.all(30),
             decoration: BoxDecoration(
@@ -59,28 +59,12 @@ class _PaginaRegistrarLaptop extends State<PaginaRegistrarLaptop> {
                   children: <Widget>[
                     Container(
                         child: Text(
-                          'Marca: ',
+                          'Marca y modelo: ',
                           style: estiloTexto,
                         ),
-                        margin: EdgeInsets.all(15)),
+                        margin: EdgeInsets.all(10)),
                     SizedBox(
-                      width: 300,
-                      height: 45,
-                      child: TextField(
-                        decoration: decoracionCamposTexto,
-                      ),
-                    ),
-                    Container(
-                      child: SizedBox(width: 200),
-                    ),
-                    Container(
-                        child: Text(
-                          'Modelo: ',
-                          style: estiloTexto,
-                        ),
-                        margin: EdgeInsets.all(5)),
-                    SizedBox(
-                      width: 300,
+                      width: 400,
                       height: 45,
                       child: TextField(decoration: decoracionCamposTexto),
                     ),
@@ -117,7 +101,22 @@ class _PaginaRegistrarLaptop extends State<PaginaRegistrarLaptop> {
                       height: 45,
                       child: TextField(decoration: decoracionCamposTexto),
                     ),
-                    Container(width: 50, height: 45, child: botonDetallar),
+                    Container(
+                      width: 50,
+                      height: 45,
+                      child: IconButton(
+                        onPressed: () => {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  PaginaEspecificarProcesador(),
+                            ),
+                          )
+                        },
+                        icon: Icon(Icons.create),
+                        color: Colors.blue,
+                      ),
+                    ),
                     Container(
                       child: SizedBox(width: 50),
                     ),
@@ -137,7 +136,17 @@ class _PaginaRegistrarLaptop extends State<PaginaRegistrarLaptop> {
                     Container(
                       width: 50,
                       height: 45,
-                      child: botonDetallar,
+                      child: IconButton(
+                        onPressed: () => {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => PaginaEspecificarRam(),
+                            ),
+                          )
+                        },
+                        icon: Icon(Icons.create),
+                        color: Colors.blue,
+                      ),
                     )
                   ],
                 ),
@@ -157,7 +166,18 @@ class _PaginaRegistrarLaptop extends State<PaginaRegistrarLaptop> {
                     Container(
                       width: 50,
                       height: 45,
-                      child: botonDetallar,
+                      child: IconButton(
+                        onPressed: () => {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  PaginaEspecificarTarjetaVideo(),
+                            ),
+                          )
+                        },
+                        icon: Icon(Icons.create),
+                        color: Colors.blue,
+                      ),
                     ),
                     Container(
                       child: SizedBox(width: 50),
@@ -178,7 +198,17 @@ class _PaginaRegistrarLaptop extends State<PaginaRegistrarLaptop> {
                     Container(
                       width: 50,
                       height: 45,
-                      child: botonDetallar,
+                      child: IconButton(
+                        onPressed: () => {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => PaginaEspecificarPantalla(),
+                            ),
+                          )
+                        },
+                        icon: Icon(Icons.create),
+                        color: Colors.blue,
+                      ),
                     )
                   ],
                 ),
@@ -200,7 +230,28 @@ class _PaginaRegistrarLaptop extends State<PaginaRegistrarLaptop> {
                     Container(
                       width: 50,
                       height: 45,
-                      child: botonDetallar,
+                      child: IconButton(
+                        onPressed: () => {
+                          if (checkValue == true)
+                            {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) => PaginaEspecificarSsd(),
+                                ),
+                              )
+                            }
+                          else
+                            {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) => PaginaEspecificarHdd(),
+                                ),
+                              )
+                            }
+                        },
+                        icon: Icon(Icons.create),
+                        color: Colors.blue,
+                      ),
                     ),
                     Container(
                       margin: EdgeInsets.all(10),
@@ -232,7 +283,32 @@ class _PaginaRegistrarLaptop extends State<PaginaRegistrarLaptop> {
                   margin: EdgeInsets.all(25),
                   alignment: AlignmentDirectional.centerStart,
                   child: ElevatedButton(
-                    onPressed: () => {},
+                    onPressed: () async {
+                      await showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                                title: Text("Cancelar Registro"),
+                                content: Text(
+                                    "¿Estas seguro de cancelar el registro?\n"
+                                    "\nNo se realizan cambios en el sistema"),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context, true);
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: Text("Aceptar"),
+                                  ),
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context, false);
+                                    },
+                                    child: Text("cancelar"),
+                                  )
+                                ],
+                              ),
+                          barrierDismissible: false);
+                    },
                     child: Text('Cancelar', style: estiloTexto),
                     style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.red, minimumSize: Size(40, 50)),

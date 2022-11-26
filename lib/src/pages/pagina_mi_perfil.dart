@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:web_laptops/src/pages/pagina_modificar_usuario.dart';
 import 'pagina_registrar_usuario.dart';
 
 class PaginaMiPerfil extends StatefulWidget {
@@ -54,7 +55,13 @@ class _PaginaMiPerfil extends State<PaginaMiPerfil> {
                     margin: EdgeInsets.all(10),
                     alignment: AlignmentDirectional.centerStart,
                     child: ElevatedButton(
-                      onPressed: () => {},
+                      onPressed: () => {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => PaginaModificarUsuario(),
+                          ),
+                        ),
+                      },
                       child: Text('Editar perfil'),
                     ),
                   ),
@@ -65,14 +72,45 @@ class _PaginaMiPerfil extends State<PaginaMiPerfil> {
                     margin: EdgeInsets.all(10),
                     alignment: AlignmentDirectional.centerEnd,
                     child: ElevatedButton(
-                      onPressed: () => {},
+                      onPressed: () async {
+                        await showDialog(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                                  title: Text("Cancelar Registro"),
+                                  content: Text(
+                                      "¿Estas seguro de eliminar tu cuenta?\n"
+                                      "\nEsta accion no se puede deshacer"),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.pop(context, true);
+                                        Navigator.of(context).pop();
+                                      },
+                                      child: Text("Aceptar"),
+                                      style: TextButton.styleFrom(
+                                          backgroundColor: Colors.red),
+                                    ),
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.pop(context, false);
+                                      },
+                                      child: Text("cancelar"),
+                                    )
+                                  ],
+                                ),
+                            barrierDismissible: false);
+                      },
                       child: Text('Eliminar perfil'),
+                      style:
+                          ElevatedButton.styleFrom(backgroundColor: Colors.red),
                     ),
                   )
                 ],
               ),
             ),
-            ElevatedButton(onPressed: () => {}, child: Text('Cerrar'))
+            ElevatedButton(
+                onPressed: () => {Navigator.of(context).pop()},
+                child: Text('Cerrar'))
           ],
         ));
   }

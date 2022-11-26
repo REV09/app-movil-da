@@ -16,7 +16,7 @@ class _PaginaInicio extends State<PaginaInicio> {
   BorderSide colorBordes = BorderSide(color: Colors.black);
   int selectedIndex = -1;
   Color colorSeleccion = Colors.tealAccent.shade200;
-  static late int numItems = 4;
+  static int numItems = 6;
   List<bool> selected = List<bool>.generate(numItems, (int index) => false);
 
   TextStyle estiloTexto = TextStyle(
@@ -112,7 +112,6 @@ class _PaginaInicio extends State<PaginaInicio> {
                           future: obtenerLaptops(),
                           builder: (context, snapshot) {
                             if (snapshot.hasError) {
-                              print(snapshot.data);
                               return Center(
                                 child: Text("Ha ocurrido un error"
                                     " al conectar al servidor intentelo mas tarde"),

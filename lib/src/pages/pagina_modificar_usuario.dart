@@ -171,7 +171,32 @@ class _PaginaModificarUsuario extends State<PaginaModificarUsuario> {
                   margin: EdgeInsets.all(25),
                   alignment: AlignmentDirectional.centerStart,
                   child: ElevatedButton(
-                    onPressed: () => {},
+                    onPressed: () async {
+                      await showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                                title: Text("Cancelar Registro"),
+                                content: Text(
+                                    "¿Estas seguro de cancelar la operacion?\n"
+                                    "\nNo se realizan cambios en el sistema"),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context, true);
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: Text("Aceptar"),
+                                  ),
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context, false);
+                                    },
+                                    child: Text("cancelar"),
+                                  )
+                                ],
+                              ),
+                          barrierDismissible: false);
+                    },
                     child: Text('Cancelar', style: estiloTexto),
                     style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.red, minimumSize: Size(40, 50)),
