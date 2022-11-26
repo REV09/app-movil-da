@@ -1,12 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:web_laptops/src/classes/clase_laptop.dart';
 import 'package:web_laptops/src/pages/pagina_modificar_laptop.dart';
 
 class PaginaDetallesLaptop extends StatefulWidget {
+  Laptop laptop;
+
+  PaginaDetallesLaptop(this.laptop);
+
   @override
   State<StatefulWidget> createState() => _PaginaDetallesLaptop();
 }
 
 class _PaginaDetallesLaptop extends State<PaginaDetallesLaptop> {
+  TextStyle estiloTexto = TextStyle(
+      fontSize: 18, fontStyle: FontStyle.italic, fontWeight: FontWeight.bold);
+
+  TextStyle estiloBotonTexto =
+      TextStyle(fontSize: 18, fontStyle: FontStyle.normal);
+
+  TextStyle estiloEncabezado =
+      TextStyle(fontSize: 24, color: Colors.black, fontWeight: FontWeight.bold);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,14 +35,131 @@ class _PaginaDetallesLaptop extends State<PaginaDetallesLaptop> {
         Container(
           margin: EdgeInsets.all(10),
           alignment: AlignmentDirectional.center,
-          constraints: BoxConstraints(maxWidth: 300, maxHeight: 350),
-          child: Text('Marca: Lenovo' +
-              '\nModelo: ThinkPad T430L' +
-              '\nProcesador: correo@gmail.com' +
-              '\nTarjeta de video: TipoUsuario' +
-              '\nMemoria Ram: MemoriaRam' +
-              '\nAlmacenamiento: Almacenamiento HDD' +
-              '\nPantalla: Pantalla Laptop'),
+          constraints: BoxConstraints(maxWidth: 500, maxHeight: 450),
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  Text(
+                    'ID de registro:  ',
+                    style: estiloTexto,
+                  ),
+                  Text(
+                    widget.laptop.getIdRegistro(),
+                    style: estiloTexto,
+                  ),
+                ],
+              ),
+              Container(
+                height: 25,
+              ),
+              Row(
+                children: [
+                  Text(
+                    'Modelo ',
+                    style: estiloTexto,
+                  ),
+                  TextButton(
+                    onPressed: (() => {}),
+                    child: Text(
+                      widget.laptop.getModelo(),
+                      style: estiloBotonTexto,
+                    ),
+                  )
+                ],
+              ),
+              Container(
+                height: 25,
+              ),
+              Row(
+                children: [
+                  Text(
+                    'Procesador ',
+                    style: estiloTexto,
+                  ),
+                  TextButton(
+                    onPressed: (() => {}),
+                    child: Text(
+                      widget.laptop.getProcesador(),
+                      style: estiloBotonTexto,
+                    ),
+                  )
+                ],
+              ),
+              Container(
+                height: 25,
+              ),
+              Row(
+                children: [
+                  Text(
+                    'Tarjeta de video ',
+                    style: estiloTexto,
+                  ),
+                  TextButton(
+                    onPressed: (() => {}),
+                    child: Text(
+                      widget.laptop.getTarjetaVideo(),
+                      style: estiloBotonTexto,
+                    ),
+                  )
+                ],
+              ),
+              Container(
+                height: 25,
+              ),
+              Row(
+                children: [
+                  Text(
+                    'Memoria Ram ',
+                    style: estiloTexto,
+                  ),
+                  TextButton(
+                    onPressed: (() => {}),
+                    child: Text(
+                      widget.laptop.getMemoriaRam(),
+                      style: estiloBotonTexto,
+                    ),
+                  )
+                ],
+              ),
+              Container(
+                height: 25,
+              ),
+              Row(
+                children: [
+                  Text(
+                    'Almacenamiento ',
+                    style: estiloTexto,
+                  ),
+                  TextButton(
+                    onPressed: (() => {}),
+                    child: Text(
+                      widget.laptop.getAlmacenamiento(),
+                      style: estiloBotonTexto,
+                    ),
+                  )
+                ],
+              ),
+              Container(
+                height: 25,
+              ),
+              Row(
+                children: [
+                  Text(
+                    'Pantalla ',
+                    style: estiloTexto,
+                  ),
+                  TextButton(
+                    onPressed: (() => {}),
+                    child: Text(
+                      widget.laptop.getPantalla(),
+                      style: estiloBotonTexto,
+                    ),
+                  )
+                ],
+              ),
+            ],
+          ),
           decoration: BoxDecoration(
             border: Border(
                 bottom: BorderSide(color: Colors.black),

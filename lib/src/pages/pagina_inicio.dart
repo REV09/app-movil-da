@@ -205,13 +205,36 @@ class _PaginaInicio extends State<PaginaInicio> {
                           Container(
                             child: ElevatedButton(
                               child: Text("Ver detalles de laptop"),
-                              onPressed: () {
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        PaginaDetallesLaptopSesionNoIniciada(),
-                                  ),
-                                );
+                              onPressed: () async {
+                                if (detallesLaptop.getIdRegistro() ==
+                                    "Sin Datos") {
+                                  await showDialog(
+                                      context: context,
+                                      builder: (context) => AlertDialog(
+                                            title: Text(
+                                                "No hay laptop seleccionada"),
+                                            content: Text(
+                                                "No se pueden mostrar detalles"
+                                                "\nsino seleccionas una laptop"),
+                                            actions: [
+                                              TextButton(
+                                                onPressed: () {
+                                                  Navigator.pop(context, true);
+                                                },
+                                                child: Text("Aceptar"),
+                                              ),
+                                            ],
+                                          ),
+                                      barrierDismissible: false);
+                                } else {
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          PaginaDetallesLaptopSesionNoIniciada(
+                                              detallesLaptop),
+                                    ),
+                                  );
+                                }
                               },
                               style: ElevatedButton.styleFrom(
                                   padding: EdgeInsets.all(5),

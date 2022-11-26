@@ -18,8 +18,8 @@ class Laptop {
       this.modelo = "Sin Datos",
       this.memoriaRam = "Sin Datos",
       this.tarjetaVideo = "Sin Datos",
-      this.pantalla = "",
-      this.procesador = "",
+      this.pantalla = "Sin Datos",
+      this.procesador = "Sin Datos",
       this.almacenamiento = "Sin Datos"});
 
   Laptop(this.idRegistro, this.modelo, this.memoriaRam, this.tarjetaVideo,
@@ -76,8 +76,8 @@ class Laptop {
       json['memoriaRam'],
       json['tarjetaVideo'],
       json['pantalla'],
-      json['almacenamiento'],
       json['procesador'],
+      json['almacenamiento'],
     );
   }
 }
