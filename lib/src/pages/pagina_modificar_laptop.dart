@@ -25,11 +25,6 @@ class _PaginaModificarLaptop extends State<PaginaModificarLaptop> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('APP flutter Android mobile'),
-        centerTitle: true,
-        backgroundColor: Colors.cyan.shade800,
-      ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
@@ -41,7 +36,7 @@ class _PaginaModificarLaptop extends State<PaginaModificarLaptop> {
               alignment: AlignmentDirectional.center,
               margin: EdgeInsets.only(left: 30.0, top: 15.0)),
           Container(
-            width: 980,
+            width: 580,
             height: 70,
             margin: EdgeInsets.all(30),
             decoration: BoxDecoration(
@@ -58,28 +53,12 @@ class _PaginaModificarLaptop extends State<PaginaModificarLaptop> {
                   children: <Widget>[
                     Container(
                         child: Text(
-                          'Marca: ',
-                          style: estiloTexto,
-                        ),
-                        margin: EdgeInsets.all(15)),
-                    SizedBox(
-                      width: 300,
-                      height: 45,
-                      child: TextField(
-                        decoration: decoracionCamposTexto,
-                      ),
-                    ),
-                    Container(
-                      child: SizedBox(width: 200),
-                    ),
-                    Container(
-                        child: Text(
-                          'Modelo: ',
+                          'Marca y modelo: ',
                           style: estiloTexto,
                         ),
                         margin: EdgeInsets.all(5)),
                     SizedBox(
-                      width: 300,
+                      width: 400,
                       height: 45,
                       child: TextField(decoration: decoracionCamposTexto),
                     ),
@@ -231,7 +210,32 @@ class _PaginaModificarLaptop extends State<PaginaModificarLaptop> {
                   margin: EdgeInsets.all(25),
                   alignment: AlignmentDirectional.centerStart,
                   child: ElevatedButton(
-                    onPressed: () => {},
+                    onPressed: () async {
+                      await showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                                title: Text("Cancelar Registro"),
+                                content: Text(
+                                    "¿Estas seguro de cancelar la accion?\n"
+                                    "\nNo se realizan cambios en el sistema"),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context, true);
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: Text("Aceptar"),
+                                  ),
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context, false);
+                                    },
+                                    child: Text("cancelar"),
+                                  )
+                                ],
+                              ),
+                          barrierDismissible: false);
+                    },
                     child: Text('Cancelar', style: estiloTexto),
                     style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.red, minimumSize: Size(40, 50)),
@@ -241,7 +245,6 @@ class _PaginaModificarLaptop extends State<PaginaModificarLaptop> {
                 Expanded(child: SizedBox(width: 7)),
                 Container(
                   margin: EdgeInsets.all(25),
-                  //height: 30,
                   alignment: AlignmentDirectional.centerEnd,
                   child: ElevatedButton(
                     onPressed: () => {},

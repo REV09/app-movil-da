@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:web_laptops/src/pages/pagina_inicio_sesion_iniciada.dart';
 
 class PaginaIniciarSesion extends StatefulWidget {
   @override
@@ -29,11 +30,6 @@ class _PaginaIniciarSesion extends State<PaginaIniciarSesion> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Nombre del sistema'),
-        centerTitle: true,
-        backgroundColor: Colors.cyan.shade800,
-      ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
@@ -84,7 +80,13 @@ class _PaginaIniciarSesion extends State<PaginaIniciarSesion> {
           Container(
             child: ElevatedButton(
               child: Text('Iniciar sesión'),
-              onPressed: () => {},
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => PaginaInicioSesionIniciada(),
+                  ),
+                );
+              },
               style: estiloBotonIniciarSesion,
             ),
             width: 200,

@@ -21,11 +21,6 @@ class _PaginaRegistrarUsuario extends State<PaginaRegistrarUsuario> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('APP flutter Android mobile'),
-        centerTitle: true,
-        backgroundColor: Colors.cyan.shade800,
-      ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[

@@ -17,11 +17,6 @@ class _PaginaEspecificarSsd extends State<PaginaEspecificarSsd> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Nombre del sistema'),
-        centerTitle: true,
-        backgroundColor: Colors.cyan.shade800,
-      ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
@@ -217,7 +212,32 @@ class _PaginaEspecificarSsd extends State<PaginaEspecificarSsd> {
                   margin: EdgeInsets.all(25),
                   alignment: AlignmentDirectional.centerStart,
                   child: ElevatedButton(
-                    onPressed: () => {},
+                    onPressed: () async {
+                      await showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                                title: Text("Cancelar Registro"),
+                                content: Text(
+                                    "¿Estas seguro de cancelar el registro?\n"
+                                    "\nNo se realizan cambios en el sistema"),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context, true);
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: Text("Aceptar"),
+                                  ),
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context, false);
+                                    },
+                                    child: Text("cancelar"),
+                                  )
+                                ],
+                              ),
+                          barrierDismissible: false);
+                    },
                     child: Text('Cancelar', style: estiloTexto),
                     style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.red, minimumSize: Size(40, 50)),

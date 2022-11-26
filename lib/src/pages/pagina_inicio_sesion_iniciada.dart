@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:web_laptops/src/classes/clase_laptop.dart';
-import 'package:web_laptops/src/pages/pagina_detalles_laptop_sesion_no_iniciada.dart';
-import 'package:web_laptops/src/pages/pagina_iniciar_sesion.dart';
-import 'package:web_laptops/src/pages/pagina_registrar_usuario.dart';
+import 'package:web_laptops/src/pages/pagina_detalles_laptop.dart';
+import 'package:web_laptops/src/pages/pagina_mi_perfil.dart';
+import 'package:web_laptops/src/pages/pagina_registrar_laptop.dart';
 import 'package:web_laptops/src/services/servicios_rest_laptop.dart';
 
-class PaginaInicio extends StatefulWidget {
+class PaginaInicioSesionIniciada extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() => _PaginaInicio();
+  State<StatefulWidget> createState() => _PaginaInicioSesionIniciada();
 }
 
-class _PaginaInicio extends State<PaginaInicio> {
+class _PaginaInicioSesionIniciada extends State<PaginaInicioSesionIniciada> {
   static List<Laptop> laptopsObtenidas = [];
 
   Laptop detallesLaptop = Laptop.laptopVacia();
@@ -87,6 +87,29 @@ class _PaginaInicio extends State<PaginaInicio> {
                         onPressed: () => {},
                         child: Text(
                           'Buscar por modelo',
+                          style: estiloTexto,
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.green,
+                          minimumSize: Size(40, 50),
+                        ),
+                      ),
+                    ),
+                    Container(
+                      child: SizedBox(width: 50),
+                    ),
+                    Container(
+                      width: 250,
+                      child: ElevatedButton(
+                        onPressed: () => {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => PaginaRegistrarLaptop(),
+                            ),
+                          ),
+                        },
+                        child: Text(
+                          'Registrar nueva laptop',
                           style: estiloTexto,
                         ),
                         style: ElevatedButton.styleFrom(
@@ -183,102 +206,105 @@ class _PaginaInicio extends State<PaginaInicio> {
                         ),
                       ),
                     ),
-                    Container(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Container(
-                            decoration: BoxDecoration(
-                              border: Border(
-                                bottom: colorBordes,
-                                top: colorBordes,
-                                right: colorBordes,
-                                left: colorBordes,
-                              ),
-                            ),
-                            margin: EdgeInsets.all(20),
-                            child: Text(
-                              detallesLaptop.toString(),
-                              style: estiloTexto,
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Container(
+                          decoration: BoxDecoration(
+                            border: Border(
+                              bottom: colorBordes,
+                              top: colorBordes,
+                              right: colorBordes,
+                              left: colorBordes,
                             ),
                           ),
-                          Container(
-                            child: ElevatedButton(
-                              child: Text("Ver detalles de laptop"),
-                              onPressed: () {
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        PaginaDetallesLaptopSesionNoIniciada(),
-                                  ),
-                                );
-                              },
-                              style: ElevatedButton.styleFrom(
-                                  padding: EdgeInsets.all(5),
-                                  backgroundColor: Colors.lightBlue.shade900),
+                          margin: EdgeInsets.all(20),
+                          child: Text(
+                            detallesLaptop.toString(),
+                            style: estiloTexto,
+                          ),
+                        ),
+                        Container(
+                          child: ElevatedButton(
+                            child: Text("Ver detalles de laptop"),
+                            onPressed: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) => PaginaDetallesLaptop(),
+                                ),
+                              );
+                            },
+                            style: ElevatedButton.styleFrom(
+                                padding: EdgeInsets.all(5),
+                                backgroundColor: Colors.lightBlue.shade900),
+                          ),
+                        ),
+                        Container(
+                          constraints: BoxConstraints(
+                            minWidth: 300,
+                            minHeight: 100,
+                          ),
+                          margin: EdgeInsets.all(5),
+                          decoration: BoxDecoration(
+                            border: Border(
+                              top: colorBordes,
+                              bottom: colorBordes,
+                              right: colorBordes,
+                              left: colorBordes,
                             ),
                           ),
-                          Container(
-                            constraints: BoxConstraints(
-                              minWidth: 300,
-                              minHeight: 100,
-                            ),
-                            margin: EdgeInsets.all(5),
-                            decoration: BoxDecoration(
-                              border: Border(
-                                top: colorBordes,
-                                bottom: colorBordes,
-                                right: colorBordes,
-                                left: colorBordes,
+                          child: Column(
+                            children: <Widget>[
+                              Container(
+                                child: Icon(Icons.person),
+                                color: Colors.grey,
+                                width: 50,
+                                height: 50,
                               ),
-                            ),
-                            child: ElevatedButton(
-                              child: Text("Registrarse"),
-                              onPressed: () {
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        PaginaRegistrarUsuario(),
-                                  ),
-                                );
-                              },
-                              style: ElevatedButton.styleFrom(
-                                  padding: EdgeInsets.all(5),
-                                  backgroundColor: Colors.lightBlue.shade900),
-                            ),
+                              Container(
+                                height: 30,
+                              ),
+                              Container(
+                                width: 150,
+                                height: 50,
+                                child: ElevatedButton(
+                                  child: Text("Mi perfil"),
+                                  onPressed: () {
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                        builder: (context) => PaginaMiPerfil(),
+                                      ),
+                                    );
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                      padding: EdgeInsets.all(5),
+                                      backgroundColor:
+                                          Colors.lightBlue.shade900),
+                                ),
+                              ),
+                              Container(
+                                height: 30,
+                              ),
+                              Container(
+                                width: 150,
+                                height: 50,
+                                child: ElevatedButton(
+                                  child: Text("Cerrar Sesion"),
+                                  onPressed: () {
+                                    Navigator.pop(context, false);
+                                    Navigator.pop(context, false);
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                      padding: EdgeInsets.all(5),
+                                      backgroundColor:
+                                          Colors.lightBlue.shade900),
+                                ),
+                              )
+                            ],
                           ),
-                          Container(
-                            constraints: BoxConstraints(
-                              minWidth: 300,
-                              minHeight: 100,
-                            ),
-                            margin: EdgeInsets.all(5),
-                            decoration: BoxDecoration(
-                              border: Border(
-                                top: colorBordes,
-                                left: colorBordes,
-                                right: colorBordes,
-                                bottom: colorBordes,
-                              ),
-                            ),
-                            child: ElevatedButton(
-                              child: Text("Iniciar Sesion"),
-                              onPressed: () {
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder: (context) => PaginaIniciarSesion(),
-                                  ),
-                                );
-                              },
-                              style: ElevatedButton.styleFrom(
-                                padding: EdgeInsets.all(20),
-                                backgroundColor: Colors.teal.shade900,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    )
+                        ),
+                      ],
+                    ),
                   ],
                 ),
               ],
