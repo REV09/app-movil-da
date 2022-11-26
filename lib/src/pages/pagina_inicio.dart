@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:web_laptops/src/classes/clase_laptop.dart';
+import 'package:web_laptops/src/pages/pagina_iniciar_sesion.dart';
 import 'package:web_laptops/src/pages/pagina_registrar_usuario.dart';
 import 'package:web_laptops/src/services/servicios_rest_laptop.dart';
 
@@ -250,7 +251,13 @@ class _PaginaInicio extends State<PaginaInicio> {
                             ),
                             child: ElevatedButton(
                               child: Text("Iniciar Sesion"),
-                              onPressed: () => {},
+                              onPressed: () {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) => PaginaIniciarSesion(),
+                                  ),
+                                );
+                              },
                               style: ElevatedButton.styleFrom(
                                 padding: EdgeInsets.all(20),
                                 backgroundColor: Colors.teal.shade900,
