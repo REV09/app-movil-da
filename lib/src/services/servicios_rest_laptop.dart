@@ -56,3 +56,9 @@ Future<Laptop> agregarLaptop(Laptop laptop) async {
   }
   throw Exception('No fue posible recuperar la informacion');
 }
+
+/*void main(List<String> args) async {
+  List<Laptop> laptops = await obtenerLaptops();
+  print(laptops);
+}
+*/

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:web_laptops/src/classes/clase_laptop.dart';
+import 'package:web_laptops/src/pages/detailsComponent/pagina_detalles_componente_procesador_sesion_no_iniciada.dart';
 
 class PaginaDetallesLaptopSesionNoIniciada extends StatefulWidget {
   Laptop laptop;
@@ -82,7 +83,15 @@ class _PaginaDetallesLaptopSesionNoIniciada
                     style: estiloTexto,
                   ),
                   TextButton(
-                    onPressed: (() => {}),
+                    onPressed: (() => {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  PaginaDetallesProcesadorNoSesion(
+                                      widget.laptop.idRegistro),
+                            ),
+                          )
+                        }),
                     child: Text(
                       widget.laptop.getProcesador(),
                       style: estiloBotonTexto,

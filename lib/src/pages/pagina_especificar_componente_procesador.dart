@@ -11,6 +11,7 @@ class _PaginaEspecificarProcesador extends State<PaginaEspecificarProcesador> {
 
   TextStyle estiloTexto = TextStyle(
       fontSize: 16, fontStyle: FontStyle.italic, fontWeight: FontWeight.bold);
+
   TextStyle estiloTituloTexto =
       TextStyle(fontSize: 22, fontWeight: FontWeight.bold);
 
@@ -21,21 +22,23 @@ class _PaginaEspecificarProcesador extends State<PaginaEspecificarProcesador> {
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
           Container(
-              child: Text(
-                'Especificar componente: Procesador',
-                style: estiloTituloTexto,
-              ),
-              alignment: AlignmentDirectional.center,
-              margin: EdgeInsets.only(left: 30.0, top: 15.0)),
+            child: Text(
+              'Especificar componente: Procesador',
+              style: estiloTituloTexto,
+            ),
+            alignment: AlignmentDirectional.center,
+            margin: EdgeInsets.only(left: 30.0, top: 15.0),
+          ),
           Container(
             width: 600,
             margin: EdgeInsets.all(30),
             decoration: BoxDecoration(
               border: Border(
-                  top: BorderSide(color: Colors.black, width: 2.0),
-                  right: BorderSide(color: Colors.black, width: 2.0),
-                  left: BorderSide(color: Colors.black, width: 2.0),
-                  bottom: BorderSide(color: Colors.black, width: 2.0)),
+                top: BorderSide(color: Colors.black, width: 2.0),
+                right: BorderSide(color: Colors.black, width: 2.0),
+                left: BorderSide(color: Colors.black, width: 2.0),
+                bottom: BorderSide(color: Colors.black, width: 2.0),
+              ),
             ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,

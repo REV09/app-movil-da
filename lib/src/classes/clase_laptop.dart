@@ -1,7 +1,3 @@
-import 'dart:async';
-import 'dart:convert';
-import 'package:http/http.dart' as http;
-
 class Laptop {
   late String idRegistro;
   late String modelo;

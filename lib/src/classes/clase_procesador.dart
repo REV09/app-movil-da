@@ -8,7 +8,27 @@ class Procesador {
   late double velocidadMinima;
   late int litografia;
 
-  Procesador();
+  Procesador.procesadorVacio({
+    this.idRegistro = "",
+    this.modelo = "",
+    this.marca = "",
+    this.numeroNucleos = 0,
+    this.numeroHilos = 0,
+    this.velocidadMaxima = 0,
+    this.velocidadMinima = 0,
+    this.litografia = 0,
+  });
+
+  Procesador(
+    this.idRegistro,
+    this.modelo,
+    this.marca,
+    this.numeroNucleos,
+    this.numeroHilos,
+    this.velocidadMaxima,
+    this.velocidadMinima,
+    this.litografia,
+  );
 
   void setIdRegistro(String idRegistro) {
     this.idRegistro = idRegistro;
@@ -56,5 +76,18 @@ class Procesador {
     return "Modelo: ${modelo}\nMarca: ${marca}\nNumero de nucleos: ${numeroNucleos}" +
         "\nNumero de hilos: ${numeroHilos}\nvelocidad maxima: ${velocidadMaxima}" +
         "\nvelocidad minima: ${velocidadMinima}\nLitografia: ${litografia}";
+  }
+
+  factory Procesador.fromJson(Map<String, dynamic> json) {
+    return Procesador(
+      json['idRegistro'],
+      json['modelo'],
+      json['marca'],
+      json['numeroNucleos'],
+      json['numeroHilos'],
+      json['velocidadMaxima'],
+      json['velocidadMinima'],
+      json['litografia'],
+    );
   }
 }
