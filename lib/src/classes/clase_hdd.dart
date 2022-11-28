@@ -8,6 +8,17 @@ class Hdd {
   late int revoluciones;
   late String tamanio;
 
+  Hdd(
+    this.idRegistro,
+    this.marca,
+    this.modelo,
+    this.capacidad,
+    this.interfaz,
+    this.cache,
+    this.revoluciones,
+    this.tamanio,
+  );
+
   void setIdRegistro(String idRegistro) {
     this.idRegistro = idRegistro;
   }
@@ -48,4 +59,16 @@ class Hdd {
   int getCache() => cache;
   int getRevoluciones() => revoluciones;
   String getTamanio() => tamanio;
+
+  factory Hdd.fromJson(Map<String, dynamic> json) {
+    return Hdd(
+        json['idRegistro'],
+        json['marca'],
+        json['modelo'],
+        json['capacidad'],
+        json['interfaz'],
+        json['cache'],
+        json['revoluciones'],
+        json['tamanio']);
+  }
 }

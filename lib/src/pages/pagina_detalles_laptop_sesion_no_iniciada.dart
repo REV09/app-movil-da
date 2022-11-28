@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:web_laptops/src/classes/clase_almacenamiento.dart';
 import 'package:web_laptops/src/classes/clase_laptop.dart';
+import 'package:web_laptops/src/pages/detailsComponent/pagina_detalles_componente_hdd_sesion_no_iniciada.dart';
 import 'package:web_laptops/src/pages/detailsComponent/pagina_detalles_componente_memoria_ram.dart';
 import 'package:web_laptops/src/pages/detailsComponent/pagina_detalles_componente_pantalla_sesion_no_iniciada.dart';
 import 'package:web_laptops/src/pages/detailsComponent/pagina_detalles_componente_procesador_sesion_no_iniciada.dart';
+import 'package:web_laptops/src/pages/detailsComponent/pagina_detalles_componente_ssd_sesion_no_iniciada.dart';
 import 'package:web_laptops/src/pages/detailsComponent/pagina_detalles_componente_tarjeta_video.dart';
 import 'package:web_laptops/src/services/servicios_rest_almacenamiento.dart';
 
@@ -175,7 +177,28 @@ class _PaginaDetallesLaptopSesionNoIniciada
                     style: estiloTexto,
                   ),
                   TextButton(
-                    onPressed: (() => {}),
+                    onPressed: (() => {
+                          if (ssd)
+                            {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      PaginaDetallesSsdNoSesion(
+                                          widget.laptop.idRegistro),
+                                ),
+                              )
+                            }
+                          else
+                            {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      PaginaDetallesHddNoSesion(
+                                          widget.laptop.idRegistro),
+                                ),
+                              )
+                            }
+                        }),
                     child: Text(
                       widget.laptop.getAlmacenamiento(),
                       style: estiloBotonTexto,
@@ -197,7 +220,7 @@ class _PaginaDetallesLaptopSesionNoIniciada
                         }
                         return Checkbox(
                           value: ssd,
-                          onChanged: null,
+                          onChanged: (value) {},
                         );
                       } else {
                         return Center(
