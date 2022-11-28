@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:web_laptops/src/classes/clase_laptop.dart';
+import 'package:web_laptops/src/pages/detailsComponent/pagina_detalles_componente_memoria_ram.dart';
 import 'package:web_laptops/src/pages/detailsComponent/pagina_detalles_componente_procesador_sesion_no_iniciada.dart';
 
 class PaginaDetallesLaptopSesionNoIniciada extends StatefulWidget {
@@ -127,7 +128,15 @@ class _PaginaDetallesLaptopSesionNoIniciada
                     style: estiloTexto,
                   ),
                   TextButton(
-                    onPressed: (() => {}),
+                    onPressed: (() => {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  PaginaDetallesMemoriaRamNoSesion(
+                                      widget.laptop.idRegistro),
+                            ),
+                          )
+                        }),
                     child: Text(
                       widget.laptop.getMemoriaRam(),
                       style: estiloBotonTexto,

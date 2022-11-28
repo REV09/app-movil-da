@@ -1,5 +1,3 @@
-import 'dart:math';
-
 class MemoriaRam {
   late String idRegistro;
   late String modelo;
@@ -10,7 +8,19 @@ class MemoriaRam {
   late int velocidad;
   late int ecc;
 
-  MemoriaRam();
+  MemoriaRam.memoriaVacia({
+    this.idRegistro = "",
+    this.modelo = "",
+    this.marca = "",
+    this.tipoMemoria = "",
+    this.cantidadMemoria = 0,
+    this.cantidadMemorias = 0,
+    this.velocidad = 0,
+    this.ecc = 0,
+  });
+
+  MemoriaRam(this.idRegistro, this.modelo, this.marca, this.tipoMemoria,
+      this.cantidadMemoria, this.cantidadMemorias, this.velocidad, this.ecc);
 
   void setIdRegistro(String idRegistro) {
     this.idRegistro = idRegistro;
@@ -59,5 +69,18 @@ class MemoriaRam {
         "\nCantidad de memoria: $cantidadMemoria"
         "\nNumero de memorias: $cantidadMemorias\nVelocidad: $velocidad"
         "\nECC: $ecc";
+  }
+
+  factory MemoriaRam.fromJson(Map<String, dynamic> json) {
+    return MemoriaRam(
+      json['idRegistro'],
+      json['modelo'],
+      json['marca'],
+      json['tipoMemoria'],
+      json['cantidadMemoria'],
+      json['cantidadMemorias'],
+      json['velocidad'],
+      json['ecc'],
+    );
   }
 }
