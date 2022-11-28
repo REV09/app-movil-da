@@ -6,7 +6,14 @@ class Usuario {
   late String contrasena;
   late int administrador;
 
-  Usuario();
+  Usuario(
+    this.nombreUsuario,
+    this.nombre,
+    this.apellido,
+    this.correoElectronico,
+    this.contrasena,
+    this.administrador,
+  );
 
   void setNombreUsuario(String nombreUsuario) {
     this.nombreUsuario = nombreUsuario;
@@ -51,5 +58,16 @@ class Usuario {
     return "Nombre de usuario: $nombreUsuario\nNombre: $nombre"
         "\nApellido: $correoElectronico\nCorreo electronico: $correoElectronico"
         "\nContraseña $contrasena\nAdministrador: ${getPermisos()}";
+  }
+
+  factory Usuario.fromJson(Map<String, dynamic> json) {
+    return Usuario(
+      json['nombreUsuario'],
+      json['nombre'],
+      json['apellido'],
+      json['correoElectronico'],
+      json['contrasena'],
+      json['administrador'],
+    );
   }
 }
