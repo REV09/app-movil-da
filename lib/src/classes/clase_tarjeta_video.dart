@@ -8,7 +8,8 @@ class TarjetaVideo {
   late double velocidadReloj;
   late String tipo;
 
-  TarjetaVideo();
+  TarjetaVideo(this.idRegistro, this.modelo, this.marca, this.cantidadVram,
+      this.tipoMemoria, this.bits, this.velocidadReloj, this.tipo);
 
   void setIdRegistro(String idRegistro) {
     this.idRegistro = idRegistro;
@@ -56,5 +57,18 @@ class TarjetaVideo {
     return "Marca: $marca\nModelo: $modelo\nCantidad de Vran: $cantidadVram"
         "\ntipo de memoria: $tipoMemoria\nBits de trabajo: $bits"
         "Velocidad de reloj: $velocidadReloj\nTipo de grafica: $tipo";
+  }
+
+  factory TarjetaVideo.fromJson(Map<String, dynamic> json) {
+    return TarjetaVideo(
+      json['idRegistro'],
+      json['modelo'],
+      json['marca'],
+      json['cantidadVram'],
+      json['tipoMemoria'],
+      json['bits'],
+      json['velocidadReloj'],
+      json['tipo'],
+    );
   }
 }
