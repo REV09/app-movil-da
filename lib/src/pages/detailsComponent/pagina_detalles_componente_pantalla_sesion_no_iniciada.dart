@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:web_laptops/src/classes/clase_memoria_ram.dart';
-import 'package:web_laptops/src/services/servicios_rest_memoria_ram.dart';
+import 'package:web_laptops/src/classes/clase_pantalla.dart';
+import 'package:web_laptops/src/classes/clase_procesador.dart';
+import 'package:web_laptops/src/services/servicios_rest_pantalla.dart';
 
-class PaginaDetallesMemoriaRamNoSesion extends StatefulWidget {
+class PaginaDetallesPantallaNoSesion extends StatefulWidget {
   String idRegistro;
 
-  PaginaDetallesMemoriaRamNoSesion(this.idRegistro);
+  PaginaDetallesPantallaNoSesion(this.idRegistro);
 
   @override
-  State<StatefulWidget> createState() => _PaginaDetallesMemoriaRamNoSesion();
+  State<StatefulWidget> createState() => new _PaginaDetallesPantallaNoSesion();
 }
 
-class _PaginaDetallesMemoriaRamNoSesion
-    extends State<PaginaDetallesMemoriaRamNoSesion> {
-  MemoriaRam _memoriaRam = MemoriaRam.memoriaVacia();
+class _PaginaDetallesPantallaNoSesion
+    extends State<PaginaDetallesPantallaNoSesion> {
+  late Pantalla _pantalla;
 
   InputDecoration decoracionCamposTexto = InputDecoration(
       border: OutlineInputBorder(borderRadius: BorderRadius.circular(0.0)));
@@ -28,7 +29,7 @@ class _PaginaDetallesMemoriaRamNoSesion
   Widget build(BuildContext context) {
     return Scaffold(
       body: FutureBuilder(
-        future: obtenerMemoriaRam(widget.idRegistro),
+        future: obtenerPantalla(widget.idRegistro),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             return Center(
@@ -36,13 +37,13 @@ class _PaginaDetallesMemoriaRamNoSesion
                   " al conectar al servidor intentelo mas tarde"),
             );
           } else if (snapshot.connectionState == ConnectionState.done) {
-            _memoriaRam = snapshot.data!;
+            _pantalla = snapshot.data!;
             return Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
                 Container(
                   child: Text(
-                    'Detalles componente: Memoria Ram',
+                    'Detalles componente: Pantalla',
                     style: estiloTituloTexto,
                   ),
                   alignment: AlignmentDirectional.center,
@@ -69,7 +70,7 @@ class _PaginaDetallesMemoriaRamNoSesion
                               alignment: AlignmentDirectional.center,
                               height: 40,
                               child: Text(
-                                'Marca: ',
+                                'Modelo: ',
                                 style: estiloTexto,
                               ),
                               margin: EdgeInsets.all(15)),
@@ -80,7 +81,7 @@ class _PaginaDetallesMemoriaRamNoSesion
                               decoration: decoracionCamposTexto,
                               readOnly: true,
                               controller: TextEditingController(
-                                text: _memoriaRam.getMarca(),
+                                text: _pantalla.getModelo(),
                               ),
                             ),
                           )
@@ -93,7 +94,7 @@ class _PaginaDetallesMemoriaRamNoSesion
                               height: 40,
                               alignment: AlignmentDirectional.center,
                               child: Text(
-                                'Modelo: ',
+                                'Resolucion: ',
                                 style: estiloTexto,
                               ),
                               margin: EdgeInsets.all(15)),
@@ -104,7 +105,7 @@ class _PaginaDetallesMemoriaRamNoSesion
                               decoration: decoracionCamposTexto,
                               readOnly: true,
                               controller: TextEditingController(
-                                text: _memoriaRam.getModelo(),
+                                text: _pantalla.getResolucion(),
                               ),
                             ),
                           )
@@ -116,8 +117,7 @@ class _PaginaDetallesMemoriaRamNoSesion
                           Container(
                               height: 40,
                               alignment: AlignmentDirectional.center,
-                              child:
-                                  Text('Tipo de memoria: ', style: estiloTexto),
+                              child: Text('Calidad: ', style: estiloTexto),
                               margin: EdgeInsets.all(15)),
                           SizedBox(
                             width: 150,
@@ -126,7 +126,7 @@ class _PaginaDetallesMemoriaRamNoSesion
                               decoration: decoracionCamposTexto,
                               readOnly: true,
                               controller: TextEditingController(
-                                text: _memoriaRam.getTipoMemoria(),
+                                text: _pantalla.getCalidad(),
                               ),
                             ),
                           ),
@@ -138,8 +138,8 @@ class _PaginaDetallesMemoriaRamNoSesion
                           Container(
                               height: 40,
                               alignment: AlignmentDirectional.center,
-                              child:
-                                  Text('Cantidad de ram: ', style: estiloTexto),
+                              child: Text('Tipo de pantalla: ',
+                                  style: estiloTexto),
                               margin: EdgeInsets.all(15)),
                           SizedBox(
                             width: 150,
@@ -148,8 +148,7 @@ class _PaginaDetallesMemoriaRamNoSesion
                               decoration: decoracionCamposTexto,
                               readOnly: true,
                               controller: TextEditingController(
-                                text:
-                                    _memoriaRam.getCantidadMemoria().toString(),
+                                text: _pantalla.getTipoPantalla(),
                               ),
                             ),
                           )
@@ -161,8 +160,8 @@ class _PaginaDetallesMemoriaRamNoSesion
                           Container(
                               height: 40,
                               alignment: AlignmentDirectional.center,
-                              child:
-                                  Text('N. de memorias: ', style: estiloTexto),
+                              child: Text('Tamaño en pulgadas: ',
+                                  style: estiloTexto),
                               margin: EdgeInsets.all(15)),
                           SizedBox(
                             width: 150,
@@ -171,51 +170,32 @@ class _PaginaDetallesMemoriaRamNoSesion
                               decoration: decoracionCamposTexto,
                               readOnly: true,
                               controller: TextEditingController(
-                                text: _memoriaRam
-                                    .getCantidadMemorias()
+                                text: _pantalla.getTamanio(),
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: <Widget>[
+                          Container(
+                              height: 40,
+                              alignment: AlignmentDirectional.center,
+                              child: Text('Frecuencia de refresco (Hz): ',
+                                  style: estiloTexto),
+                              margin: EdgeInsets.all(15)),
+                          SizedBox(
+                            width: 150,
+                            height: 45,
+                            child: TextField(
+                              decoration: decoracionCamposTexto,
+                              readOnly: true,
+                              controller: TextEditingController(
+                                text: _pantalla
+                                    .getFrecuenciaRefresco()
                                     .toString(),
                               ),
-                            ),
-                          )
-                        ],
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: <Widget>[
-                          Container(
-                              height: 40,
-                              alignment: AlignmentDirectional.center,
-                              child: Text('Velocidad: ', style: estiloTexto),
-                              margin: EdgeInsets.all(15)),
-                          SizedBox(
-                            width: 150,
-                            height: 45,
-                            child: TextField(
-                              decoration: decoracionCamposTexto,
-                              readOnly: true,
-                              controller: TextEditingController(
-                                text: _memoriaRam.getVelocidad().toString(),
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: <Widget>[
-                          Container(
-                              height: 40,
-                              alignment: AlignmentDirectional.center,
-                              child: Text('ECC: ', style: estiloTexto),
-                              margin: EdgeInsets.all(15)),
-                          SizedBox(
-                            width: 150,
-                            height: 45,
-                            child: TextField(
-                              decoration: decoracionCamposTexto,
-                              readOnly: true,
-                              controller:
-                                  TextEditingController(text: determinarEcc()),
                             ),
                           )
                         ],
@@ -241,12 +221,5 @@ class _PaginaDetallesMemoriaRamNoSesion
         },
       ),
     );
-  }
-
-  String determinarEcc() {
-    if (_memoriaRam.getEcc() == 1) {
-      return "Si";
-    }
-    return "No";
   }
 }

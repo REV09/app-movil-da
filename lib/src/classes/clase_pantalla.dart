@@ -7,7 +7,8 @@ class Pantalla {
   late String tamanio;
   late int frecuenciaRefresco;
 
-  Pantalla();
+  Pantalla(this.idRegistro, this.modelo, this.resolucion, this.calidad,
+      this.tipoPantalla, this.tamanio, this.frecuenciaRefresco);
 
   void setIdRegistro(String idRegistro) {
     this.idRegistro = idRegistro;
@@ -44,4 +45,16 @@ class Pantalla {
   String getTipoPantalla() => tipoPantalla;
   String getTamanio() => tamanio;
   int getFrecuenciaRefresco() => frecuenciaRefresco;
+
+  factory Pantalla.fromJson(Map<String, dynamic> json) {
+    return Pantalla(
+      json['idRegistro'],
+      json['modelo'],
+      json['resolucion'],
+      json['calidad'],
+      json['tipoPantalla'],
+      json['tamanio'],
+      json['frecuenciaRefresco'],
+    );
+  }
 }
