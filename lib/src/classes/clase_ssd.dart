@@ -11,7 +11,19 @@ class Ssd {
   late String velocidadEscritura;
   late String protocolo;
 
-  Ssd();
+  Ssd(
+    this.idRegistro,
+    this.marca,
+    this.modelo,
+    this.capacidad,
+    this.factorForma,
+    this.durabilidad,
+    this.tipoMemorias,
+    this.generacionMemorias,
+    this.velocidadLectura,
+    this.velocidadEscritura,
+    this.protocolo,
+  );
 
   void setIdRegistro(String idRegistro) {
     this.idRegistro = idRegistro;
@@ -78,5 +90,21 @@ class Ssd {
         "Velocidad de lectura: $velocidadLectura"
         "Velocidad de escritura: $velocidadEscritura"
         "Protocolo de transferencia: $protocolo";
+  }
+
+  factory Ssd.fromJson(Map<String, dynamic> json) {
+    return Ssd(
+      json['idRegistro'],
+      json['marca'],
+      json['modelo'],
+      json['capacidad'],
+      json['factorForma'],
+      json['durabilidad'],
+      json['tipoMemorias'],
+      json['generacionMemorias'],
+      json['velocidadLectura'],
+      json['velocidadEscritura'],
+      json['protocolo'],
+    );
   }
 }

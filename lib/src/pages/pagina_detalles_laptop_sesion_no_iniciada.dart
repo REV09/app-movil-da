@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:web_laptops/src/classes/clase_almacenamiento.dart';
 import 'package:web_laptops/src/classes/clase_laptop.dart';
 import 'package:web_laptops/src/pages/detailsComponent/pagina_detalles_componente_memoria_ram.dart';
 import 'package:web_laptops/src/pages/detailsComponent/pagina_detalles_componente_pantalla_sesion_no_iniciada.dart';
 import 'package:web_laptops/src/pages/detailsComponent/pagina_detalles_componente_procesador_sesion_no_iniciada.dart';
 import 'package:web_laptops/src/pages/detailsComponent/pagina_detalles_componente_tarjeta_video.dart';
+import 'package:web_laptops/src/services/servicios_rest_almacenamiento.dart';
 
 class PaginaDetallesLaptopSesionNoIniciada extends StatefulWidget {
   Laptop laptop;
@@ -26,6 +28,8 @@ class _PaginaDetallesLaptopSesionNoIniciada
   TextStyle estiloEncabezado =
       TextStyle(fontSize: 24, color: Colors.black, fontWeight: FontWeight.bold);
 
+  bool ssd = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,17 +37,24 @@ class _PaginaDetallesLaptopSesionNoIniciada
       mainAxisAlignment: MainAxisAlignment.start,
       children: <Widget>[
         Container(
+          alignment: AlignmentDirectional.center,
+          margin: EdgeInsets.all(20),
           child: Text(
             'Detalles de laptop',
             style: estiloEncabezado,
           ),
-          alignment: AlignmentDirectional.center,
-          margin: EdgeInsets.all(20),
         ),
         Container(
           margin: EdgeInsets.all(10),
           alignment: AlignmentDirectional.center,
           constraints: BoxConstraints(maxWidth: 500, maxHeight: 450),
+          decoration: BoxDecoration(
+            border: Border(
+                bottom: BorderSide(color: Colors.black),
+                left: BorderSide(color: Colors.black),
+                right: BorderSide(color: Colors.black),
+                top: BorderSide(color: Colors.black)),
+          ),
           child: Column(
             children: [
               Row(
@@ -169,6 +180,35 @@ class _PaginaDetallesLaptopSesionNoIniciada
                       widget.laptop.getAlmacenamiento(),
                       style: estiloBotonTexto,
                     ),
+                  ),
+                  FutureBuilder(
+                    future:
+                        obtenerAlmacenamiento(widget.laptop.getIdRegistro()),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasError) {
+                        return Center(
+                          child: Text("ND"),
+                        );
+                      } else if (snapshot.connectionState ==
+                          ConnectionState.done) {
+                        Almacenamiento almacenamiento = snapshot.data!;
+                        if (almacenamiento.getTipoAlmacenamiento() == 'SSD') {
+                          ssd = true;
+                        }
+                        return Checkbox(
+                          value: ssd,
+                          onChanged: null,
+                        );
+                      } else {
+                        return Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      }
+                    },
+                  ),
+                  Text(
+                    'SSD',
+                    style: estiloTexto,
                   )
                 ],
               ),
@@ -199,13 +239,6 @@ class _PaginaDetallesLaptopSesionNoIniciada
                 ],
               ),
             ],
-          ),
-          decoration: BoxDecoration(
-            border: Border(
-                bottom: BorderSide(color: Colors.black),
-                left: BorderSide(color: Colors.black),
-                right: BorderSide(color: Colors.black),
-                top: BorderSide(color: Colors.black)),
           ),
         ),
         Container(
