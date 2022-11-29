@@ -15,7 +15,7 @@ Laptop convertirLaptop(String cuerpoRespuesta) {
 
 Future<List<Laptop>> obtenerLaptops() async {
   final respuesta = await http
-      .get(Uri.parse('https://fastapi-laptops.herokuapp.com/laptops'));
+      .get(Uri.parse('https://web-production-2d2f.up.railway.app/laptops'));
   if (respuesta.statusCode == 200) {
     return convertirLaptops(respuesta.body);
   }
@@ -23,8 +23,8 @@ Future<List<Laptop>> obtenerLaptops() async {
 }
 
 Future<Laptop> obtenerLaptopPorId(String idRegistro) async {
-  final respuesta = await http.get(
-      Uri.parse('https://fastapi-laptops.herokuapp.com/laptop/$idRegistro'));
+  final respuesta = await http.get(Uri.parse(
+      'https://web-production-2d2f.up.railway.app/laptop/$idRegistro'));
   if (respuesta.statusCode == 200) {
     return convertirLaptop(respuesta.body);
   }
@@ -32,8 +32,8 @@ Future<Laptop> obtenerLaptopPorId(String idRegistro) async {
 }
 
 Future<List<Laptop>> obtenerLaptopPorModelo(String modelo) async {
-  final respuesta = await http
-      .get(Uri.parse('https://fastapi-laptops.herokuapp.com/laptop/$modelo'));
+  final respuesta = await http.get(
+      Uri.parse('https://web-production-2d2f.up.railway.app/laptop/$modelo'));
   if (respuesta.statusCode == 200) {
     return convertirLaptops(respuesta.body);
   }
@@ -42,7 +42,7 @@ Future<List<Laptop>> obtenerLaptopPorModelo(String modelo) async {
 
 Future<Laptop> agregarLaptop(Laptop laptop) async {
   final respuesta = await http.post(
-    Uri.parse('https://fastapi-laptops.herokuapp.com/laptop'),
+    Uri.parse('https://web-production-2d2f.up.railway.app/laptop'),
     headers: <String, String>{
       'Content-Type': 'application/json',
     },
@@ -62,8 +62,7 @@ Future<Laptop> agregarLaptop(Laptop laptop) async {
   throw Exception('No fue posible recuperar la informacion');
 }
 
-/*void main(List<String> args) async {
+void main(List<String> args) async {
   List<Laptop> laptops = await obtenerLaptops();
   print(laptops);
 }
-*/

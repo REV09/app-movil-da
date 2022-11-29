@@ -10,7 +10,7 @@ Procesador convertirProcesador(String cuerpoRespuesta) {
 
 Future<Procesador> obtenerProcesador(String idRegistro) async {
   final respuesta = await http.get(Uri.parse(
-      'https://fastapi-laptops.herokuapp.com/procesador/$idRegistro'));
+      'https://web-production-2d2f.up.railway.app/procesador/$idRegistro'));
   if (respuesta.statusCode == 200) {
     return convertirProcesador(respuesta.body);
   }

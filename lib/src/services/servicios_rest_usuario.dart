@@ -10,7 +10,7 @@ Usuario convertirUsuario(String cuerpoRespuesta) {
 
 Future<Usuario> obtenerUsuario(String nombreUsuario) async {
   final respuesta = await http.get(Uri.parse(
-      'https://fastapi-laptops.herokuapp.com/usuario/$nombreUsuario'));
+      'https://web-production-2d2f.up.railway.app/usuario/$nombreUsuario'));
   if (respuesta.statusCode == 200) {
     return convertirUsuario(respuesta.body);
   } else {

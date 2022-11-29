@@ -9,8 +9,8 @@ MemoriaRam convertirMemoriaRam(String cuerpoRespuesta) {
 }
 
 Future<MemoriaRam> obtenerMemoriaRam(String idRegistro) async {
-  final respuesta = await http.get(
-      Uri.parse('https://fastapi-laptops.herokuapp.com/memoria/$idRegistro'));
+  final respuesta = await http.get(Uri.parse(
+      'https://web-production-2d2f.up.railway.app/memoria/$idRegistro'));
   if (respuesta.statusCode == 200) {
     return convertirMemoriaRam(respuesta.body);
   } else {

@@ -9,8 +9,8 @@ Pantalla convertirPantalla(String cuerpoRespuesta) {
 }
 
 Future<Pantalla> obtenerPantalla(String idRegistro) async {
-  final respuesta = await http.get(
-      Uri.parse('https://fastapi-laptops.herokuapp.com/pantalla/$idRegistro'));
+  final respuesta = await http.get(Uri.parse(
+      'https://web-production-2d2f.up.railway.app/pantalla/$idRegistro'));
   if (respuesta.statusCode == 200) {
     return convertirPantalla(respuesta.body);
   } else {

@@ -10,7 +10,7 @@ Almacenamiento convertirAlmacenamiento(String cuerpoRespuesta) {
 
 Future<Almacenamiento> obtenerAlmacenamiento(String idRegistro) async {
   final respuesta = await http.get(Uri.parse(
-      'https://fastapi-laptops.herokuapp.com/almacenamiento/$idRegistro'));
+      'https://web-production-2d2f.up.railway.app/almacenamiento/$idRegistro'));
   if (respuesta.statusCode == 200) {
     return convertirAlmacenamiento(respuesta.body);
   } else {

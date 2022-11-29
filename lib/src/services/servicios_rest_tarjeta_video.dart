@@ -10,7 +10,7 @@ TarjetaVideo convertirTarjetaVideo(String cuerpoRespuesta) {
 
 Future<TarjetaVideo> obtenerTarjetaVideo(String idRegistro) async {
   final respuesta = await http.get(Uri.parse(
-      'https://fastapi-laptops.herokuapp.com/tarjetaDeVideo/$idRegistro'));
+      'https://web-production-2d2f.up.railway.app/tarjetaDeVideo/$idRegistro'));
   if (respuesta.statusCode == 200) {
     return convertirTarjetaVideo(respuesta.body);
   } else {

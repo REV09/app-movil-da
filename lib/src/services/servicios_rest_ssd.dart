@@ -9,8 +9,8 @@ Ssd convertirSsd(String cuerpoRespuesta) {
 }
 
 Future<Ssd> obtenerSsd(String idRegistro) async {
-  final respuesta = await http
-      .get(Uri.parse('https://fastapi-laptops.herokuapp.com/ssd/$idRegistro'));
+  final respuesta = await http.get(
+      Uri.parse('https://web-production-2d2f.up.railway.app/ssd/$idRegistro'));
   if (respuesta.statusCode == 200) {
     return convertirSsd(respuesta.body);
   } else {

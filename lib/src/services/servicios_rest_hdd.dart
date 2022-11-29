@@ -9,8 +9,8 @@ Hdd convertirHdd(String cuerpoRespuesta) {
 }
 
 Future<Hdd> obtenerHdd(String idRegistro) async {
-  final respuesta = await http
-      .get(Uri.parse('https://fastapi-laptops.herokuapp.com/hdd/$idRegistro'));
+  final respuesta = await http.get(
+      Uri.parse('https://web-production-2d2f.up.railway.app/hdd/$idRegistro'));
   if (respuesta.statusCode == 200) {
     return convertirHdd(respuesta.body);
   } else {
