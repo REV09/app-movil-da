@@ -11,7 +11,7 @@ class PaginaIniciarSesion extends StatefulWidget {
 class _PaginaIniciarSesion extends State<PaginaIniciarSesion> {
   InputDecoration decoracionIniciarSesionCampoTexto = InputDecoration(
       border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.0)),
-      hintText: 'Ej: email-address@email.com');
+      hintText: 'Ej: usuario12345');
 
   InputDecoration decoracionContrasenaCampoTexto = InputDecoration(
       border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.0)),
@@ -90,11 +90,9 @@ class _PaginaIniciarSesion extends State<PaginaIniciarSesion> {
             height: 50,
             child: ElevatedButton(
               onPressed: () async {
-                Usuario usuario =
-                    await obtenerUsuario(controladorNombreUsuario.text);
-                if (usuario
-                        .getNombreUsuario() == //cambiar este if por un try catch
-                    controladorNombreUsuario.text) {
+                late Usuario usuario;
+                try {
+                  usuario = await obtenerUsuario(controladorNombreUsuario.text);
                   if (usuario.getContrasena() == _controladorContrasena.text) {
                     Navigator.of(context).push(
                       MaterialPageRoute(
@@ -119,13 +117,13 @@ class _PaginaIniciarSesion extends State<PaginaIniciarSesion> {
                             ),
                         barrierDismissible: false);
                   }
-                } else {
+                } catch (excepcion) {
                   showDialog(
                       context: context,
                       builder: (context) => AlertDialog(
-                            title: Text("Nombre de usuario incorrecto"),
+                            title: Text("Usuario no valido"),
                             content: Text(
-                                "No existe usuario registrado con ese nombre"),
+                                "No existe cuenta registrada con ese nombre"),
                             actions: [
                               TextButton(
                                 onPressed: () {
