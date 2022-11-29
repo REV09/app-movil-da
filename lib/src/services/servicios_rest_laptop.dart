@@ -8,6 +8,11 @@ List<Laptop> convertirLaptops(String cuerpoRespuesta) {
   return convertido.map<Laptop>((json) => Laptop.fromJson(json)).toList();
 }
 
+Laptop convertirLaptop(String cuerpoRespuesta) {
+  Map<String, dynamic> jsonConvertido = json.decode(cuerpoRespuesta);
+  return Laptop.fromJson(jsonConvertido);
+}
+
 Future<List<Laptop>> obtenerLaptops() async {
   final respuesta = await http
       .get(Uri.parse('https://fastapi-laptops.herokuapp.com/laptops'));
@@ -17,11 +22,11 @@ Future<List<Laptop>> obtenerLaptops() async {
   throw Exception('No fue posible recuperar la informacion');
 }
 
-Future<List<Laptop>> obtenerLaptopPorId(String idRegistro) async {
+Future<Laptop> obtenerLaptopPorId(String idRegistro) async {
   final respuesta = await http.get(
       Uri.parse('https://fastapi-laptops.herokuapp.com/laptop/$idRegistro'));
   if (respuesta.statusCode == 200) {
-    return convertirLaptops(respuesta.body);
+    return convertirLaptop(respuesta.body);
   }
   throw Exception('No fue posible recuperar la informacion');
 }
