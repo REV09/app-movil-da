@@ -17,3 +17,22 @@ Future<Almacenamiento> obtenerAlmacenamiento(String idRegistro) async {
     throw Exception('No fue posible recuperar la informacion');
   }
 }
+
+Future<Almacenamiento> agregarAlmacenamiento(
+    Almacenamiento almacenamiento) async {
+  final respuesta = await http.post(
+    Uri.parse('https://web-production-2d2f.up.railway.app/almacenamiento'),
+    headers: <String, String>{
+      'Content-Type': 'application/json',
+    },
+    body: jsonEncode(<String, String>{
+      "idRegisro": almacenamiento.getIdRegistro(),
+      "tipoAlmacenamiento": almacenamiento.getTipoAlmacenamiento(),
+    }),
+  );
+  if (respuesta.statusCode == 200) {
+    return Almacenamiento.fromJson(jsonDecode(respuesta.body));
+  } else {
+    throw Exception("No se pudo crear el almacenamiento correctamente");
+  }
+}

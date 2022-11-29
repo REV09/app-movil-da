@@ -18,6 +18,30 @@ Future<TarjetaVideo> obtenerTarjetaVideo(String idRegistro) async {
   }
 }
 
+Future<TarjetaVideo> agregarTarjetaVideo(TarjetaVideo tarjetaVideo) async {
+  final respuesta = await http.post(
+    Uri.parse('https://web-production-2d2f.up.railway.app/tarjetaDeVideo'),
+    headers: <String, String>{
+      'Content-Type': 'application/json',
+    },
+    body: jsonEncode(<String, String>{
+      "idRegistro": tarjetaVideo.getIdRegistro(),
+      "modelo": tarjetaVideo.getModelo(),
+      "marca": tarjetaVideo.getMarca(),
+      "cantidadVram": tarjetaVideo.getCantidadVram().toString(),
+      "tipoMemoria": tarjetaVideo.getTipoMemoria(),
+      "bits": tarjetaVideo.getBits().toString(),
+      "velocidadReloj": tarjetaVideo.getVelocidadReloj().toString(),
+      "tipo": tarjetaVideo.getTipo(),
+    }),
+  );
+  if (respuesta.statusCode == 200) {
+    return TarjetaVideo.fromJson(jsonDecode(respuesta.body));
+  } else {
+    throw Exception('No se pudo crear la tarjeta de video correctamente');
+  }
+}
+
 void main(List<String> args) async {
   TarjetaVideo tarjetaVideo = await obtenerTarjetaVideo('ABCDEF123456');
   print(tarjetaVideo);

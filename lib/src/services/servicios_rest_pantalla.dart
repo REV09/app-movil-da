@@ -18,6 +18,29 @@ Future<Pantalla> obtenerPantalla(String idRegistro) async {
   }
 }
 
+Future<Pantalla> agregarPantalla(Pantalla pantalla) async {
+  final respuesta = await http.post(
+    Uri.parse('https://web-production-2d2f.up.railway.app/pantalla'),
+    headers: <String, String>{
+      'Content-Type': 'application/json',
+    },
+    body: jsonEncode(<String, String>{
+      "idRegistro": pantalla.getIdRegistro(),
+      "modelo": pantalla.getModelo(),
+      "resolucion": pantalla.getResolucion(),
+      "calidad": pantalla.getCalidad(),
+      "tipoPantalla": pantalla.getTipoPantalla(),
+      "tamanio": pantalla.getTamanio(),
+      "frecuenciaRefresco": pantalla.getFrecuenciaRefresco().toString(),
+    }),
+  );
+  if (respuesta.statusCode == 200) {
+    return Pantalla.fromJson(jsonDecode(respuesta.body));
+  } else {
+    throw Exception('No se pudo crear la pantalla correctamente');
+  }
+}
+
 void main(List<String> args) async {
   Pantalla pantalla = await obtenerPantalla('ABCDEF123456');
   print(pantalla);

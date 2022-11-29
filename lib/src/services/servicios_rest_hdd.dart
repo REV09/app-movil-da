@@ -17,3 +17,27 @@ Future<Hdd> obtenerHdd(String idRegistro) async {
     throw Exception('No fue posible recuperar la informacion');
   }
 }
+
+Future<Hdd> agregarHdd(Hdd hdd) async {
+  final respuesta = await http.post(
+    Uri.parse('https://web-production-2d2f.up.railway.app/hdd'),
+    headers: <String, String>{
+      'Content-Type': 'application/json',
+    },
+    body: jsonEncode(<String, String>{
+      "idRegistro": hdd.getIdRegistro(),
+      "marca": hdd.getMarca(),
+      "modelo": hdd.getModelo(),
+      "capacidad": hdd.getCapacidad().toString(),
+      "interfaz": hdd.getInterfaz(),
+      "cache": hdd.getCache().toString(),
+      "revoluciones": hdd.getRevoluciones().toString(),
+      "tamanio": hdd.getTamanio(),
+    }),
+  );
+  if (respuesta.statusCode == 200) {
+    return Hdd.fromJson(jsonDecode(respuesta.body));
+  } else {
+    throw Exception("No se pudo crear el disco duro correctamente");
+  }
+}

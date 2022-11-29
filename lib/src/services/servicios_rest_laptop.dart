@@ -59,10 +59,19 @@ Future<Laptop> agregarLaptop(Laptop laptop) async {
   if (respuesta.statusCode == 200) {
     return Laptop.fromJson(jsonDecode(respuesta.body));
   }
-  throw Exception('No fue posible recuperar la informacion');
+  throw Exception('No se pudo crear la laptop correctamente');
 }
 
 void main(List<String> args) async {
-  List<Laptop> laptops = await obtenerLaptops();
-  print(laptops);
+  Laptop pruebaLaptop = Laptop(
+    "idRegistro",
+    "modelo",
+    "memoriaRam",
+    "tarjetaVideo",
+    "pantalla",
+    "procesador",
+    "almacenamiento",
+  );
+  Laptop laptop = await agregarLaptop(pruebaLaptop);
+  print(laptop);
 }
