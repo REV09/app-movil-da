@@ -16,12 +16,6 @@ class _PaginaModificarLaptop extends State<PaginaModificarLaptop> {
 
   bool? checkValue = false;
 
-  IconButton botonDetallar = IconButton(
-    onPressed: () => {},
-    icon: Icon(Icons.create),
-    color: Colors.blue,
-  );
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -95,7 +89,6 @@ class _PaginaModificarLaptop extends State<PaginaModificarLaptop> {
                       height: 45,
                       child: TextField(decoration: decoracionCamposTexto),
                     ),
-                    Container(width: 50, height: 45, child: botonDetallar),
                     Container(
                       child: SizedBox(width: 50),
                     ),
@@ -112,11 +105,6 @@ class _PaginaModificarLaptop extends State<PaginaModificarLaptop> {
                         decoration: decoracionCamposTexto,
                       ),
                     ),
-                    Container(
-                      width: 50,
-                      height: 45,
-                      child: botonDetallar,
-                    )
                   ],
                 ),
                 Row(
@@ -131,11 +119,6 @@ class _PaginaModificarLaptop extends State<PaginaModificarLaptop> {
                       width: 350,
                       height: 45,
                       child: TextField(decoration: decoracionCamposTexto),
-                    ),
-                    Container(
-                      width: 50,
-                      height: 45,
-                      child: botonDetallar,
                     ),
                     Container(
                       child: SizedBox(width: 50),
@@ -153,11 +136,6 @@ class _PaginaModificarLaptop extends State<PaginaModificarLaptop> {
                         decoration: decoracionCamposTexto,
                       ),
                     ),
-                    Container(
-                      width: 50,
-                      height: 45,
-                      child: botonDetallar,
-                    )
                   ],
                 ),
                 Row(
@@ -174,11 +152,6 @@ class _PaginaModificarLaptop extends State<PaginaModificarLaptop> {
                       child: TextField(
                         decoration: decoracionCamposTexto,
                       ),
-                    ),
-                    Container(
-                      width: 50,
-                      height: 45,
-                      child: botonDetallar,
                     ),
                     Container(
                       margin: EdgeInsets.all(10),

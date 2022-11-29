@@ -29,9 +29,11 @@ class _PaginaRegistrarUsuario extends State<PaginaRegistrarUsuario> {
                 'Registrar Nuevo usuario',
                 style: estiloTituloTexto,
               ),
-              alignment: AlignmentDirectional.centerStart,
+              alignment: AlignmentDirectional.center,
               margin: EdgeInsets.only(left: 30.0, top: 15.0)),
           Container(
+            width: 1000,
+            height: 400,
             margin: EdgeInsets.all(30),
             decoration: BoxDecoration(
                 border: Border(
@@ -59,6 +61,9 @@ class _PaginaRegistrarUsuario extends State<PaginaRegistrarUsuario> {
                       ),
                     ),
                     Container(
+                      width: 50,
+                    ),
+                    Container(
                         child: Text(
                           'Apellido: ',
                           style: estiloTexto,
@@ -70,6 +75,9 @@ class _PaginaRegistrarUsuario extends State<PaginaRegistrarUsuario> {
                       child: TextField(decoration: decoracionCamposTexto),
                     ),
                   ],
+                ),
+                Container(
+                  height: 20,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -87,6 +95,9 @@ class _PaginaRegistrarUsuario extends State<PaginaRegistrarUsuario> {
                     )
                   ],
                 ),
+                Container(
+                  height: 20,
+                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
@@ -99,6 +110,9 @@ class _PaginaRegistrarUsuario extends State<PaginaRegistrarUsuario> {
                       child: TextField(decoration: decoracionCamposTexto),
                     )
                   ],
+                ),
+                Container(
+                  height: 20,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -117,6 +131,9 @@ class _PaginaRegistrarUsuario extends State<PaginaRegistrarUsuario> {
                     )
                   ],
                 ),
+                Container(
+                  height: 20,
+                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
@@ -134,6 +151,9 @@ class _PaginaRegistrarUsuario extends State<PaginaRegistrarUsuario> {
                       ),
                     )
                   ],
+                ),
+                Container(
+                  height: 20,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,

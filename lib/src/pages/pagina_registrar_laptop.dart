@@ -97,22 +97,6 @@ class _PaginaRegistrarLaptop extends State<PaginaRegistrarLaptop> {
                       child: TextField(decoration: decoracionCamposTexto),
                     ),
                     Container(
-                      width: 50,
-                      height: 45,
-                      child: IconButton(
-                        onPressed: () => {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  PaginaEspecificarProcesador(),
-                            ),
-                          )
-                        },
-                        icon: Icon(Icons.create),
-                        color: Colors.blue,
-                      ),
-                    ),
-                    Container(
                       child: SizedBox(width: 50),
                     ),
                     Container(
@@ -128,21 +112,6 @@ class _PaginaRegistrarLaptop extends State<PaginaRegistrarLaptop> {
                         decoration: decoracionCamposTexto,
                       ),
                     ),
-                    Container(
-                      width: 50,
-                      height: 45,
-                      child: IconButton(
-                        onPressed: () => {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => PaginaEspecificarRam(),
-                            ),
-                          )
-                        },
-                        icon: Icon(Icons.create),
-                        color: Colors.blue,
-                      ),
-                    )
                   ],
                 ),
                 Row(
@@ -157,22 +126,6 @@ class _PaginaRegistrarLaptop extends State<PaginaRegistrarLaptop> {
                       width: 350,
                       height: 45,
                       child: TextField(decoration: decoracionCamposTexto),
-                    ),
-                    Container(
-                      width: 50,
-                      height: 45,
-                      child: IconButton(
-                        onPressed: () => {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  PaginaEspecificarTarjetaVideo(),
-                            ),
-                          )
-                        },
-                        icon: Icon(Icons.create),
-                        color: Colors.blue,
-                      ),
                     ),
                     Container(
                       child: SizedBox(width: 50),
@@ -190,21 +143,6 @@ class _PaginaRegistrarLaptop extends State<PaginaRegistrarLaptop> {
                         decoration: decoracionCamposTexto,
                       ),
                     ),
-                    Container(
-                      width: 50,
-                      height: 45,
-                      child: IconButton(
-                        onPressed: () => {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => PaginaEspecificarPantalla(),
-                            ),
-                          )
-                        },
-                        icon: Icon(Icons.create),
-                        color: Colors.blue,
-                      ),
-                    )
                   ],
                 ),
                 Row(
@@ -220,32 +158,6 @@ class _PaginaRegistrarLaptop extends State<PaginaRegistrarLaptop> {
                       height: 45,
                       child: TextField(
                         decoration: decoracionCamposTexto,
-                      ),
-                    ),
-                    Container(
-                      width: 50,
-                      height: 45,
-                      child: IconButton(
-                        onPressed: () => {
-                          if (checkValue == true)
-                            {
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (context) => PaginaEspecificarSsd(),
-                                ),
-                              )
-                            }
-                          else
-                            {
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (context) => PaginaEspecificarHdd(),
-                                ),
-                              )
-                            }
-                        },
-                        icon: Icon(Icons.create),
-                        color: Colors.blue,
                       ),
                     ),
                     Container(

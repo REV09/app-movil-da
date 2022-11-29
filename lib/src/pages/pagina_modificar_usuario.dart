@@ -23,13 +23,16 @@ class _PaginaModificarUsuario extends State<PaginaModificarUsuario> {
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
           Container(
-              child: Text(
-                'Modificar usuario',
-                style: estiloTituloTexto,
-              ),
-              alignment: AlignmentDirectional.centerStart,
-              margin: EdgeInsets.only(left: 30.0, top: 15.0)),
+            child: Text(
+              'Modificar usuario',
+              style: estiloTituloTexto,
+            ),
+            alignment: AlignmentDirectional.center,
+            margin: EdgeInsets.only(left: 30.0, top: 15.0),
+          ),
           Container(
+            width: 1000,
+            height: 500,
             margin: EdgeInsets.all(30),
             decoration: BoxDecoration(
                 border: Border(
@@ -57,6 +60,9 @@ class _PaginaModificarUsuario extends State<PaginaModificarUsuario> {
                       ),
                     ),
                     Container(
+                      width: 50,
+                    ),
+                    Container(
                         child: Text(
                           'Apellido: ',
                           style: estiloTexto,
@@ -68,6 +74,9 @@ class _PaginaModificarUsuario extends State<PaginaModificarUsuario> {
                       child: TextField(decoration: decoracionCamposTexto),
                     ),
                   ],
+                ),
+                Container(
+                  height: 20,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -85,6 +94,9 @@ class _PaginaModificarUsuario extends State<PaginaModificarUsuario> {
                     )
                   ],
                 ),
+                Container(
+                  height: 20,
+                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
@@ -97,6 +109,9 @@ class _PaginaModificarUsuario extends State<PaginaModificarUsuario> {
                       child: TextField(decoration: decoracionCamposTexto),
                     )
                   ],
+                ),
+                Container(
+                  height: 20,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -115,6 +130,9 @@ class _PaginaModificarUsuario extends State<PaginaModificarUsuario> {
                     )
                   ],
                 ),
+                Container(
+                  height: 20,
+                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
@@ -132,6 +150,9 @@ class _PaginaModificarUsuario extends State<PaginaModificarUsuario> {
                       ),
                     )
                   ],
+                ),
+                Container(
+                  height: 20,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,

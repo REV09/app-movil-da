@@ -173,13 +173,6 @@ class _PaginaDetallesLaptop extends State<PaginaDetallesLaptop> {
                       style: estiloTexto,
                     ),
                     TextButton(
-                      onPressed: (() => {}),
-                      child: Text(
-                        widget.laptop.getAlmacenamiento(),
-                        style: estiloBotonTexto,
-                      ),
-                    ),
-                    TextButton(
                       onPressed: (() => {
                             if (ssd)
                               {
