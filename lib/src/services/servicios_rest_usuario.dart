@@ -39,3 +39,13 @@ Future<Usuario> agregarUsuario(Usuario usuario) async {
     throw Exception('No se pudo crear el usuario correctamente');
   }
 }
+
+Future<int> eliminarUsuario(String nombreUsuario) async {
+  final respuesta = await http.delete(Uri.parse(
+      'https://web-production-2d2f.up.railway.app/usuario/$nombreUsuario'));
+  if (respuesta.statusCode == 204) {
+    return 204;
+  } else {
+    throw Exception('No fue posible recuperar la informacion');
+  }
+}

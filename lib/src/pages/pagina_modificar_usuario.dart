@@ -7,10 +7,15 @@ class PaginaModificarUsuario extends StatefulWidget {
   PaginaModificarUsuario(this.usuario);
 
   @override
-  State<StatefulWidget> createState() => _PaginaModificarUsuario();
+  State<StatefulWidget> createState() =>
+      _PaginaModificarUsuario((usuario.getAdministrador() == 1) ? true : false);
 }
 
 class _PaginaModificarUsuario extends State<PaginaModificarUsuario> {
+  bool checkValue;
+
+  _PaginaModificarUsuario(this.checkValue);
+
   InputDecoration decoracionCamposTexto = InputDecoration(
       border: OutlineInputBorder(borderRadius: BorderRadius.circular(0.0)));
 
@@ -18,8 +23,6 @@ class _PaginaModificarUsuario extends State<PaginaModificarUsuario> {
       fontSize: 16, fontStyle: FontStyle.italic, fontWeight: FontWeight.bold);
   TextStyle estiloTituloTexto =
       TextStyle(fontSize: 22, fontWeight: FontWeight.bold);
-
-  bool? checkValue = false;
 
   TextEditingController controladorCampoNombre = TextEditingController();
   TextEditingController controladorCampoApellido = TextEditingController();
@@ -255,7 +258,6 @@ class _PaginaModificarUsuario extends State<PaginaModificarUsuario> {
                 Expanded(child: SizedBox(width: 7)),
                 Container(
                   margin: EdgeInsets.all(25),
-                  //height: 30,
                   alignment: AlignmentDirectional.centerEnd,
                   child: ElevatedButton(
                     onPressed: () => {},

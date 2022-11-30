@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:web_laptops/src/classes/clase_usuario.dart';
 import 'package:web_laptops/src/pages/pagina_modificar_usuario.dart';
+import 'package:web_laptops/src/services/servicios_rest_usuario.dart';
 
 class PaginaMiPerfil extends StatefulWidget {
   Usuario usuario;
@@ -88,11 +89,56 @@ class _PaginaMiPerfil extends State<PaginaMiPerfil> {
                                     "\nEsta accion no se puede deshacer"),
                                 actions: [
                                   TextButton(
-                                    onPressed: () {
-                                      Navigator.pop(context, true);
-                                      Navigator.of(context).pop();
-                                      Navigator.of(context).pop();
-                                      Navigator.of(context).pop();
+                                    onPressed: () async {
+                                      try {
+                                        int codigoResultado =
+                                            await eliminarUsuario(widget.usuario
+                                                .getNombreUsuario());
+                                        if (codigoResultado == 204) {
+                                          showDialog(
+                                            context: context,
+                                            builder: (context) => AlertDialog(
+                                              title: Text("Usuario eliminado"),
+                                              content: Text(
+                                                  "Se ha eliminado la cuenta"
+                                                  " correctamente"),
+                                              actions: [
+                                                TextButton(
+                                                  onPressed: () {
+                                                    Navigator.pop(
+                                                        context, true);
+                                                    Navigator.of(context).pop();
+                                                    Navigator.of(context).pop();
+                                                    Navigator.of(context).pop();
+                                                  },
+                                                  child: Text("Aceptar"),
+                                                ),
+                                              ],
+                                            ),
+                                            barrierDismissible: false,
+                                          );
+                                        }
+                                      } catch (excepcion) {
+                                        showDialog(
+                                          context: context,
+                                          builder: (context) => AlertDialog(
+                                            title: Text("Usuario no eliminado"),
+                                            content: Text(
+                                                "Ha ocurrido un error de"
+                                                "conexion\ny no se ha podido"
+                                                "eliminar al usuario"),
+                                            actions: [
+                                              TextButton(
+                                                onPressed: () {
+                                                  Navigator.pop(context, true);
+                                                },
+                                                child: Text("Aceptar"),
+                                              ),
+                                            ],
+                                          ),
+                                          barrierDismissible: false,
+                                        );
+                                      }
                                     },
                                     child: Text("Aceptar"),
                                     style: TextButton.styleFrom(
