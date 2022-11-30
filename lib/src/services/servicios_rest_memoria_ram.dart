@@ -42,6 +42,41 @@ Future<MemoriaRam> agregarMemoriaRam(MemoriaRam memoriaRam) async {
   }
 }
 
+Future<MemoriaRam> modificarMemoriaRam(
+    MemoriaRam memoriaRam, String idRegistro) async {
+  final respuesta = await http.put(
+    Uri.parse('https://web-production-2d2f.up.railway.app/memoria/$idRegistro'),
+    headers: <String, String>{
+      'Content-Type': 'application/json',
+    },
+    body: jsonEncode(<String, String>{
+      "idRegistro": memoriaRam.getIdRegistro(),
+      "modelo": memoriaRam.getModelo(),
+      "marca": memoriaRam.getMarca(),
+      "tipoMemoria": memoriaRam.getTipoMemoria(),
+      "cantidadMemoria": memoriaRam.getCantidadMemoria().toString(),
+      "cantidadMemorias": memoriaRam.getCantidadMemorias().toString(),
+      "velocidad": memoriaRam.getVelocidad().toString(),
+      "ecc": memoriaRam.getEcc().toString(),
+    }),
+  );
+  if (respuesta.statusCode == 200) {
+    return MemoriaRam.fromJson(jsonDecode(respuesta.body));
+  } else {
+    throw Exception('No se pudo crear la memoria ram correctamente');
+  }
+}
+
+Future<int> eliminarMemoriaRam(String idRegistro) async {
+  final respuesta = await http.delete(Uri.parse(
+      'https://web-production-2d2f.up.railway.app/memoria/$idRegistro'));
+  if (respuesta.statusCode == 204) {
+    return 204;
+  } else {
+    throw Exception('No fue posible recuperar la informacion');
+  }
+}
+
 void main(List<String> args) async {
   MemoriaRam memoriaRam =
       await obtenerMemoriaRam('91096249-080b-4d28-8a3f-7a7e1f46a115');

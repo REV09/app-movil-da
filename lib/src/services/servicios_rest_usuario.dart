@@ -40,6 +40,29 @@ Future<Usuario> agregarUsuario(Usuario usuario) async {
   }
 }
 
+Future<Usuario> modificarUsuario(Usuario usuario, String nombreAnterior) async {
+  final respuesta = await http.put(
+    Uri.parse(
+        'https://web-production-2d2f.up.railway.app/usuario/$nombreAnterior'),
+    headers: <String, String>{
+      'Content-Type': 'application/json',
+    },
+    body: jsonEncode(<String, String>{
+      "nombreUsuario": usuario.getNombreUsuario(),
+      "nombre": usuario.getNombre(),
+      "apellido": usuario.getApellido(),
+      "correoElectronico": usuario.getCorreoElectronico(),
+      "contrasena": usuario.getContrasena(),
+      "administrador": usuario.getAdministrador().toString(),
+    }),
+  );
+  if (respuesta.statusCode == 200) {
+    return Usuario.fromJson(jsonDecode(respuesta.body));
+  } else {
+    throw Exception('No se pudo crear el usuario correctamente');
+  }
+}
+
 Future<int> eliminarUsuario(String nombreUsuario) async {
   final respuesta = await http.delete(Uri.parse(
       'https://web-production-2d2f.up.railway.app/usuario/$nombreUsuario'));

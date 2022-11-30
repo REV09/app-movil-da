@@ -40,6 +40,41 @@ Future<Procesador> agregarProcesador(Procesador procesador) async {
     throw Exception('No se pudo crear el procesador correctamente');
   }
 }
+
+Future<int> modificarProcesador(
+    Procesador procesador, String idRegistro) async {
+  final respuesta = await http.post(
+    Uri.parse(
+        'https://web-production-2d2f.up.railway.app/procesador/$idRegistro'),
+    headers: <String, String>{
+      'Content-Type': 'application/json',
+    },
+    body: jsonEncode(<String, String>{
+      "idRegistro": procesador.getIdRegistro(),
+      "modelo": procesador.getModelo(),
+      "marca": procesador.getMarca(),
+      "numeroNucleos": procesador.getNumeroNucleos().toString(),
+      "numeroHilos": procesador.getNumeroHilos().toString(),
+      "velocidadMaxima": procesador.getVelocidadMaxima().toString(),
+      "velocidadMinima": procesador.getVelocidadMinima().toString(),
+      "litografia": procesador.getLitografia().toString(),
+    }),
+  );
+  if (respuesta.statusCode == 204) {
+    return 204;
+  } else {
+    throw Exception('No se pudo crear el procesador correctamente');
+  }
+}
+
+Future<int> eliminarProcesador(String idRegistro) async {
+  final respuesta = await http.delete(Uri.parse(
+      'https://web-production-2d2f.up.railway.app/procesador/$idRegistro'));
+  if (respuesta.statusCode == 204) {
+    return 204;
+  }
+  throw Exception('No fue posible recuperar la informacion');
+}
 /*
 void main(List<String> args) async {
   Procesador procesador = await obtenerProcesador('ABCDEF123456');
