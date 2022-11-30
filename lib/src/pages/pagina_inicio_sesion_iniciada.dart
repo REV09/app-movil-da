@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:web_laptops/src/classes/clase_laptop.dart';
+import 'package:web_laptops/src/classes/clase_usuario.dart';
 import 'package:web_laptops/src/pages/pagina_detalles_laptop.dart';
 import 'package:web_laptops/src/pages/pagina_mi_perfil.dart';
 import 'package:web_laptops/src/pages/pagina_registrar_laptop.dart';
 import 'package:web_laptops/src/services/servicios_rest_laptop.dart';
 
 class PaginaInicioSesionIniciada extends StatefulWidget {
+  Usuario usuario;
+
+  PaginaInicioSesionIniciada(this.usuario);
+
   @override
   State<StatefulWidget> createState() => _PaginaInicioSesionIniciada();
 }
@@ -295,7 +300,8 @@ class _PaginaInicioSesionIniciada extends State<PaginaInicioSesionIniciada> {
                                   onPressed: () {
                                     Navigator.of(context).push(
                                       MaterialPageRoute(
-                                        builder: (context) => PaginaMiPerfil(),
+                                        builder: (context) =>
+                                            PaginaMiPerfil(widget.usuario),
                                       ),
                                     );
                                   },

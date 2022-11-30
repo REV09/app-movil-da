@@ -96,7 +96,8 @@ class _PaginaIniciarSesion extends State<PaginaIniciarSesion> {
                   if (usuario.getContrasena() == _controladorContrasena.text) {
                     Navigator.of(context).push(
                       MaterialPageRoute(
-                        builder: (context) => PaginaInicioSesionIniciada(),
+                        builder: (context) =>
+                            PaginaInicioSesionIniciada(usuario),
                       ),
                     );
                   } else {

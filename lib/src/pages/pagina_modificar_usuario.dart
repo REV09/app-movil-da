@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:web_laptops/src/classes/clase_usuario.dart';
 
 class PaginaModificarUsuario extends StatefulWidget {
+  Usuario usuario;
+
+  PaginaModificarUsuario(this.usuario);
+
   @override
   State<StatefulWidget> createState() => _PaginaModificarUsuario();
 }
@@ -16,8 +21,23 @@ class _PaginaModificarUsuario extends State<PaginaModificarUsuario> {
 
   bool? checkValue = false;
 
+  TextEditingController controladorCampoNombre = TextEditingController();
+  TextEditingController controladorCampoApellido = TextEditingController();
+  TextEditingController controladorCampoNombreUsuario = TextEditingController();
+  TextEditingController controladorCampoCorreoElectronico =
+      TextEditingController();
+  TextEditingController controladorCampoContrasena = TextEditingController();
+  TextEditingController controladorCampoConfirmarContrasena =
+      TextEditingController();
+
   @override
   Widget build(BuildContext context) {
+    controladorCampoNombre.text = widget.usuario.getNombre();
+    controladorCampoApellido.text = widget.usuario.getApellido();
+    controladorCampoCorreoElectronico.text =
+        widget.usuario.getCorreoElectronico();
+    controladorCampoNombreUsuario.text = widget.usuario.getNombreUsuario();
+
     return Scaffold(
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -57,6 +77,7 @@ class _PaginaModificarUsuario extends State<PaginaModificarUsuario> {
                       height: 45,
                       child: TextField(
                         decoration: decoracionCamposTexto,
+                        controller: controladorCampoNombre,
                       ),
                     ),
                     Container(
@@ -71,7 +92,10 @@ class _PaginaModificarUsuario extends State<PaginaModificarUsuario> {
                     SizedBox(
                       width: 350,
                       height: 45,
-                      child: TextField(decoration: decoracionCamposTexto),
+                      child: TextField(
+                        decoration: decoracionCamposTexto,
+                        controller: controladorCampoApellido,
+                      ),
                     ),
                   ],
                 ),
@@ -90,7 +114,10 @@ class _PaginaModificarUsuario extends State<PaginaModificarUsuario> {
                     SizedBox(
                       width: 350,
                       height: 45,
-                      child: TextField(decoration: decoracionCamposTexto),
+                      child: TextField(
+                        decoration: decoracionCamposTexto,
+                        controller: controladorCampoNombreUsuario,
+                      ),
                     )
                   ],
                 ),
@@ -106,7 +133,11 @@ class _PaginaModificarUsuario extends State<PaginaModificarUsuario> {
                     SizedBox(
                       width: 350,
                       height: 45,
-                      child: TextField(decoration: decoracionCamposTexto),
+                      child: TextField(
+                        decoration: decoracionCamposTexto,
+                        readOnly: true,
+                        controller: controladorCampoCorreoElectronico,
+                      ),
                     )
                   ],
                 ),
@@ -126,6 +157,7 @@ class _PaginaModificarUsuario extends State<PaginaModificarUsuario> {
                         obscureText: true,
                         obscuringCharacter: '*',
                         decoration: decoracionCamposTexto,
+                        controller: controladorCampoContrasena,
                       ),
                     )
                   ],
@@ -147,6 +179,7 @@ class _PaginaModificarUsuario extends State<PaginaModificarUsuario> {
                         obscureText: true,
                         obscuringCharacter: '*',
                         decoration: decoracionCamposTexto,
+                        controller: controladorCampoConfirmarContrasena,
                       ),
                     )
                   ],
