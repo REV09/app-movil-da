@@ -1,10 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:web_laptops/src/pages/pagina_especificar_componente_hdd.dart';
-import 'package:web_laptops/src/pages/pagina_especificar_componente_pantalla.dart';
-import 'package:web_laptops/src/pages/pagina_especificar_componente_procesador.dart';
-import 'package:web_laptops/src/pages/pagina_especificar_componente_ram.dart';
-import 'package:web_laptops/src/pages/pagina_especificar_componente_tarjeta_video.dart';
-import 'package:web_laptops/src/pages/pagina_especificar_ssd.dart';
+import 'package:web_laptops/src/classes/clase_almacenamiento.dart';
+import 'package:web_laptops/src/classes/clase_hdd.dart';
+import 'package:web_laptops/src/classes/clase_laptop.dart';
+import 'package:web_laptops/src/classes/clase_memoria_ram.dart';
+import 'package:web_laptops/src/classes/clase_pantalla.dart';
+import 'package:web_laptops/src/classes/clase_procesador.dart';
+import 'package:web_laptops/src/classes/clase_ssd.dart';
+import 'package:web_laptops/src/classes/clase_tarjeta_video.dart';
+import 'package:web_laptops/src/services/servicios_rest_almacenamiento.dart';
+import 'package:web_laptops/src/services/servicios_rest_hdd.dart';
+import 'package:web_laptops/src/services/servicios_rest_laptop.dart';
+import 'package:web_laptops/src/services/servicios_rest_memoria_ram.dart';
+import 'package:web_laptops/src/services/servicios_rest_pantalla.dart';
+import 'package:web_laptops/src/services/servicios_rest_procesador.dart';
+import 'package:web_laptops/src/services/servicios_rest_ssd.dart';
+import 'package:web_laptops/src/services/servicios_rest_tarjeta_video.dart';
 
 class PaginaRegistrarLaptop extends StatefulWidget {
   @override
@@ -21,6 +31,14 @@ class _PaginaRegistrarLaptop extends State<PaginaRegistrarLaptop> {
       TextStyle(fontSize: 22, fontWeight: FontWeight.bold);
 
   bool? checkValue = false;
+
+  TextEditingController controladorCampoModelo = TextEditingController();
+  TextEditingController controladorCampoProcesador = TextEditingController();
+  TextEditingController controladorCampoTarjetaVideo = TextEditingController();
+  TextEditingController controladorCampoPantalla = TextEditingController();
+  TextEditingController controladorCampoAlmacenamiento =
+      TextEditingController();
+  TextEditingController controladorCampoMemoriaRam = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +79,10 @@ class _PaginaRegistrarLaptop extends State<PaginaRegistrarLaptop> {
                     SizedBox(
                       width: 400,
                       height: 45,
-                      child: TextField(decoration: decoracionCamposTexto),
+                      child: TextField(
+                        decoration: decoracionCamposTexto,
+                        controller: controladorCampoModelo,
+                      ),
                     ),
                   ],
                 )
@@ -94,7 +115,10 @@ class _PaginaRegistrarLaptop extends State<PaginaRegistrarLaptop> {
                     SizedBox(
                       width: 350,
                       height: 45,
-                      child: TextField(decoration: decoracionCamposTexto),
+                      child: TextField(
+                        decoration: decoracionCamposTexto,
+                        controller: controladorCampoProcesador,
+                      ),
                     ),
                     Container(
                       child: SizedBox(width: 50),
@@ -110,6 +134,7 @@ class _PaginaRegistrarLaptop extends State<PaginaRegistrarLaptop> {
                       height: 45,
                       child: TextField(
                         decoration: decoracionCamposTexto,
+                        controller: controladorCampoMemoriaRam,
                       ),
                     ),
                   ],
@@ -125,7 +150,10 @@ class _PaginaRegistrarLaptop extends State<PaginaRegistrarLaptop> {
                     SizedBox(
                       width: 350,
                       height: 45,
-                      child: TextField(decoration: decoracionCamposTexto),
+                      child: TextField(
+                        decoration: decoracionCamposTexto,
+                        controller: controladorCampoTarjetaVideo,
+                      ),
                     ),
                     Container(
                       child: SizedBox(width: 50),
@@ -141,6 +169,7 @@ class _PaginaRegistrarLaptop extends State<PaginaRegistrarLaptop> {
                       height: 45,
                       child: TextField(
                         decoration: decoracionCamposTexto,
+                        controller: controladorCampoPantalla,
                       ),
                     ),
                   ],
@@ -158,6 +187,7 @@ class _PaginaRegistrarLaptop extends State<PaginaRegistrarLaptop> {
                       height: 45,
                       child: TextField(
                         decoration: decoracionCamposTexto,
+                        controller: controladorCampoAlmacenamiento,
                       ),
                     ),
                     Container(
@@ -228,7 +258,97 @@ class _PaginaRegistrarLaptop extends State<PaginaRegistrarLaptop> {
                   //height: 30,
                   alignment: AlignmentDirectional.centerEnd,
                   child: ElevatedButton(
-                    onPressed: () => {},
+                    onPressed: () async {
+                      Laptop laptop = Laptop(
+                        "idRegistro",
+                        controladorCampoModelo.text,
+                        controladorCampoMemoriaRam.text,
+                        controladorCampoTarjetaVideo.text,
+                        controladorCampoPantalla.text,
+                        controladorCampoProcesador.text,
+                        controladorCampoAlmacenamiento.text,
+                      );
+                      late Laptop respuestaLaptop;
+                      late Pantalla pantalla;
+                      late MemoriaRam memoriaRam;
+                      late Procesador procesador;
+                      late Almacenamiento almacenamiento;
+                      late TarjetaVideo tarjetaVideo;
+                      late Hdd discoDuro;
+                      late Ssd estadoSolido;
+                      try {
+                        respuestaLaptop = await agregarLaptop(laptop);
+                        if (respuestaLaptop.getModelo() == laptop.getModelo()) {
+                          String tipoAlmacenamiento;
+                          String idRegistro = respuestaLaptop.getIdRegistro();
+                          if (checkValue == true) {
+                            estadoSolido = Ssd.ssdVacio();
+                            estadoSolido.setIdRegistro(idRegistro);
+                            tipoAlmacenamiento = "SSD";
+                            agregarSsd(estadoSolido);
+                          } else {
+                            discoDuro = Hdd.vacio();
+                            discoDuro.setIdRegistro(idRegistro);
+                            tipoAlmacenamiento = "HDD";
+                            agregarHdd(discoDuro);
+                          }
+                          tarjetaVideo = TarjetaVideo.tarjetaVideoVacia();
+                          tarjetaVideo.setIdRegistro(idRegistro);
+                          almacenamiento =
+                              Almacenamiento(idRegistro, tipoAlmacenamiento);
+                          procesador = Procesador.procesadorVacio();
+                          procesador.setIdRegistro(idRegistro);
+                          memoriaRam = MemoriaRam.memoriaVacia();
+                          memoriaRam.setIdRegistro(idRegistro);
+                          pantalla = Pantalla.pantallaVacia();
+                          pantalla.setIdRegistro(idRegistro);
+                          agregarTarjetaVideo(tarjetaVideo);
+                          agregarAlmacenamiento(almacenamiento);
+                          agregarProcesador(procesador);
+                          agregarMemoriaRam(memoriaRam);
+                          agregarPantalla(pantalla);
+                          showDialog(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                              title: Text("Laptop registrada correctamente"),
+                              content: Text(
+                                  "Se ha registrado la laptop correctamente"
+                                  "con\nel siguiente id de registro:"
+                                  "${respuestaLaptop.getIdRegistro()}"),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(context, true);
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: Text("Aceptar"),
+                                ),
+                              ],
+                            ),
+                            barrierDismissible: false,
+                          );
+                        }
+                      } catch (excepcion) {
+                        showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: Text("Laptop no registrada"),
+                            content:
+                                Text("ocurrio un error y no se pudo registrar\n"
+                                    "la laptop por favor vuelva a intentar"),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context, true);
+                                },
+                                child: Text("Aceptar"),
+                              ),
+                            ],
+                          ),
+                          barrierDismissible: false,
+                        );
+                      }
+                    },
                     child: Text(
                       'Registrar Laptop',
                       style: estiloTexto,

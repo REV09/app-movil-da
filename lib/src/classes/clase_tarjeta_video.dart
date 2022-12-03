@@ -8,8 +8,25 @@ class TarjetaVideo {
   late double velocidadReloj;
   late String tipo;
 
-  TarjetaVideo(this.idRegistro, this.modelo, this.marca, this.cantidadVram,
-      this.tipoMemoria, this.bits, this.velocidadReloj, this.tipo);
+  TarjetaVideo(
+    this.idRegistro,
+    this.modelo,
+    this.marca,
+    this.cantidadVram,
+    this.tipoMemoria,
+    this.bits,
+    this.velocidadReloj,
+    this.tipo,
+  );
+
+  TarjetaVideo.tarjetaVideoVacia(
+      {this.modelo = "ND",
+      this.marca = "ND",
+      this.cantidadVram = 0,
+      this.tipoMemoria = "ND",
+      this.bits = 0,
+      this.velocidadReloj = 0,
+      this.tipo = "ND"});
 
   void setIdRegistro(String idRegistro) {
     this.idRegistro = idRegistro;

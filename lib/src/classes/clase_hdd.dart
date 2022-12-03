@@ -19,6 +19,15 @@ class Hdd {
     this.tamanio,
   );
 
+  Hdd.vacio(
+      {this.marca = "ND",
+      this.modelo = "ND",
+      this.capacidad = 0,
+      this.interfaz = "ND",
+      this.cache = 0,
+      this.revoluciones = 0,
+      this.tamanio = "ND"});
+
   void setIdRegistro(String idRegistro) {
     this.idRegistro = idRegistro;
   }

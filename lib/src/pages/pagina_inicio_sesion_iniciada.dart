@@ -23,7 +23,7 @@ class _PaginaInicioSesionIniciada extends State<PaginaInicioSesionIniciada> {
   BorderSide colorBordes = BorderSide(color: Colors.black);
   int selectedIndex = -1;
   Color colorSeleccion = Colors.tealAccent.shade200;
-  static int numItems = 6;
+  static int numItems = 10;
   List<bool> selected = List<bool>.generate(numItems, (int index) => false);
 
   TextStyle estiloTexto = TextStyle(

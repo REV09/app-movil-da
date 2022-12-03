@@ -26,7 +26,7 @@ Future<Almacenamiento> agregarAlmacenamiento(
       'Content-Type': 'application/json',
     },
     body: jsonEncode(<String, String>{
-      "idRegisro": almacenamiento.getIdRegistro(),
+      "idRegistro": almacenamiento.getIdRegistro(),
       "tipoAlmacenamiento": almacenamiento.getTipoAlmacenamiento(),
     }),
   );
@@ -65,4 +65,12 @@ Future<int> eliminarAlmacenamiento(String idRegistro) async {
   } else {
     throw Exception('No fue posible recuperar la informacion');
   }
+}
+
+void main(List<String> args) async {
+  Almacenamiento almacenamientoPrueba = Almacenamiento("idRegistro", "HDD");
+  Almacenamiento almacenamiento =
+      await agregarAlmacenamiento(almacenamientoPrueba);
+  print(
+      "${almacenamiento.getIdRegistro()}\n${almacenamiento.getTipoAlmacenamiento()}");
 }

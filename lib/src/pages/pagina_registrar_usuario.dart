@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:web_laptops/src/classes/clase_usuario.dart';
+import 'package:web_laptops/src/pages/pagina_inicio_sesion_iniciada.dart';
+import 'package:web_laptops/src/services/servicios_rest_usuario.dart';
 
 class PaginaRegistrarUsuario extends StatefulWidget {
   @override
@@ -17,6 +20,14 @@ class _PaginaRegistrarUsuario extends State<PaginaRegistrarUsuario> {
       TextStyle(fontSize: 22, fontWeight: FontWeight.bold);
 
   bool? checkValue = false;
+
+  TextEditingController controladorCampoNombre = TextEditingController();
+  TextEditingController controladorCampoApellido = TextEditingController();
+  TextEditingController controladorCampoNombreUsuario = TextEditingController();
+  TextEditingController controladorCampoCorreo = TextEditingController();
+  TextEditingController controladorCampoContrasena = TextEditingController();
+  TextEditingController controladorCampoConfirmarContrasena =
+      TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -58,6 +69,7 @@ class _PaginaRegistrarUsuario extends State<PaginaRegistrarUsuario> {
                       height: 45,
                       child: TextField(
                         decoration: decoracionCamposTexto,
+                        controller: controladorCampoNombre,
                       ),
                     ),
                     Container(
@@ -72,7 +84,10 @@ class _PaginaRegistrarUsuario extends State<PaginaRegistrarUsuario> {
                     SizedBox(
                       width: 350,
                       height: 45,
-                      child: TextField(decoration: decoracionCamposTexto),
+                      child: TextField(
+                        decoration: decoracionCamposTexto,
+                        controller: controladorCampoApellido,
+                      ),
                     ),
                   ],
                 ),
@@ -91,7 +106,10 @@ class _PaginaRegistrarUsuario extends State<PaginaRegistrarUsuario> {
                     SizedBox(
                       width: 350,
                       height: 45,
-                      child: TextField(decoration: decoracionCamposTexto),
+                      child: TextField(
+                        decoration: decoracionCamposTexto,
+                        controller: controladorCampoNombreUsuario,
+                      ),
                     )
                   ],
                 ),
@@ -107,7 +125,10 @@ class _PaginaRegistrarUsuario extends State<PaginaRegistrarUsuario> {
                     SizedBox(
                       width: 350,
                       height: 45,
-                      child: TextField(decoration: decoracionCamposTexto),
+                      child: TextField(
+                        decoration: decoracionCamposTexto,
+                        controller: controladorCampoCorreo,
+                      ),
                     )
                   ],
                 ),
@@ -127,6 +148,7 @@ class _PaginaRegistrarUsuario extends State<PaginaRegistrarUsuario> {
                         obscureText: true,
                         obscuringCharacter: '*',
                         decoration: decoracionCamposTexto,
+                        controller: controladorCampoContrasena,
                       ),
                     )
                   ],
@@ -148,6 +170,7 @@ class _PaginaRegistrarUsuario extends State<PaginaRegistrarUsuario> {
                         obscureText: true,
                         obscuringCharacter: '*',
                         decoration: decoracionCamposTexto,
+                        controller: controladorCampoConfirmarContrasena,
                       ),
                     )
                   ],
@@ -225,10 +248,89 @@ class _PaginaRegistrarUsuario extends State<PaginaRegistrarUsuario> {
                 Expanded(child: SizedBox(width: 7)),
                 Container(
                   margin: EdgeInsets.all(25),
-                  //height: 30,
                   alignment: AlignmentDirectional.centerEnd,
                   child: ElevatedButton(
-                    onPressed: () => {},
+                    onPressed: () async {
+                      Usuario usuario = Usuario(
+                        controladorCampoNombreUsuario.text,
+                        controladorCampoNombre.text,
+                        controladorCampoApellido.text,
+                        controladorCampoCorreo.text,
+                        controladorCampoConfirmarContrasena.text,
+                        asignarPermisos(),
+                      );
+                      if (controladorCampoContrasena.text ==
+                          controladorCampoConfirmarContrasena.text) {
+                        late Usuario usuarioRespuesta;
+                        try {
+                          usuarioRespuesta = await agregarUsuario(usuario);
+                          if (usuarioRespuesta.getCorreoElectronico() ==
+                              usuario.getCorreoElectronico()) {
+                            showDialog(
+                              context: context,
+                              builder: (context) => AlertDialog(
+                                title: Text("Usuario registrado correctamente"),
+                                content: Text(
+                                    "Se ha registrado la cuenta correctamente"),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              PaginaInicioSesionIniciada(
+                                                  usuario),
+                                        ),
+                                      );
+                                    },
+                                    child: Text("Aceptar"),
+                                  ),
+                                ],
+                              ),
+                              barrierDismissible: false,
+                            );
+                          }
+                        } catch (excepcion) {
+                          showDialog(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                              title: Text("Usuario no registrado"),
+                              content: Text("Ocurrio un error con el servidor\n"
+                                  "y no se pudo registrar el usuario"),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(context, true);
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: Text("Aceptar"),
+                                ),
+                              ],
+                            ),
+                            barrierDismissible: false,
+                          );
+                        }
+                      } else {
+                        showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: Text("Contraseñas diferentes"),
+                            content:
+                                Text("Las contraseñas ingresadas no coinciden"),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context, true);
+                                  Navigator.of(context).pop();
+                                },
+                                child: Text("Aceptar"),
+                              ),
+                            ],
+                          ),
+                          barrierDismissible: false,
+                        );
+                      }
+                    },
                     child: Text(
                       'Registrar usuario',
                       style: estiloTexto,
@@ -244,5 +346,12 @@ class _PaginaRegistrarUsuario extends State<PaginaRegistrarUsuario> {
         ],
       ),
     );
+  }
+
+  int asignarPermisos() {
+    if (checkValue == true) {
+      return 1;
+    }
+    return 0;
   }
 }

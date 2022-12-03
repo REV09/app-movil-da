@@ -25,6 +25,18 @@ class Ssd {
     this.protocolo,
   );
 
+  Ssd.ssdVacio(
+      {this.marca = "ND",
+      this.modelo = "ND",
+      this.capacidad = 0,
+      this.factorForma = "ND",
+      this.durabilidad = "ND",
+      this.tipoMemorias = "ND",
+      this.generacionMemorias = "ND",
+      this.velocidadLectura = "ND",
+      this.velocidadEscritura = "ND",
+      this.protocolo = "ND"});
+
   void setIdRegistro(String idRegistro) {
     this.idRegistro = idRegistro;
   }

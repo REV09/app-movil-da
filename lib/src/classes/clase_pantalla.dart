@@ -7,8 +7,23 @@ class Pantalla {
   late String tamanio;
   late int frecuenciaRefresco;
 
-  Pantalla(this.idRegistro, this.modelo, this.resolucion, this.calidad,
-      this.tipoPantalla, this.tamanio, this.frecuenciaRefresco);
+  Pantalla(
+    this.idRegistro,
+    this.modelo,
+    this.resolucion,
+    this.calidad,
+    this.tipoPantalla,
+    this.tamanio,
+    this.frecuenciaRefresco,
+  );
+
+  Pantalla.pantallaVacia(
+      {this.modelo = "ND",
+      this.resolucion = "ND",
+      this.calidad = "ND",
+      this.tipoPantalla = "ND",
+      this.tamanio = "ND",
+      this.frecuenciaRefresco = 0});
 
   void setIdRegistro(String idRegistro) {
     this.idRegistro = idRegistro;

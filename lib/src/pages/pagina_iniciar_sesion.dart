@@ -120,21 +120,22 @@ class _PaginaIniciarSesion extends State<PaginaIniciarSesion> {
                   }
                 } catch (excepcion) {
                   showDialog(
-                      context: context,
-                      builder: (context) => AlertDialog(
-                            title: Text("Usuario no valido"),
-                            content: Text(
-                                "No existe cuenta registrada con ese nombre"),
-                            actions: [
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.pop(context, true);
-                                },
-                                child: Text("Aceptar"),
-                              ),
-                            ],
-                          ),
-                      barrierDismissible: false);
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      title: Text("Usuario no valido"),
+                      content:
+                          Text("No existe cuenta registrada con ese nombre"),
+                      actions: [
+                        TextButton(
+                          onPressed: () {
+                            Navigator.pop(context, true);
+                          },
+                          child: Text("Aceptar"),
+                        ),
+                      ],
+                    ),
+                    barrierDismissible: false,
+                  );
                 }
               },
               style: estiloBotonIniciarSesion,

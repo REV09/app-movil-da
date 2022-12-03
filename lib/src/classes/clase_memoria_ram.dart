@@ -9,10 +9,9 @@ class MemoriaRam {
   late int ecc;
 
   MemoriaRam.memoriaVacia({
-    this.idRegistro = "",
-    this.modelo = "",
-    this.marca = "",
-    this.tipoMemoria = "",
+    this.modelo = "ND",
+    this.marca = "ND",
+    this.tipoMemoria = "ND",
     this.cantidadMemoria = 0,
     this.cantidadMemorias = 0,
     this.velocidad = 0,

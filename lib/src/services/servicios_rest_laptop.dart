@@ -47,7 +47,7 @@ Future<Laptop> agregarLaptop(Laptop laptop) async {
       'Content-Type': 'application/json',
     },
     body: jsonEncode(<String, String>{
-      "idRegistro": "",
+      "idRegistro": laptop.getIdRegistro(),
       "modelo": laptop.getModelo(),
       "memoriaRam": laptop.getMemoriaRam(),
       "tarjetaVideo": laptop.getTarjetaVideo(),

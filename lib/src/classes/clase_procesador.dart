@@ -9,9 +9,9 @@ class Procesador {
   late int litografia;
 
   Procesador.procesadorVacio({
-    this.idRegistro = "",
-    this.modelo = "",
-    this.marca = "",
+    this.idRegistro = "ND",
+    this.modelo = "ND",
+    this.marca = "ND",
     this.numeroNucleos = 0,
     this.numeroHilos = 0,
     this.velocidadMaxima = 0,
