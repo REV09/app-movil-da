@@ -45,7 +45,7 @@ Future<int> modificarProcesador(
     Procesador procesador, String idRegistro) async {
   final respuesta = await http.post(
     Uri.parse(
-        'https://web-production-2d2f.up.railway.app/procesador/$idRegistro'),
+        'https://web-production-2d2f.up.railway.app/procesador/{id_registro}?procesador_id=$idRegistro'),
     headers: <String, String>{
       'Content-Type': 'application/json',
     },

@@ -44,7 +44,8 @@ Future<Hdd> agregarHdd(Hdd hdd) async {
 
 Future<Hdd> modificarHdd(Hdd hdd, String idRegistro) async {
   final respuesta = await http.put(
-    Uri.parse('https://web-production-2d2f.up.railway.app/hdd/$idRegistro'),
+    Uri.parse(
+        'https://web-production-2d2f.up.railway.app/hdd/{id_registro}?hdd_id=$idRegistro'),
     headers: <String, String>{
       'Content-Type': 'application/json',
     },

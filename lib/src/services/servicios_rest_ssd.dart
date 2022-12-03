@@ -46,7 +46,8 @@ Future<Ssd> agregarSsd(Ssd ssd) async {
 
 Future<Ssd> modificarSsd(Ssd ssd, String idRegistro) async {
   final respuesta = await http.put(
-    Uri.parse('https://web-production-2d2f.up.railway.app/ssd/$idRegistro'),
+    Uri.parse(
+        'https://web-production-2d2f.up.railway.app/ssd/{id_registro}?ssd_id=$idRegistro'),
     headers: <String, String>{'Content-Type': 'application/json'},
     body: jsonEncode(<String, String>{
       "idRegistro": ssd.getIdRegistro(),

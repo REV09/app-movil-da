@@ -41,7 +41,7 @@ Future<Almacenamiento> modificarAlmacenamiento(
     Almacenamiento almacenamiento, String idRegistro) async {
   final respuesta = await http.put(
     Uri.parse(
-        'https://web-production-2d2f.up.railway.app/almacenamiento/$idRegistro'),
+        'https://web-production-2d2f.up.railway.app/almacenamiento/{id_registro}?almacenamiento_id=$idRegistro'),
     headers: <String, String>{
       'Content-Type': 'application/json',
     },

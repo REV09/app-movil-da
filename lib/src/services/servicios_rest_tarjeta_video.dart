@@ -46,7 +46,7 @@ Future<TarjetaVideo> modificarTarjetaVideo(
     TarjetaVideo tarjetaVideo, String idRegistro) async {
   final respuesta = await http.put(
     Uri.parse(
-        'https://web-production-2d2f.up.railway.app/tarjetaDeVideo/$idRegistro'),
+        'https://web-production-2d2f.up.railway.app/tarjetaDeVideo/{id_registro}?tarjeta_id=$idRegistro'),
     headers: <String, String>{
       'Content-Type': 'application/json',
     },

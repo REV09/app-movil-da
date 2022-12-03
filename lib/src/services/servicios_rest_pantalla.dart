@@ -43,7 +43,8 @@ Future<Pantalla> agregarPantalla(Pantalla pantalla) async {
 
 Future<Pantalla> modificarPantalla(Pantalla pantalla, String idRegistro) async {
   final respuesta = await http.put(
-    Uri.parse('https://web-production-2d2f.up.railway.app/pantalla'),
+    Uri.parse(
+        'https://web-production-2d2f.up.railway.app/pantalla/{id_registro}?pantalla_id=$idRegistro'),
     headers: <String, String>{
       'Content-Type': 'application/json',
     },

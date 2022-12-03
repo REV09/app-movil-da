@@ -43,7 +43,7 @@ Future<Usuario> agregarUsuario(Usuario usuario) async {
 Future<Usuario> modificarUsuario(Usuario usuario, String nombreAnterior) async {
   final respuesta = await http.put(
     Uri.parse(
-        'https://web-production-2d2f.up.railway.app/usuario/$nombreAnterior'),
+        'https://web-production-2d2f.up.railway.app/usuario/{nombre_usuario}?nombre_usuario_anterior=$nombreAnterior'),
     headers: <String, String>{
       'Content-Type': 'application/json',
     },
