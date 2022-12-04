@@ -45,8 +45,8 @@ Future<MemoriaRam> agregarMemoriaRam(MemoriaRam memoriaRam) async {
 Future<MemoriaRam> modificarMemoriaRam(
     MemoriaRam memoriaRam, String idRegistro) async {
   final respuesta = await http.put(
-    Uri.parse(
-        'https://web-production-2d2f.up.railway.app/memoria/{id_registro}?ram_id=$idRegistro'),
+    Uri.parse('https://web-production-2d2f.up.railway.app/memoria/{id_registro}'
+        '?ram_id=$idRegistro'),
     headers: <String, String>{
       'Content-Type': 'application/json',
     },
