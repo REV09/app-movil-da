@@ -301,7 +301,6 @@ class _PaginaRegistrarUsuario extends State<PaginaRegistrarUsuario> {
                                 TextButton(
                                   onPressed: () {
                                     Navigator.pop(context, true);
-                                    Navigator.of(context).pop();
                                   },
                                   child: Text("Aceptar"),
                                 ),
@@ -321,7 +320,6 @@ class _PaginaRegistrarUsuario extends State<PaginaRegistrarUsuario> {
                               TextButton(
                                 onPressed: () {
                                   Navigator.pop(context, true);
-                                  Navigator.of(context).pop();
                                 },
                                 child: Text("Aceptar"),
                               ),

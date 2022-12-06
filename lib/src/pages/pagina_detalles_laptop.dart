@@ -7,6 +7,13 @@ import 'package:web_laptops/src/pages/detailsComponentWithSession/pagina_detalle
 import 'package:web_laptops/src/pages/detailsComponentWithSession/pagina_detalles_componente_ssd_sesion_iniciada.dart';
 import 'package:web_laptops/src/pages/detailsComponentWithSession/pagina_detalles_componente_tarjeta_video_sesion_iniciada.dart';
 import 'package:web_laptops/src/pages/pagina_modificar_laptop.dart';
+import 'package:web_laptops/src/services/servicios_rest_hdd.dart';
+import 'package:web_laptops/src/services/servicios_rest_laptop.dart';
+import 'package:web_laptops/src/services/servicios_rest_memoria_ram.dart';
+import 'package:web_laptops/src/services/servicios_rest_pantalla.dart';
+import 'package:web_laptops/src/services/servicios_rest_procesador.dart';
+import 'package:web_laptops/src/services/servicios_rest_ssd.dart';
+import 'package:web_laptops/src/services/servicios_rest_tarjeta_video.dart';
 import '../classes/clase_almacenamiento.dart';
 import '../services/servicios_rest_almacenamiento.dart';
 
@@ -304,9 +311,67 @@ class _PaginaDetallesLaptop extends State<PaginaDetallesLaptop> {
                                     "\nEsta accion no se puede deshacer"),
                                 actions: [
                                   TextButton(
-                                    onPressed: () {
-                                      Navigator.pop(context, true);
-                                      Navigator.of(context).pop();
+                                    onPressed: () async {
+                                      String idRegistroLaptop =
+                                          widget.laptop.getIdRegistro();
+                                      try {
+                                        await eliminarLaptop(idRegistroLaptop);
+                                        await eliminarMemoriaRam(
+                                            idRegistroLaptop);
+                                        await eliminarAlmacenamiento(
+                                            idRegistroLaptop);
+                                        await eliminarPantalla(
+                                            idRegistroLaptop);
+                                        await eliminarProcesador(
+                                            idRegistroLaptop);
+                                        await eliminarTarjetaVideo(
+                                            idRegistroLaptop);
+                                        if (ssd) {
+                                          await eliminarSsd(idRegistroLaptop);
+                                        } else {
+                                          await eliminarHdd(idRegistroLaptop);
+                                        }
+                                        showDialog(
+                                          context: context,
+                                          builder: (context) => AlertDialog(
+                                            title: Text("Laptop eliminada"),
+                                            content:
+                                                Text("Se ha eliminado la laptop"
+                                                    " correctamente"),
+                                            actions: [
+                                              TextButton(
+                                                onPressed: () {
+                                                  Navigator.pop(context, true);
+                                                  Navigator.pop(context, true);
+                                                  Navigator.of(context).pop();
+                                                },
+                                                child: Text("Aceptar"),
+                                              ),
+                                            ],
+                                          ),
+                                          barrierDismissible: false,
+                                        );
+                                      } catch (excepcion) {
+                                        showDialog(
+                                          context: context,
+                                          builder: (context) => AlertDialog(
+                                            title: Text("Laptop no eliminada"),
+                                            content: Text(
+                                                "Ha ocurrido un error de"
+                                                "conexion\ny no se ha podido"
+                                                "eliminar la laptop"),
+                                            actions: [
+                                              TextButton(
+                                                onPressed: () {
+                                                  Navigator.pop(context, true);
+                                                },
+                                                child: Text("Aceptar"),
+                                              ),
+                                            ],
+                                          ),
+                                          barrierDismissible: false,
+                                        );
+                                      }
                                     },
                                     child: Text("Aceptar"),
                                   ),
@@ -330,9 +395,7 @@ class _PaginaDetallesLaptop extends State<PaginaDetallesLaptop> {
             ),
           ),
           ElevatedButton(
-            onPressed: () => {
-              Navigator.pop(context, false),
-            },
+            onPressed: () => {},
             child: Text('Cerrar'),
           )
         ],

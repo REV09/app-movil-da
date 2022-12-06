@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:web_laptops/src/classes/clase_usuario.dart';
+import 'package:web_laptops/src/services/servicios_rest_usuario.dart';
 
 class PaginaModificarUsuario extends StatefulWidget {
   Usuario usuario;
@@ -260,9 +261,87 @@ class _PaginaModificarUsuario extends State<PaginaModificarUsuario> {
                   margin: EdgeInsets.all(25),
                   alignment: AlignmentDirectional.centerEnd,
                   child: ElevatedButton(
-                    onPressed: () => {},
+                    onPressed: () async {
+                      Usuario usuarioActualizado = Usuario(
+                        controladorCampoNombreUsuario.text,
+                        controladorCampoNombre.text,
+                        controladorCampoApellido.text,
+                        controladorCampoCorreoElectronico.text,
+                        controladorCampoContrasena.text,
+                        otorgarPermisos(),
+                      );
+                      if (controladorCampoContrasena.text ==
+                          controladorCampoConfirmarContrasena.text) {
+                        late Usuario usuarioRespuesta;
+                        try {
+                          usuarioRespuesta = await modificarUsuario(
+                              usuarioActualizado,
+                              widget.usuario.getNombreUsuario());
+                          if (usuarioRespuesta.getCorreoElectronico() ==
+                              usuarioActualizado.getCorreoElectronico()) {
+                            showDialog(
+                              context: context,
+                              builder: (context) => AlertDialog(
+                                title:
+                                    Text("Usuario actualizado correctamente"),
+                                content: Text(
+                                    "Se ha actualizado la cuenta correctamente"),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context, true);
+                                      Navigator.of(context).pop();
+                                      Navigator.of(context).pop();
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: Text("Aceptar"),
+                                  ),
+                                ],
+                              ),
+                              barrierDismissible: false,
+                            );
+                          }
+                        } catch (excepcion) {
+                          showDialog(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                              title: Text("Usuario no actualizado"),
+                              content: Text("Ocurrio un error con el servidor\n"
+                                  "y no se pudo actualizar el usuario"),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(context, true);
+                                  },
+                                  child: Text("Aceptar"),
+                                ),
+                              ],
+                            ),
+                            barrierDismissible: false,
+                          );
+                        }
+                      } else {
+                        showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: Text("Contraseñas diferentes"),
+                            content:
+                                Text("Las contraseñas ingresadas no coinciden"),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context, true);
+                                },
+                                child: Text("Aceptar"),
+                              ),
+                            ],
+                          ),
+                          barrierDismissible: false,
+                        );
+                      }
+                    },
                     child: Text(
-                      'Registrar usuario',
+                      'modificar usuario',
                       style: estiloTexto,
                     ),
                     style: ElevatedButton.styleFrom(
@@ -276,5 +355,12 @@ class _PaginaModificarUsuario extends State<PaginaModificarUsuario> {
         ],
       ),
     );
+  }
+
+  int otorgarPermisos() {
+    if (checkValue) {
+      return 1;
+    }
+    return 0;
   }
 }
