@@ -206,8 +206,7 @@ class _PaginaInicio extends State<PaginaInicio> {
                             child: ElevatedButton(
                               child: Text("Ver detalles de laptop"),
                               onPressed: () async {
-                                if (detallesLaptop.getIdRegistro() ==
-                                    "Sin Datos") {
+                                if (detallesLaptop.getIdRegistro() == "ND") {
                                   await showDialog(
                                       context: context,
                                       builder: (context) => AlertDialog(
