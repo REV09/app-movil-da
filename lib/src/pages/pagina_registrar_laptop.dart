@@ -313,7 +313,7 @@ class _PaginaRegistrarLaptop extends State<PaginaRegistrarLaptop> {
                               title: Text("Laptop registrada correctamente"),
                               content: Text(
                                   "Se ha registrado la laptop correctamente"
-                                  "con\nel siguiente id de registro:"
+                                  "con\nel siguiente id de registro:\n"
                                   "${respuestaLaptop.getIdRegistro()}"),
                               actions: [
                                 TextButton(

@@ -1,11 +1,36 @@
 import 'package:flutter/material.dart';
+import 'package:web_laptops/src/classes/clase_almacenamiento.dart';
+import 'package:web_laptops/src/classes/clase_hdd.dart';
+import 'package:web_laptops/src/classes/clase_laptop.dart';
+import 'package:web_laptops/src/classes/clase_memoria_ram.dart';
+import 'package:web_laptops/src/classes/clase_pantalla.dart';
+import 'package:web_laptops/src/classes/clase_procesador.dart';
+import 'package:web_laptops/src/classes/clase_ssd.dart';
+import 'package:web_laptops/src/classes/clase_tarjeta_video.dart';
+import 'package:web_laptops/src/services/servicios_rest_almacenamiento.dart';
+import 'package:web_laptops/src/services/servicios_rest_hdd.dart';
+import 'package:web_laptops/src/services/servicios_rest_laptop.dart';
+import 'package:web_laptops/src/services/servicios_rest_memoria_ram.dart';
+import 'package:web_laptops/src/services/servicios_rest_pantalla.dart';
+import 'package:web_laptops/src/services/servicios_rest_procesador.dart';
+import 'package:web_laptops/src/services/servicios_rest_ssd.dart';
+import 'package:web_laptops/src/services/servicios_rest_tarjeta_video.dart';
 
 class PaginaModificarLaptop extends StatefulWidget {
+  Laptop laptopAnterior;
+  bool ssd;
+
+  PaginaModificarLaptop(this.laptopAnterior, this.ssd);
+
   @override
-  State<StatefulWidget> createState() => _PaginaModificarLaptop();
+  State<StatefulWidget> createState() => _PaginaModificarLaptop(ssd);
 }
 
 class _PaginaModificarLaptop extends State<PaginaModificarLaptop> {
+  bool checkValue;
+
+  _PaginaModificarLaptop(this.checkValue);
+
   InputDecoration decoracionCamposTexto = InputDecoration(
       border: OutlineInputBorder(borderRadius: BorderRadius.circular(0.0)));
 
@@ -14,10 +39,24 @@ class _PaginaModificarLaptop extends State<PaginaModificarLaptop> {
   TextStyle estiloTituloTexto =
       TextStyle(fontSize: 22, fontWeight: FontWeight.bold);
 
-  bool? checkValue = false;
+  TextEditingController controladorCampoModelo = TextEditingController();
+  TextEditingController controladorCampoProcesador = TextEditingController();
+  TextEditingController controladorCampoTarjetaVideo = TextEditingController();
+  TextEditingController controladorCampoPantalla = TextEditingController();
+  TextEditingController controladorCampoAlmacenamiento =
+      TextEditingController();
+  TextEditingController controladorCampoMemoriaRam = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    controladorCampoModelo.text = widget.laptopAnterior.getModelo();
+    controladorCampoProcesador.text = widget.laptopAnterior.getProcesador();
+    controladorCampoTarjetaVideo.text = widget.laptopAnterior.getTarjetaVideo();
+    controladorCampoPantalla.text = widget.laptopAnterior.getPantalla();
+    controladorCampoAlmacenamiento.text =
+        widget.laptopAnterior.getAlmacenamiento();
+    controladorCampoMemoriaRam.text = widget.laptopAnterior.getMemoriaRam();
+
     return Scaffold(
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -54,7 +93,10 @@ class _PaginaModificarLaptop extends State<PaginaModificarLaptop> {
                     SizedBox(
                       width: 400,
                       height: 45,
-                      child: TextField(decoration: decoracionCamposTexto),
+                      child: TextField(
+                        decoration: decoracionCamposTexto,
+                        controller: controladorCampoModelo,
+                      ),
                     ),
                   ],
                 )
@@ -87,7 +129,10 @@ class _PaginaModificarLaptop extends State<PaginaModificarLaptop> {
                     SizedBox(
                       width: 350,
                       height: 45,
-                      child: TextField(decoration: decoracionCamposTexto),
+                      child: TextField(
+                        decoration: decoracionCamposTexto,
+                        controller: controladorCampoProcesador,
+                      ),
                     ),
                     Container(
                       child: SizedBox(width: 50),
@@ -103,6 +148,7 @@ class _PaginaModificarLaptop extends State<PaginaModificarLaptop> {
                       height: 45,
                       child: TextField(
                         decoration: decoracionCamposTexto,
+                        controller: controladorCampoMemoriaRam,
                       ),
                     ),
                   ],
@@ -118,7 +164,10 @@ class _PaginaModificarLaptop extends State<PaginaModificarLaptop> {
                     SizedBox(
                       width: 350,
                       height: 45,
-                      child: TextField(decoration: decoracionCamposTexto),
+                      child: TextField(
+                        decoration: decoracionCamposTexto,
+                        controller: controladorCampoTarjetaVideo,
+                      ),
                     ),
                     Container(
                       child: SizedBox(width: 50),
@@ -134,6 +183,7 @@ class _PaginaModificarLaptop extends State<PaginaModificarLaptop> {
                       height: 45,
                       child: TextField(
                         decoration: decoracionCamposTexto,
+                        controller: controladorCampoPantalla,
                       ),
                     ),
                   ],
@@ -151,6 +201,7 @@ class _PaginaModificarLaptop extends State<PaginaModificarLaptop> {
                       height: 45,
                       child: TextField(
                         decoration: decoracionCamposTexto,
+                        controller: controladorCampoAlmacenamiento,
                       ),
                     ),
                     Container(
@@ -220,7 +271,142 @@ class _PaginaModificarLaptop extends State<PaginaModificarLaptop> {
                   margin: EdgeInsets.all(25),
                   alignment: AlignmentDirectional.centerEnd,
                   child: ElevatedButton(
-                    onPressed: () => {},
+                    onPressed: () async {
+                      Laptop laptopActualizada = Laptop(
+                        widget.laptopAnterior.getIdRegistro(),
+                        controladorCampoModelo.text,
+                        controladorCampoMemoriaRam.text,
+                        controladorCampoTarjetaVideo.text,
+                        controladorCampoPantalla.text,
+                        controladorCampoProcesador.text,
+                        controladorCampoAlmacenamiento.text,
+                      );
+                      Almacenamiento almacenamiento;
+                      late Hdd discoDuro;
+                      late Ssd estadoSolido;
+                      try {
+                        Laptop respuestaLaptop = await modificarLaptop(
+                          laptopActualizada,
+                          laptopActualizada.getIdRegistro(),
+                        );
+                        if (respuestaLaptop.getIdRegistro() ==
+                            laptopActualizada.getIdRegistro()) {
+                          String? tipoAlmacenamiento;
+                          String idRegistro = respuestaLaptop.getIdRegistro();
+                          if (checkValue && !widget.ssd) {
+                            estadoSolido = Ssd.ssdVacio();
+                            estadoSolido.setIdRegistro(idRegistro);
+                            tipoAlmacenamiento = "SSD";
+                            agregarSsd(estadoSolido);
+                            eliminarHdd(idRegistro);
+                            almacenamiento = Almacenamiento(
+                              idRegistro,
+                              tipoAlmacenamiento,
+                            );
+                            modificarAlmacenamiento(almacenamiento, idRegistro);
+                          } else if (!checkValue && widget.ssd) {
+                            discoDuro = Hdd.vacio();
+                            discoDuro.setIdRegistro(idRegistro);
+                            tipoAlmacenamiento = "HDD";
+                            agregarHdd(discoDuro);
+                            eliminarSsd(idRegistro);
+                            almacenamiento = Almacenamiento(
+                              idRegistro,
+                              tipoAlmacenamiento,
+                            );
+                            modificarAlmacenamiento(almacenamiento, idRegistro);
+                          } else {
+                            if (laptopActualizada.getAlmacenamiento() !=
+                                widget.laptopAnterior.getAlmacenamiento()) {
+                              if (tipoAlmacenamiento == "HDD") {
+                                Hdd hddAnterior = await obtenerHdd(idRegistro);
+                                hddAnterior.setModelo(
+                                    laptopActualizada.getAlmacenamiento());
+                                agregarHdd(hddAnterior);
+                              } else {
+                                Ssd ssdAnterior = await obtenerSsd(idRegistro);
+                                ssdAnterior.setModelo(
+                                    laptopActualizada.getAlmacenamiento());
+                                agregarSsd(ssdAnterior);
+                              }
+                            }
+                          }
+                          if (laptopActualizada.getMemoriaRam() !=
+                              widget.laptopAnterior.getMemoriaRam()) {
+                            MemoriaRam memoriaRamAnterior =
+                                await obtenerMemoriaRam(idRegistro);
+                            memoriaRamAnterior
+                                .setModelo(laptopActualizada.getMemoriaRam());
+                            modificarMemoriaRam(memoriaRamAnterior, idRegistro);
+                          }
+                          if (laptopActualizada.getPantalla() !=
+                              widget.laptopAnterior.getPantalla()) {
+                            Pantalla pantallaAnterior =
+                                await obtenerPantalla(idRegistro);
+                            pantallaAnterior
+                                .setModelo(laptopActualizada.getPantalla());
+                            modificarPantalla(pantallaAnterior, idRegistro);
+                          }
+                          if (laptopActualizada.getProcesador() !=
+                              widget.laptopAnterior.getProcesador()) {
+                            Procesador procesadorAnterior =
+                                await obtenerProcesador(idRegistro);
+                            procesadorAnterior
+                                .setModelo(laptopActualizada.getProcesador());
+                            modificarProcesador(procesadorAnterior, idRegistro);
+                          }
+                          if (laptopActualizada.getTarjetaVideo() !=
+                              widget.laptopAnterior.getTarjetaVideo()) {
+                            TarjetaVideo tarjetaVideoAnterior =
+                                await obtenerTarjetaVideo(idRegistro);
+                            tarjetaVideoAnterior
+                                .setModelo(laptopActualizada.getTarjetaVideo());
+                            modificarTarjetaVideo(
+                                tarjetaVideoAnterior, idRegistro);
+                          }
+                          showDialog(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                              title: Text("Laptop actualizada correctamente"),
+                              content: Text(
+                                  "Se ha actualizado la laptop correctamente"
+                                  "con\nel siguiente id de registro:\n"
+                                  "${respuestaLaptop.getIdRegistro()}"),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(context, true);
+                                    Navigator.of(context).pop();
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: Text("Aceptar"),
+                                ),
+                              ],
+                            ),
+                            barrierDismissible: false,
+                          );
+                        }
+                      } catch (excepcion) {
+                        showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: Text("Laptop no actualizada"),
+                            content: Text(
+                                "ocurrio un error y no se pudo actualizar\n"
+                                "la laptop por favor vuelva a intentar"),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context, true);
+                                },
+                                child: Text("Aceptar"),
+                              ),
+                            ],
+                          ),
+                          barrierDismissible: false,
+                        );
+                      }
+                    },
                     child: Text(
                       'Actualizar',
                       style: estiloTexto,

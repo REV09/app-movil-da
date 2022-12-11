@@ -1,6 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:web_laptops/src/classes/clase_laptop.dart';
+import 'package:web_laptops/src/classes/clase_procesador.dart';
+import 'package:web_laptops/src/services/servicios_rest_laptop.dart';
+import 'package:web_laptops/src/services/servicios_rest_procesador.dart';
 
 class PaginaEspecificarProcesador extends StatefulWidget {
+  Procesador procesador;
+
+  PaginaEspecificarProcesador(this.procesador);
+
   @override
   State<StatefulWidget> createState() => _PaginaEspecificarProcesador();
 }
@@ -15,8 +23,30 @@ class _PaginaEspecificarProcesador extends State<PaginaEspecificarProcesador> {
   TextStyle estiloTituloTexto =
       TextStyle(fontSize: 22, fontWeight: FontWeight.bold);
 
+  TextEditingController controladorCampoMarca = TextEditingController();
+  TextEditingController controladorCampoModelo = TextEditingController();
+  TextEditingController controladorCampoNucleos = TextEditingController();
+  TextEditingController controladorCampoHilos = TextEditingController();
+  TextEditingController controladorCampoVelocidadMaxima =
+      TextEditingController();
+  TextEditingController controladorCampoVelocidadMinima =
+      TextEditingController();
+  TextEditingController controladorCampoLitografia = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
+    controladorCampoMarca.text = widget.procesador.getMarca();
+    controladorCampoModelo.text = widget.procesador.getModelo();
+    controladorCampoNucleos.text =
+        widget.procesador.getNumeroHilos().toString();
+    controladorCampoHilos.text = widget.procesador.getNumeroHilos().toString();
+    controladorCampoVelocidadMaxima.text =
+        widget.procesador.getVelocidadMaxima().toString();
+    controladorCampoVelocidadMinima.text =
+        widget.procesador.getVelocidadMinima().toString();
+    controladorCampoLitografia.text =
+        widget.procesador.getLitografia().toString();
+
     return Scaffold(
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -57,7 +87,10 @@ class _PaginaEspecificarProcesador extends State<PaginaEspecificarProcesador> {
                     SizedBox(
                       width: 200,
                       height: 45,
-                      child: TextField(decoration: decoracionCamposTexto),
+                      child: TextField(
+                        decoration: decoracionCamposTexto,
+                        controller: controladorCampoMarca,
+                      ),
                     )
                   ],
                 ),
@@ -72,7 +105,10 @@ class _PaginaEspecificarProcesador extends State<PaginaEspecificarProcesador> {
                     SizedBox(
                       width: 350,
                       height: 45,
-                      child: TextField(decoration: decoracionCamposTexto),
+                      child: TextField(
+                        decoration: decoracionCamposTexto,
+                        controller: controladorCampoModelo,
+                      ),
                     )
                   ],
                 ),
@@ -89,6 +125,7 @@ class _PaginaEspecificarProcesador extends State<PaginaEspecificarProcesador> {
                       height: 45,
                       child: TextField(
                         decoration: decoracionCamposTexto,
+                        controller: controladorCampoNucleos,
                       ),
                     ),
                   ],
@@ -104,7 +141,10 @@ class _PaginaEspecificarProcesador extends State<PaginaEspecificarProcesador> {
                     SizedBox(
                       width: 150,
                       height: 45,
-                      child: TextField(decoration: decoracionCamposTexto),
+                      child: TextField(
+                        decoration: decoracionCamposTexto,
+                        controller: controladorCampoHilos,
+                      ),
                     )
                   ],
                 ),
@@ -119,7 +159,10 @@ class _PaginaEspecificarProcesador extends State<PaginaEspecificarProcesador> {
                     SizedBox(
                       width: 150,
                       height: 45,
-                      child: TextField(decoration: decoracionCamposTexto),
+                      child: TextField(
+                        decoration: decoracionCamposTexto,
+                        controller: controladorCampoVelocidadMaxima,
+                      ),
                     )
                   ],
                 ),
@@ -134,7 +177,10 @@ class _PaginaEspecificarProcesador extends State<PaginaEspecificarProcesador> {
                     SizedBox(
                       width: 150,
                       height: 45,
-                      child: TextField(decoration: decoracionCamposTexto),
+                      child: TextField(
+                        decoration: decoracionCamposTexto,
+                        controller: controladorCampoVelocidadMinima,
+                      ),
                     )
                   ],
                 ),
@@ -149,7 +195,10 @@ class _PaginaEspecificarProcesador extends State<PaginaEspecificarProcesador> {
                     SizedBox(
                       width: 150,
                       height: 45,
-                      child: TextField(decoration: decoracionCamposTexto),
+                      child: TextField(
+                        decoration: decoracionCamposTexto,
+                        controller: controladorCampoLitografia,
+                      ),
                     )
                   ],
                 ),
@@ -169,9 +218,9 @@ class _PaginaEspecificarProcesador extends State<PaginaEspecificarProcesador> {
                       await showDialog(
                           context: context,
                           builder: (context) => AlertDialog(
-                                title: Text("Cancelar Registro"),
+                                title: Text("Cancelar"),
                                 content: Text(
-                                    "¿Estas seguro de cancelar el registro?\n"
+                                    "¿Estas seguro de cancelar la operacion?\n"
                                     "\nNo se realizan cambios en el sistema"),
                                 actions: [
                                   TextButton(
@@ -202,7 +251,72 @@ class _PaginaEspecificarProcesador extends State<PaginaEspecificarProcesador> {
                   margin: EdgeInsets.all(25),
                   alignment: AlignmentDirectional.centerEnd,
                   child: ElevatedButton(
-                    onPressed: () => {},
+                    onPressed: () async {
+                      Procesador procesadorActualizado = Procesador(
+                        widget.procesador.getIdRegistro(),
+                        controladorCampoModelo.text,
+                        controladorCampoMarca.text,
+                        int.parse(controladorCampoNucleos.text),
+                        int.parse(controladorCampoHilos.text),
+                        double.parse(controladorCampoVelocidadMaxima.text),
+                        double.parse(controladorCampoVelocidadMinima.text),
+                        int.parse(controladorCampoLitografia.text),
+                      );
+                      try {
+                        Laptop laptopNueva = await obtenerLaptopPorId(
+                            widget.procesador.getIdRegistro());
+                        laptopNueva.setProcesador(
+                            " ${procesadorActualizado.getModelo()}");
+                        Procesador procesadorRespuesta =
+                            await modificarProcesador(procesadorActualizado,
+                                procesadorActualizado.getIdRegistro());
+                        if (procesadorActualizado.getIdRegistro() ==
+                            procesadorRespuesta.getIdRegistro()) {
+                          modificarLaptop(
+                              laptopNueva, laptopNueva.getIdRegistro());
+                          showDialog(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                              title:
+                                  Text("Procesador actualizado correctamente"),
+                              content: Text("Se ha actualizado el procesador"
+                                  " correctamente"),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(context, true);
+                                    Navigator.of(context).pop();
+                                    Navigator.of(context).pop();
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: Text("Aceptar"),
+                                ),
+                              ],
+                            ),
+                            barrierDismissible: false,
+                          );
+                        }
+                      } catch (excepcion) {
+                        showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: Text("Procesador no actualizado"),
+                            content: Text(
+                                "ocurrio un error y no se pudo actualizar\n"
+                                "el procesador por favor vuelva a intentar"),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context, true);
+                                },
+                                child: Text("Aceptar"),
+                              ),
+                            ],
+                          ),
+                          barrierDismissible: false,
+                        );
+                      }
+                    },
                     child: Text(
                       'Guardar',
                       style: estiloTexto,

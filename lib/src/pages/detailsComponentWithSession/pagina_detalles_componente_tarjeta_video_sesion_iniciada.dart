@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:web_laptops/src/classes/clase_tarjeta_video.dart';
+import 'package:web_laptops/src/pages/pagina_especificar_componente_tarjeta_video.dart';
 import 'package:web_laptops/src/services/servicios_rest_tarjeta_video.dart';
 
 class PaginaDetallesTarjetaVideoSesionIniciada extends StatefulWidget {
@@ -243,7 +244,14 @@ class _PaginaDetallesTarjetaVideoSesionIniciada
                         margin: EdgeInsets.all(10),
                         alignment: AlignmentDirectional.centerStart,
                         child: ElevatedButton(
-                          onPressed: () => {},
+                          onPressed: () => {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    PaginaEspecificarTarjetaVideo(),
+                              ),
+                            )
+                          },
                           child: Text('Modificar Tarjeta de video'),
                         ),
                       ),

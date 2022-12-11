@@ -1,3 +1,5 @@
+import 'dart:html';
+
 import 'package:flutter/material.dart';
 import 'package:web_laptops/src/classes/clase_laptop.dart';
 import 'package:web_laptops/src/pages/detailsComponentWithSession/pagina_detalles_componente_hdd_sesion_iniciada.dart';
@@ -287,7 +289,8 @@ class _PaginaDetallesLaptop extends State<PaginaDetallesLaptop> {
                     onPressed: () => {
                       Navigator.of(context).push(
                         MaterialPageRoute(
-                          builder: (context) => PaginaModificarLaptop(),
+                          builder: (context) =>
+                              PaginaModificarLaptop(widget.laptop, ssd),
                         ),
                       )
                     },
@@ -395,7 +398,7 @@ class _PaginaDetallesLaptop extends State<PaginaDetallesLaptop> {
             ),
           ),
           ElevatedButton(
-            onPressed: () => {},
+            onPressed: () => {Navigator.of(context).pop()},
             child: Text('Cerrar'),
           )
         ],

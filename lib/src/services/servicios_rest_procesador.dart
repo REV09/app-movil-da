@@ -41,9 +41,9 @@ Future<Procesador> agregarProcesador(Procesador procesador) async {
   }
 }
 
-Future<int> modificarProcesador(
+Future<Procesador> modificarProcesador(
     Procesador procesador, String idRegistro) async {
-  final respuesta = await http.post(
+  final respuesta = await http.put(
     Uri.parse('$urlApi/procesador/{id_registro}?procesador_id=$idRegistro'),
     headers: <String, String>{
       'Content-Type': 'application/json',
@@ -59,8 +59,8 @@ Future<int> modificarProcesador(
       "litografia": procesador.getLitografia().toString(),
     }),
   );
-  if (respuesta.statusCode == 204) {
-    return 204;
+  if (respuesta.statusCode == 200) {
+    return Procesador.fromJson(jsonDecode(respuesta.body));
   } else {
     throw Exception('No se pudo crear el procesador correctamente');
   }
