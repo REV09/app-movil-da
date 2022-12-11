@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:web_laptops/src/classes/clase_hdd.dart';
+import 'package:web_laptops/src/services/url_api.dart';
 
 Hdd convertirHdd(String cuerpoRespuesta) {
   Map<String, dynamic> jsonConvertido = json.decode(cuerpoRespuesta);
@@ -9,8 +10,7 @@ Hdd convertirHdd(String cuerpoRespuesta) {
 }
 
 Future<Hdd> obtenerHdd(String idRegistro) async {
-  final respuesta = await http.get(
-      Uri.parse('https://web-production-2d2f.up.railway.app/hdd/$idRegistro'));
+  final respuesta = await http.get(Uri.parse('$urlApi/hdd/$idRegistro'));
   if (respuesta.statusCode == 200) {
     return convertirHdd(respuesta.body);
   } else {
@@ -20,7 +20,7 @@ Future<Hdd> obtenerHdd(String idRegistro) async {
 
 Future<Hdd> agregarHdd(Hdd hdd) async {
   final respuesta = await http.post(
-    Uri.parse('https://web-production-2d2f.up.railway.app/hdd'),
+    Uri.parse('$urlApi/hdd'),
     headers: <String, String>{
       'Content-Type': 'application/json',
     },
@@ -44,8 +44,7 @@ Future<Hdd> agregarHdd(Hdd hdd) async {
 
 Future<Hdd> modificarHdd(Hdd hdd, String idRegistro) async {
   final respuesta = await http.put(
-    Uri.parse(
-        'https://web-production-2d2f.up.railway.app/hdd/{id_registro}?hdd_id=$idRegistro'),
+    Uri.parse('$urlApi/hdd/{id_registro}?hdd_id=$idRegistro'),
     headers: <String, String>{
       'Content-Type': 'application/json',
     },
@@ -68,8 +67,7 @@ Future<Hdd> modificarHdd(Hdd hdd, String idRegistro) async {
 }
 
 Future<int> eliminarHdd(String idRegistro) async {
-  final respuesta = await http.delete(
-      Uri.parse('https://web-production-2d2f.up.railway.app/hdd/$idRegistro'));
+  final respuesta = await http.delete(Uri.parse('$urlApi/hdd/$idRegistro'));
   if (respuesta.statusCode == 204) {
     return 204;
   } else {

@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:web_laptops/src/classes/clase_procesador.dart';
+import 'package:web_laptops/src/services/url_api.dart';
 
 Procesador convertirProcesador(String cuerpoRespuesta) {
   Map<String, dynamic> jsonConvertido = json.decode(cuerpoRespuesta.toString());
@@ -9,8 +10,7 @@ Procesador convertirProcesador(String cuerpoRespuesta) {
 }
 
 Future<Procesador> obtenerProcesador(String idRegistro) async {
-  final respuesta = await http.get(Uri.parse(
-      'https://web-production-2d2f.up.railway.app/procesador/$idRegistro'));
+  final respuesta = await http.get(Uri.parse('$urlApi/procesador/$idRegistro'));
   if (respuesta.statusCode == 200) {
     return convertirProcesador(respuesta.body);
   }
@@ -19,7 +19,7 @@ Future<Procesador> obtenerProcesador(String idRegistro) async {
 
 Future<Procesador> agregarProcesador(Procesador procesador) async {
   final respuesta = await http.post(
-    Uri.parse('https://web-production-2d2f.up.railway.app/procesador'),
+    Uri.parse('$urlApi/procesador'),
     headers: <String, String>{
       'Content-Type': 'application/json',
     },
@@ -44,8 +44,7 @@ Future<Procesador> agregarProcesador(Procesador procesador) async {
 Future<int> modificarProcesador(
     Procesador procesador, String idRegistro) async {
   final respuesta = await http.post(
-    Uri.parse(
-        'https://web-production-2d2f.up.railway.app/procesador/{id_registro}?procesador_id=$idRegistro'),
+    Uri.parse('$urlApi/procesador/{id_registro}?procesador_id=$idRegistro'),
     headers: <String, String>{
       'Content-Type': 'application/json',
     },
@@ -68,8 +67,8 @@ Future<int> modificarProcesador(
 }
 
 Future<int> eliminarProcesador(String idRegistro) async {
-  final respuesta = await http.delete(Uri.parse(
-      'https://web-production-2d2f.up.railway.app/procesador/$idRegistro'));
+  final respuesta =
+      await http.delete(Uri.parse('$urlApi/procesador/$idRegistro'));
   if (respuesta.statusCode == 204) {
     return 204;
   }

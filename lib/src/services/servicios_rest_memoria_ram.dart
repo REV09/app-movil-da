@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:web_laptops/src/classes/clase_memoria_ram.dart';
+import 'package:web_laptops/src/services/url_api.dart';
 
 MemoriaRam convertirMemoriaRam(String cuerpoRespuesta) {
   Map<String, dynamic> jsonConvertido = json.decode(cuerpoRespuesta);
@@ -9,8 +10,7 @@ MemoriaRam convertirMemoriaRam(String cuerpoRespuesta) {
 }
 
 Future<MemoriaRam> obtenerMemoriaRam(String idRegistro) async {
-  final respuesta = await http.get(Uri.parse(
-      'https://web-production-2d2f.up.railway.app/memoria/$idRegistro'));
+  final respuesta = await http.get(Uri.parse('$urlApi/memoria/$idRegistro'));
   if (respuesta.statusCode == 200) {
     return convertirMemoriaRam(respuesta.body);
   } else {
@@ -20,7 +20,7 @@ Future<MemoriaRam> obtenerMemoriaRam(String idRegistro) async {
 
 Future<MemoriaRam> agregarMemoriaRam(MemoriaRam memoriaRam) async {
   final respuesta = await http.post(
-    Uri.parse('https://web-production-2d2f.up.railway.app/memoria'),
+    Uri.parse('$urlApi/memoria'),
     headers: <String, String>{
       'Content-Type': 'application/json',
     },
@@ -45,7 +45,7 @@ Future<MemoriaRam> agregarMemoriaRam(MemoriaRam memoriaRam) async {
 Future<MemoriaRam> modificarMemoriaRam(
     MemoriaRam memoriaRam, String idRegistro) async {
   final respuesta = await http.put(
-    Uri.parse('https://web-production-2d2f.up.railway.app/memoria/{id_registro}'
+    Uri.parse('$urlApi/memoria/{id_registro}'
         '?ram_id=$idRegistro'),
     headers: <String, String>{
       'Content-Type': 'application/json',
@@ -69,8 +69,7 @@ Future<MemoriaRam> modificarMemoriaRam(
 }
 
 Future<int> eliminarMemoriaRam(String idRegistro) async {
-  final respuesta = await http.delete(Uri.parse(
-      'https://web-production-2d2f.up.railway.app/memoria/$idRegistro'));
+  final respuesta = await http.delete(Uri.parse('$urlApi/memoria/$idRegistro'));
   if (respuesta.statusCode == 204) {
     return 204;
   } else {

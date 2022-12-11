@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:web_laptops/src/classes/clase_ssd.dart';
+import 'package:web_laptops/src/services/url_api.dart';
 
 Ssd convertirSsd(String cuerpoRespuesta) {
   Map<String, dynamic> jsonConvertido = json.decode(cuerpoRespuesta);
@@ -9,8 +10,7 @@ Ssd convertirSsd(String cuerpoRespuesta) {
 }
 
 Future<Ssd> obtenerSsd(String idRegistro) async {
-  final respuesta = await http.get(
-      Uri.parse('https://web-production-2d2f.up.railway.app/ssd/$idRegistro'));
+  final respuesta = await http.get(Uri.parse('$urlApi/ssd/$idRegistro'));
   if (respuesta.statusCode == 200) {
     return convertirSsd(respuesta.body);
   } else {
@@ -20,7 +20,7 @@ Future<Ssd> obtenerSsd(String idRegistro) async {
 
 Future<Ssd> agregarSsd(Ssd ssd) async {
   final respuesta = await http.post(
-    Uri.parse('https://web-production-2d2f.up.railway.app/ssd'),
+    Uri.parse('$urlApi/ssd'),
     headers: <String, String>{'Content-Type': 'application/json'},
     body: jsonEncode(<String, String>{
       "idRegistro": ssd.getIdRegistro(),
@@ -46,8 +46,7 @@ Future<Ssd> agregarSsd(Ssd ssd) async {
 
 Future<Ssd> modificarSsd(Ssd ssd, String idRegistro) async {
   final respuesta = await http.put(
-    Uri.parse(
-        'https://web-production-2d2f.up.railway.app/ssd/{id_registro}?ssd_id=$idRegistro'),
+    Uri.parse('$urlApi/ssd/{id_registro}?ssd_id=$idRegistro'),
     headers: <String, String>{'Content-Type': 'application/json'},
     body: jsonEncode(<String, String>{
       "idRegistro": ssd.getIdRegistro(),
@@ -72,8 +71,7 @@ Future<Ssd> modificarSsd(Ssd ssd, String idRegistro) async {
 }
 
 Future<int> eliminarSsd(String idRegistro) async {
-  final respuesta = await http.delete(
-      Uri.parse('https://web-production-2d2f.up.railway.app/ssd/$idRegistro'));
+  final respuesta = await http.delete(Uri.parse('$urlApi/ssd/$idRegistro'));
   if (respuesta.statusCode == 204) {
     return 204;
   } else {

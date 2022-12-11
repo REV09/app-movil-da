@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:web_laptops/src/classes/clase_almacenamiento.dart';
+import 'package:web_laptops/src/services/url_api.dart';
 
 Almacenamiento convertirAlmacenamiento(String cuerpoRespuesta) {
   Map<String, dynamic> jsonConvertido = json.decode(cuerpoRespuesta);
@@ -9,8 +10,8 @@ Almacenamiento convertirAlmacenamiento(String cuerpoRespuesta) {
 }
 
 Future<Almacenamiento> obtenerAlmacenamiento(String idRegistro) async {
-  final respuesta = await http.get(Uri.parse(
-      'https://web-production-2d2f.up.railway.app/almacenamiento/$idRegistro'));
+  final respuesta =
+      await http.get(Uri.parse('$urlApi/almacenamiento/$idRegistro'));
   if (respuesta.statusCode == 200) {
     return convertirAlmacenamiento(respuesta.body);
   } else {
@@ -21,7 +22,7 @@ Future<Almacenamiento> obtenerAlmacenamiento(String idRegistro) async {
 Future<Almacenamiento> agregarAlmacenamiento(
     Almacenamiento almacenamiento) async {
   final respuesta = await http.post(
-    Uri.parse('https://web-production-2d2f.up.railway.app/almacenamiento'),
+    Uri.parse('$urlApi/almacenamiento'),
     headers: <String, String>{
       'Content-Type': 'application/json',
     },
@@ -41,7 +42,7 @@ Future<Almacenamiento> modificarAlmacenamiento(
     Almacenamiento almacenamiento, String idRegistro) async {
   final respuesta = await http.put(
     Uri.parse(
-        'https://web-production-2d2f.up.railway.app/almacenamiento/{id_registro}?almacenamiento_id=$idRegistro'),
+        '$urlApi/almacenamiento/{id_registro}?almacenamiento_id=$idRegistro'),
     headers: <String, String>{
       'Content-Type': 'application/json',
     },
@@ -58,8 +59,8 @@ Future<Almacenamiento> modificarAlmacenamiento(
 }
 
 Future<int> eliminarAlmacenamiento(String idRegistro) async {
-  final respuesta = await http.delete(Uri.parse(
-      'https://web-production-2d2f.up.railway.app/almacenamiento/$idRegistro'));
+  final respuesta =
+      await http.delete(Uri.parse('$urlApi/almacenamiento/$idRegistro'));
   if (respuesta.statusCode == 204) {
     return 204;
   } else {

@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:web_laptops/src/classes/clase_tarjeta_video.dart';
+import 'package:web_laptops/src/services/url_api.dart';
 
 TarjetaVideo convertirTarjetaVideo(String cuerpoRespuesta) {
   Map<String, dynamic> jsonConvertido = json.decode(cuerpoRespuesta);
@@ -9,8 +10,8 @@ TarjetaVideo convertirTarjetaVideo(String cuerpoRespuesta) {
 }
 
 Future<TarjetaVideo> obtenerTarjetaVideo(String idRegistro) async {
-  final respuesta = await http.get(Uri.parse(
-      'https://web-production-2d2f.up.railway.app/tarjetaDeVideo/$idRegistro'));
+  final respuesta =
+      await http.get(Uri.parse('$urlApi/tarjetaDeVideo/$idRegistro'));
   if (respuesta.statusCode == 200) {
     return convertirTarjetaVideo(respuesta.body);
   } else {
@@ -20,7 +21,7 @@ Future<TarjetaVideo> obtenerTarjetaVideo(String idRegistro) async {
 
 Future<TarjetaVideo> agregarTarjetaVideo(TarjetaVideo tarjetaVideo) async {
   final respuesta = await http.post(
-    Uri.parse('https://web-production-2d2f.up.railway.app/tarjetaDeVideo'),
+    Uri.parse('$urlApi/tarjetaDeVideo'),
     headers: <String, String>{
       'Content-Type': 'application/json',
     },
@@ -45,8 +46,7 @@ Future<TarjetaVideo> agregarTarjetaVideo(TarjetaVideo tarjetaVideo) async {
 Future<TarjetaVideo> modificarTarjetaVideo(
     TarjetaVideo tarjetaVideo, String idRegistro) async {
   final respuesta = await http.put(
-    Uri.parse(
-        'https://web-production-2d2f.up.railway.app/tarjetaDeVideo/{id_registro}?tarjeta_id=$idRegistro'),
+    Uri.parse('$urlApi/tarjetaDeVideo/{id_registro}?tarjeta_id=$idRegistro'),
     headers: <String, String>{
       'Content-Type': 'application/json',
     },
@@ -69,8 +69,8 @@ Future<TarjetaVideo> modificarTarjetaVideo(
 }
 
 Future<int> eliminarTarjetaVideo(String idRegistro) async {
-  final respuesta = await http.delete(Uri.parse(
-      'https://web-production-2d2f.up.railway.app/tarjetaDeVideo/$idRegistro'));
+  final respuesta =
+      await http.delete(Uri.parse('$urlApi/tarjetaDeVideo/$idRegistro'));
   if (respuesta.statusCode == 204) {
     return 204;
   } else {

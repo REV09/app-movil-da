@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:web_laptops/src/classes/clase_pantalla.dart';
+import 'package:web_laptops/src/services/url_api.dart';
 
 Pantalla convertirPantalla(String cuerpoRespuesta) {
   Map<String, dynamic> jsonConvertido = json.decode(cuerpoRespuesta);
@@ -9,8 +10,7 @@ Pantalla convertirPantalla(String cuerpoRespuesta) {
 }
 
 Future<Pantalla> obtenerPantalla(String idRegistro) async {
-  final respuesta = await http.get(Uri.parse(
-      'https://web-production-2d2f.up.railway.app/pantalla/$idRegistro'));
+  final respuesta = await http.get(Uri.parse('$urlApi/pantalla/$idRegistro'));
   if (respuesta.statusCode == 200) {
     return convertirPantalla(respuesta.body);
   } else {
@@ -20,7 +20,7 @@ Future<Pantalla> obtenerPantalla(String idRegistro) async {
 
 Future<Pantalla> agregarPantalla(Pantalla pantalla) async {
   final respuesta = await http.post(
-    Uri.parse('https://web-production-2d2f.up.railway.app/pantalla'),
+    Uri.parse('$urlApi/pantalla'),
     headers: <String, String>{
       'Content-Type': 'application/json',
     },
@@ -43,8 +43,7 @@ Future<Pantalla> agregarPantalla(Pantalla pantalla) async {
 
 Future<Pantalla> modificarPantalla(Pantalla pantalla, String idRegistro) async {
   final respuesta = await http.put(
-    Uri.parse(
-        'https://web-production-2d2f.up.railway.app/pantalla/{id_registro}?pantalla_id=$idRegistro'),
+    Uri.parse('$urlApi/pantalla/{id_registro}?pantalla_id=$idRegistro'),
     headers: <String, String>{
       'Content-Type': 'application/json',
     },
@@ -66,8 +65,8 @@ Future<Pantalla> modificarPantalla(Pantalla pantalla, String idRegistro) async {
 }
 
 Future<int> eliminarPantalla(String idRegistro) async {
-  final respuesta = await http.delete(Uri.parse(
-      'https://web-production-2d2f.up.railway.app/pantalla/$idRegistro'));
+  final respuesta =
+      await http.delete(Uri.parse('$urlApi/pantalla/$idRegistro'));
   if (respuesta.statusCode == 204) {
     return 204;
   } else {

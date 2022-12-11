@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:web_laptops/src/classes/clase_laptop.dart';
+import 'package:web_laptops/src/services/url_api.dart';
 
 List<Laptop> convertirLaptops(String cuerpoRespuesta) {
   var convertido = json.decode(cuerpoRespuesta).cast<Map<String, dynamic>>();
@@ -14,8 +15,7 @@ Laptop convertirLaptop(String cuerpoRespuesta) {
 }
 
 Future<List<Laptop>> obtenerLaptops() async {
-  final respuesta = await http
-      .get(Uri.parse('https://web-production-2d2f.up.railway.app/laptops'));
+  final respuesta = await http.get(Uri.parse('$urlApi/laptops'));
   if (respuesta.statusCode == 200) {
     return convertirLaptops(respuesta.body);
   }
@@ -23,8 +23,7 @@ Future<List<Laptop>> obtenerLaptops() async {
 }
 
 Future<Laptop> obtenerLaptopPorId(String idRegistro) async {
-  final respuesta = await http.get(Uri.parse(
-      'https://web-production-2d2f.up.railway.app/laptop/$idRegistro'));
+  final respuesta = await http.get(Uri.parse('$urlApi/laptop/$idRegistro'));
   if (respuesta.statusCode == 200) {
     return convertirLaptop(respuesta.body);
   }
@@ -32,8 +31,7 @@ Future<Laptop> obtenerLaptopPorId(String idRegistro) async {
 }
 
 Future<List<Laptop>> obtenerLaptopPorModelo(String modelo) async {
-  final respuesta = await http.get(
-      Uri.parse('https://web-production-2d2f.up.railway.app/laptop/$modelo'));
+  final respuesta = await http.get(Uri.parse('$urlApi/laptop/$modelo'));
   if (respuesta.statusCode == 200) {
     return convertirLaptops(respuesta.body);
   }
@@ -42,7 +40,7 @@ Future<List<Laptop>> obtenerLaptopPorModelo(String modelo) async {
 
 Future<Laptop> agregarLaptop(Laptop laptop) async {
   final respuesta = await http.post(
-    Uri.parse('https://web-production-2d2f.up.railway.app/laptop'),
+    Uri.parse('$urlApi/laptop'),
     headers: <String, String>{
       'Content-Type': 'application/json',
     },
@@ -64,7 +62,7 @@ Future<Laptop> agregarLaptop(Laptop laptop) async {
 
 Future<Laptop> modificarLaptop(Laptop laptop, String idRegistro) async {
   final respuesta = await http.put(
-    Uri.parse('https://web-production-2d2f.up.railway.app/laptop/$idRegistro'),
+    Uri.parse('$urlApi/laptop/$idRegistro'),
     headers: <String, String>{
       'Content-Type': 'application/json',
     },
@@ -85,8 +83,7 @@ Future<Laptop> modificarLaptop(Laptop laptop, String idRegistro) async {
 }
 
 Future<int> eliminarLaptop(String idRegistro) async {
-  final respuesta = await http.delete(Uri.parse(
-      'https://web-production-2d2f.up.railway.app/laptop/$idRegistro'));
+  final respuesta = await http.delete(Uri.parse('$urlApi/laptop/$idRegistro'));
   if (respuesta.statusCode == 204) {
     return 204;
   }

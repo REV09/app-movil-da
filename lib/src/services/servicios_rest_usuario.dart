@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:web_laptops/src/classes/clase_usuario.dart';
+import 'package:web_laptops/src/services/url_api.dart';
 
 Usuario convertirUsuario(String cuerpoRespuesta) {
   Map<String, dynamic> jsonConvertido = json.decode(cuerpoRespuesta);
@@ -9,8 +10,7 @@ Usuario convertirUsuario(String cuerpoRespuesta) {
 }
 
 Future<Usuario> obtenerUsuario(String nombreUsuario) async {
-  final respuesta = await http.get(Uri.parse(
-      'https://web-production-2d2f.up.railway.app/usuario/$nombreUsuario'));
+  final respuesta = await http.get(Uri.parse('$urlApi/usuario/$nombreUsuario'));
   if (respuesta.statusCode == 200) {
     return convertirUsuario(respuesta.body);
   } else {
@@ -20,7 +20,7 @@ Future<Usuario> obtenerUsuario(String nombreUsuario) async {
 
 Future<Usuario> agregarUsuario(Usuario usuario) async {
   final respuesta = await http.post(
-    Uri.parse('https://web-production-2d2f.up.railway.app/usuario'),
+    Uri.parse('$urlApi/usuario'),
     headers: <String, String>{
       'Content-Type': 'application/json',
     },
@@ -43,7 +43,7 @@ Future<Usuario> agregarUsuario(Usuario usuario) async {
 Future<Usuario> modificarUsuario(Usuario usuario, String nombreAnterior) async {
   final respuesta = await http.put(
     Uri.parse(
-        'https://web-production-2d2f.up.railway.app/usuario/{nombre_usuario}?nombre_usuario_anterior=$nombreAnterior'),
+        '$urlApi/usuario/{nombre_usuario}?nombre_usuario_anterior=$nombreAnterior'),
     headers: <String, String>{
       'Content-Type': 'application/json',
     },
@@ -64,8 +64,8 @@ Future<Usuario> modificarUsuario(Usuario usuario, String nombreAnterior) async {
 }
 
 Future<int> eliminarUsuario(String nombreUsuario) async {
-  final respuesta = await http.delete(Uri.parse(
-      'https://web-production-2d2f.up.railway.app/usuario/$nombreUsuario'));
+  final respuesta =
+      await http.delete(Uri.parse('$urlApi/usuario/$nombreUsuario'));
   if (respuesta.statusCode == 204) {
     return 204;
   } else {
