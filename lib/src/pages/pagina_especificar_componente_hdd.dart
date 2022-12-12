@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:web_laptops/src/classes/clase_hdd.dart';
+import 'package:web_laptops/src/classes/clase_laptop.dart';
+import 'package:web_laptops/src/services/servicios_rest_hdd.dart';
+import 'package:web_laptops/src/services/servicios_rest_laptop.dart';
 
 class PaginaEspecificarHdd extends StatefulWidget {
   Hdd discoDuro;
@@ -240,7 +243,72 @@ class _PaginaEspecificarHdd extends State<PaginaEspecificarHdd> {
                   margin: EdgeInsets.all(25),
                   alignment: AlignmentDirectional.centerEnd,
                   child: ElevatedButton(
-                    onPressed: () => {},
+                    onPressed: () async {
+                      Hdd discoDuroActualizado = Hdd(
+                        widget.discoDuro.getIdRegistro(),
+                        controladorCampoMarca.text,
+                        controladorCampoModelo.text,
+                        int.parse(controladorCampoCapacidad.text),
+                        controladorCampoInterfaz.text,
+                        int.parse(controladorCampoCache.text),
+                        int.parse(controladorCampoRevoluciones.text),
+                        controladorCampoTamanio.text,
+                      );
+                      try {
+                        Laptop laptopNueva = await obtenerLaptopPorId(
+                            widget.discoDuro.getIdRegistro());
+                        laptopNueva.setAlmacenamiento(
+                            discoDuroActualizado.getModelo());
+                        Hdd hddRespuesta = await modificarHdd(
+                            discoDuroActualizado,
+                            discoDuroActualizado.getIdRegistro());
+                        if (discoDuroActualizado.getIdRegistro() ==
+                            hddRespuesta.getIdRegistro()) {
+                          modificarLaptop(
+                              laptopNueva, laptopNueva.getIdRegistro());
+                          showDialog(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                              title:
+                                  Text("Disco duro actualizado correctamente"),
+                              content: Text("Se ha actualizado el disco duro"
+                                  " correctamente"),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(context, true);
+                                    Navigator.of(context).pop();
+                                    Navigator.of(context).pop();
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: Text("Aceptar"),
+                                ),
+                              ],
+                            ),
+                            barrierDismissible: false,
+                          );
+                        }
+                      } catch (excepcion) {
+                        showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: Text("disco duro no actualizado"),
+                            content: Text(
+                                "ocurrio un error y no se pudo actualizar\n"
+                                "el disco duro por favor vuelva a intentar"),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context, true);
+                                },
+                                child: Text("Aceptar"),
+                              ),
+                            ],
+                          ),
+                          barrierDismissible: false,
+                        );
+                      }
+                    },
                     child: Text(
                       'Guardar',
                       style: estiloTexto,

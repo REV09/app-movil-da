@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:web_laptops/src/classes/clase_laptop.dart';
 import 'package:web_laptops/src/classes/clase_pantalla.dart';
+import 'package:web_laptops/src/services/servicios_rest_laptop.dart';
+import 'package:web_laptops/src/services/servicios_rest_pantalla.dart';
 
 class PaginaEspecificarPantalla extends StatefulWidget {
   Pantalla pantalla;
@@ -218,7 +221,70 @@ class _PaginaEspecificarPantalla extends State<PaginaEspecificarPantalla> {
                   margin: EdgeInsets.all(25),
                   alignment: AlignmentDirectional.centerEnd,
                   child: ElevatedButton(
-                    onPressed: () => {},
+                    onPressed: () async {
+                      Pantalla pantallaActualizada = Pantalla(
+                        widget.pantalla.getIdRegistro(),
+                        controladorCampoModelo.text,
+                        controladorCampoResolucion.text,
+                        controladorCampoCalidad.text,
+                        controladorCampoTipoPantalla.text,
+                        controladorCampoTamanio.text,
+                        int.parse(controladorCampoFrecuencia.text),
+                      );
+                      try {
+                        Laptop laptopNueva = await obtenerLaptopPorId(
+                            widget.pantalla.getIdRegistro());
+                        laptopNueva
+                            .setPantalla(pantallaActualizada.getModelo());
+                        Pantalla pantallaRespuesta = await modificarPantalla(
+                            pantallaActualizada,
+                            pantallaActualizada.getIdRegistro());
+                        if (pantallaActualizada.getIdRegistro() ==
+                            pantallaRespuesta.getIdRegistro()) {
+                          modificarLaptop(
+                              laptopNueva, laptopNueva.getIdRegistro());
+                          showDialog(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                              title: Text("Pantalla actualizado correctamente"),
+                              content: Text("Se ha actualizado la pantalla"
+                                  " correctamente"),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(context, true);
+                                    Navigator.of(context).pop();
+                                    Navigator.of(context).pop();
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: Text("Aceptar"),
+                                ),
+                              ],
+                            ),
+                            barrierDismissible: false,
+                          );
+                        }
+                      } catch (excepcion) {
+                        showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: Text("Pantalla no actualizada"),
+                            content: Text(
+                                "ocurrio un error y no se pudo actualizar\n"
+                                "la pantalla por favor vuelva a intentarlo"),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context, true);
+                                },
+                                child: Text("Aceptar"),
+                              ),
+                            ],
+                          ),
+                          barrierDismissible: false,
+                        );
+                      }
+                    },
                     child: Text(
                       'Guardar',
                       style: estiloTexto,

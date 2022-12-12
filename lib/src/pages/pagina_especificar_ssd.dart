@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:web_laptops/src/classes/clase_laptop.dart';
 import 'package:web_laptops/src/classes/clase_ssd.dart';
+import 'package:web_laptops/src/services/servicios_rest_laptop.dart';
+import 'package:web_laptops/src/services/servicios_rest_ssd.dart';
 
 class PaginaEspecificarSsd extends StatefulWidget {
   Ssd ssd;
@@ -302,7 +305,72 @@ class _PaginaEspecificarSsd extends State<PaginaEspecificarSsd> {
                   margin: EdgeInsets.all(25),
                   alignment: AlignmentDirectional.centerEnd,
                   child: ElevatedButton(
-                    onPressed: () => {},
+                    onPressed: () async {
+                      Ssd ssdActualizado = Ssd(
+                        widget.ssd.getIdRegistro(),
+                        controladorCampoMarca.text,
+                        controladorCampoModelo.text,
+                        int.parse(controladorCampoCapacidad.text),
+                        controladorCampoForma.text,
+                        controladorCampoDurabilidad.text,
+                        controladorCampoTipoMemorias.text,
+                        controladorCampoGeneracion.text,
+                        controladorCampoVelocidadLectura.text,
+                        controladorCampoVelocidadEscritura.text,
+                        controladorCampoProtocolo.text,
+                      );
+                      try {
+                        Laptop laptopNueva = await obtenerLaptopPorId(
+                            widget.ssd.getIdRegistro());
+                        laptopNueva.setProcesador(ssdActualizado.getModelo());
+                        Ssd ssdRespuesta = await modificarSsd(
+                            ssdActualizado, ssdActualizado.getIdRegistro());
+                        if (ssdActualizado.getIdRegistro() ==
+                            ssdRespuesta.getIdRegistro()) {
+                          modificarLaptop(
+                              laptopNueva, laptopNueva.getIdRegistro());
+                          showDialog(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                              title: Text("ssd actualizado correctamente"),
+                              content: Text("Se ha actualizado el ssd"
+                                  " correctamente"),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(context, true);
+                                    Navigator.of(context).pop();
+                                    Navigator.of(context).pop();
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: Text("Aceptar"),
+                                ),
+                              ],
+                            ),
+                            barrierDismissible: false,
+                          );
+                        }
+                      } catch (excepcion) {
+                        showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: Text("ssd no actualizado"),
+                            content: Text(
+                                "ocurrio un error y no se pudo actualizar\n"
+                                "el ssd por favor vuelva a intentar"),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context, true);
+                                },
+                                child: Text("Aceptar"),
+                              ),
+                            ],
+                          ),
+                          barrierDismissible: false,
+                        );
+                      }
+                    },
                     child: Text(
                       'Guardar',
                       style: estiloTexto,

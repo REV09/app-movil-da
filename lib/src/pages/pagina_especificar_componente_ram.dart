@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:web_laptops/src/classes/clase_laptop.dart';
 import 'package:web_laptops/src/classes/clase_memoria_ram.dart';
+import 'package:web_laptops/src/services/servicios_rest_laptop.dart';
+import 'package:web_laptops/src/services/servicios_rest_memoria_ram.dart';
 
 class PaginaEspecificarRam extends StatefulWidget {
   MemoriaRam memoriaRam;
@@ -39,7 +42,7 @@ class _PaginaEspecificarRam extends State<PaginaEspecificarRam> {
         widget.memoriaRam.getCantidadMemorias().toString();
     controladorCampoVelocidad.text =
         widget.memoriaRam.getVelocidad().toString();
-    controladorCampoEcc.text = widget.memoriaRam.getEcc().toString();
+    controladorCampoEcc.text = asignarEcc();
 
     return Scaffold(
       body: Column(
@@ -243,7 +246,72 @@ class _PaginaEspecificarRam extends State<PaginaEspecificarRam> {
                   margin: EdgeInsets.all(25),
                   alignment: AlignmentDirectional.centerEnd,
                   child: ElevatedButton(
-                    onPressed: () => {},
+                    onPressed: () async {
+                      MemoriaRam memoriaRamActualizada = MemoriaRam(
+                        widget.memoriaRam.getIdRegistro(),
+                        controladorCampoModelo.text,
+                        controladorCampoMarca.text,
+                        controladorCampoTipoMemoria.text,
+                        int.parse(controladorCampoCantidadRam.text),
+                        int.parse(controladorCampoNumeroMemorias.text),
+                        int.parse(controladorCampoVelocidad.text),
+                        esEcc(),
+                      );
+                      try {
+                        Laptop laptopNueva = await obtenerLaptopPorId(
+                            widget.memoriaRam.getIdRegistro());
+                        laptopNueva
+                            .setMemoriaRam(memoriaRamActualizada.getModelo());
+                        MemoriaRam memoriaRamRespuesta =
+                            await modificarMemoriaRam(memoriaRamActualizada,
+                                memoriaRamActualizada.getIdRegistro());
+                        if (memoriaRamActualizada.getIdRegistro() ==
+                            memoriaRamRespuesta.getIdRegistro()) {
+                          modificarLaptop(
+                              laptopNueva, laptopNueva.getIdRegistro());
+                          showDialog(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                              title:
+                                  Text("memoria ram actualizada correctamente"),
+                              content: Text("Se ha actualizado la memoria ram"
+                                  " correctamente"),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(context, true);
+                                    Navigator.of(context).pop();
+                                    Navigator.of(context).pop();
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: Text("Aceptar"),
+                                ),
+                              ],
+                            ),
+                            barrierDismissible: false,
+                          );
+                        }
+                      } catch (excepcion) {
+                        showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: Text("memoria ram no actualizada"),
+                            content: Text(
+                                "ocurrio un error y no se pudo actualizar\n"
+                                "la memoria ram por favor vuelva a intentar"),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context, true);
+                                },
+                                child: Text("Aceptar"),
+                              ),
+                            ],
+                          ),
+                          barrierDismissible: false,
+                        );
+                      }
+                    },
                     child: Text(
                       'Guardar',
                       style: estiloTexto,
@@ -259,5 +327,19 @@ class _PaginaEspecificarRam extends State<PaginaEspecificarRam> {
         ],
       ),
     );
+  }
+
+  String asignarEcc() {
+    if (widget.memoriaRam.getEcc() == 0) {
+      return "No";
+    }
+    return "Si";
+  }
+
+  int esEcc() {
+    if (controladorCampoEcc.text == "Si") {
+      return 1;
+    }
+    return 0;
   }
 }

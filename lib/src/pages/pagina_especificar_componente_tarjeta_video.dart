@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:web_laptops/src/classes/clase_laptop.dart';
 import 'package:web_laptops/src/classes/clase_tarjeta_video.dart';
+import 'package:web_laptops/src/services/servicios_rest_laptop.dart';
+import 'package:web_laptops/src/services/servicios_rest_tarjeta_video.dart';
 
 class PaginaEspecificarTarjetaVideo extends StatefulWidget {
   TarjetaVideo tarjetaVideo;
@@ -243,7 +246,73 @@ class _PaginaEspecificarTarjetaVideo
                   margin: EdgeInsets.all(25),
                   alignment: AlignmentDirectional.centerEnd,
                   child: ElevatedButton(
-                    onPressed: () => {},
+                    onPressed: () async {
+                      TarjetaVideo tarjetaVideoActualizada = TarjetaVideo(
+                        widget.tarjetaVideo.getIdRegistro(),
+                        controladorCampoModelo.text,
+                        controladorCampoMarca.text,
+                        int.parse(controladorCampoCantidadVram.text),
+                        controladorCampoTipoMemoria.text,
+                        int.parse(controladorCampoBits.text),
+                        double.parse(controladorCampoVelocidad.text),
+                        controladorCampoTipo.text,
+                      );
+                      try {
+                        Laptop laptopNueva = await obtenerLaptopPorId(
+                            widget.tarjetaVideo.getIdRegistro());
+                        laptopNueva.setTarjetaVideo(
+                            " ${tarjetaVideoActualizada.getModelo()}");
+                        TarjetaVideo tarjetaVideoRespuesta =
+                            await modificarTarjetaVideo(tarjetaVideoActualizada,
+                                tarjetaVideoActualizada.getIdRegistro());
+                        if (tarjetaVideoActualizada.getIdRegistro() ==
+                            tarjetaVideoRespuesta.getIdRegistro()) {
+                          modificarLaptop(
+                              laptopNueva, laptopNueva.getIdRegistro());
+                          showDialog(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                              title:
+                                  Text("Procesador actualizado correctamente"),
+                              content: Text("Se ha actualizado el procesador"
+                                  " correctamente"),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(context, true);
+                                    Navigator.of(context).pop();
+                                    Navigator.of(context).pop();
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: Text("Aceptar"),
+                                ),
+                              ],
+                            ),
+                            barrierDismissible: false,
+                          );
+                        }
+                      } catch (excepcion) {
+                        showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: Text("Tarjeta de video no actualizada"),
+                            content: Text(
+                                "ocurrio un error y no se pudo actualizar\n"
+                                "la tarjeta de video por favor vuelva a "
+                                "intentar"),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context, true);
+                                },
+                                child: Text("Aceptar"),
+                              ),
+                            ],
+                          ),
+                          barrierDismissible: false,
+                        );
+                      }
+                    },
                     child: Text(
                       'Guardar',
                       style: estiloTexto,
