@@ -225,7 +225,7 @@ class _PaginaDetallesPantallaSesionIniciada
                             Navigator.of(context).push(
                               MaterialPageRoute(
                                 builder: (context) =>
-                                    PaginaEspecificarPantalla(),
+                                    PaginaEspecificarPantalla(_pantalla),
                               ),
                             )
                           },

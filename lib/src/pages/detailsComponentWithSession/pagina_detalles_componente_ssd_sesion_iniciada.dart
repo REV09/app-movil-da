@@ -308,7 +308,8 @@ class _PaginaDetallesSsdSesionIniciada
                           onPressed: () => {
                             Navigator.of(context).push(
                               MaterialPageRoute(
-                                builder: (context) => PaginaEspecificarSsd(),
+                                builder: (context) =>
+                                    PaginaEspecificarSsd(_ssd),
                               ),
                             )
                           },

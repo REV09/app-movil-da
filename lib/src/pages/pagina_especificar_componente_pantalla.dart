@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:web_laptops/src/classes/clase_pantalla.dart';
 
 class PaginaEspecificarPantalla extends StatefulWidget {
+  Pantalla pantalla;
+
+  PaginaEspecificarPantalla(this.pantalla);
+
   @override
   State<StatefulWidget> createState() => _PaginaEspecificarPantalla();
 }
@@ -13,9 +18,23 @@ class _PaginaEspecificarPantalla extends State<PaginaEspecificarPantalla> {
       fontSize: 16, fontStyle: FontStyle.italic, fontWeight: FontWeight.bold);
   TextStyle estiloTituloTexto =
       TextStyle(fontSize: 22, fontWeight: FontWeight.bold);
+  TextEditingController controladorCampoModelo = TextEditingController();
+  TextEditingController controladorCampoResolucion = TextEditingController();
+  TextEditingController controladorCampoCalidad = TextEditingController();
+  TextEditingController controladorCampoTipoPantalla = TextEditingController();
+  TextEditingController controladorCampoTamanio = TextEditingController();
+  TextEditingController controladorCampoFrecuencia = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    controladorCampoModelo.text = widget.pantalla.getModelo();
+    controladorCampoResolucion.text = widget.pantalla.getResolucion();
+    controladorCampoCalidad.text = widget.pantalla.getCalidad();
+    controladorCampoTipoPantalla.text = widget.pantalla.getTipoPantalla();
+    controladorCampoTamanio.text = widget.pantalla.getTamanio();
+    controladorCampoFrecuencia.text =
+        widget.pantalla.getFrecuenciaRefresco().toString();
+
     return Scaffold(
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -32,10 +51,11 @@ class _PaginaEspecificarPantalla extends State<PaginaEspecificarPantalla> {
             margin: EdgeInsets.all(30),
             decoration: BoxDecoration(
               border: Border(
-                  top: BorderSide(color: Colors.black, width: 2.0),
-                  right: BorderSide(color: Colors.black, width: 2.0),
-                  left: BorderSide(color: Colors.black, width: 2.0),
-                  bottom: BorderSide(color: Colors.black, width: 2.0)),
+                top: BorderSide(color: Colors.black, width: 2.0),
+                right: BorderSide(color: Colors.black, width: 2.0),
+                left: BorderSide(color: Colors.black, width: 2.0),
+                bottom: BorderSide(color: Colors.black, width: 2.0),
+              ),
             ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -51,7 +71,10 @@ class _PaginaEspecificarPantalla extends State<PaginaEspecificarPantalla> {
                     SizedBox(
                       width: 350,
                       height: 45,
-                      child: TextField(decoration: decoracionCamposTexto),
+                      child: TextField(
+                        decoration: decoracionCamposTexto,
+                        controller: controladorCampoModelo,
+                      ),
                     )
                   ],
                 ),
@@ -68,6 +91,7 @@ class _PaginaEspecificarPantalla extends State<PaginaEspecificarPantalla> {
                       height: 45,
                       child: TextField(
                         decoration: decoracionCamposTexto,
+                        controller: controladorCampoResolucion,
                       ),
                     ),
                   ],
@@ -83,7 +107,10 @@ class _PaginaEspecificarPantalla extends State<PaginaEspecificarPantalla> {
                     SizedBox(
                       width: 150,
                       height: 45,
-                      child: TextField(decoration: decoracionCamposTexto),
+                      child: TextField(
+                        decoration: decoracionCamposTexto,
+                        controller: controladorCampoCalidad,
+                      ),
                     )
                   ],
                 ),
@@ -98,7 +125,10 @@ class _PaginaEspecificarPantalla extends State<PaginaEspecificarPantalla> {
                     SizedBox(
                       width: 150,
                       height: 45,
-                      child: TextField(decoration: decoracionCamposTexto),
+                      child: TextField(
+                        decoration: decoracionCamposTexto,
+                        controller: controladorCampoTipoPantalla,
+                      ),
                     )
                   ],
                 ),
@@ -113,7 +143,10 @@ class _PaginaEspecificarPantalla extends State<PaginaEspecificarPantalla> {
                     SizedBox(
                       width: 150,
                       height: 45,
-                      child: TextField(decoration: decoracionCamposTexto),
+                      child: TextField(
+                        decoration: decoracionCamposTexto,
+                        controller: controladorCampoTamanio,
+                      ),
                     )
                   ],
                 ),
@@ -129,7 +162,10 @@ class _PaginaEspecificarPantalla extends State<PaginaEspecificarPantalla> {
                     SizedBox(
                       width: 150,
                       height: 45,
-                      child: TextField(decoration: decoracionCamposTexto),
+                      child: TextField(
+                        decoration: decoracionCamposTexto,
+                        controller: controladorCampoFrecuencia,
+                      ),
                     )
                   ],
                 ),
@@ -151,7 +187,7 @@ class _PaginaEspecificarPantalla extends State<PaginaEspecificarPantalla> {
                           builder: (context) => AlertDialog(
                                 title: Text("Cancelar Registro"),
                                 content: Text(
-                                    "¿Estas seguro de cancelar el registro?\n"
+                                    "¿Estas seguro de cancelar la operacion?\n"
                                     "\nNo se realizan cambios en el sistema"),
                                 actions: [
                                   TextButton(

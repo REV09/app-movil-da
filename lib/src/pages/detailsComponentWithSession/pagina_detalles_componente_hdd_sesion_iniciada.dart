@@ -242,7 +242,8 @@ class _PaginaDetallesHddSesionIniciada
                           onPressed: () => {
                             Navigator.of(context).push(
                               MaterialPageRoute(
-                                builder: (context) => PaginaEspecificarHdd(),
+                                builder: (context) =>
+                                    PaginaEspecificarHdd(_discoDuro),
                               ),
                             )
                           },

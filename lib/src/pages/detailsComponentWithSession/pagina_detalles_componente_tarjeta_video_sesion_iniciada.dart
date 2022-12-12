@@ -248,7 +248,8 @@ class _PaginaDetallesTarjetaVideoSesionIniciada
                             Navigator.of(context).push(
                               MaterialPageRoute(
                                 builder: (context) =>
-                                    PaginaEspecificarTarjetaVideo(),
+                                    PaginaEspecificarTarjetaVideo(
+                                        _tarjetaVideo),
                               ),
                             )
                           },

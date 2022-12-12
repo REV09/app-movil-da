@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:web_laptops/src/classes/clase_memoria_ram.dart';
 
 class PaginaEspecificarRam extends StatefulWidget {
+  MemoriaRam memoriaRam;
+
+  PaginaEspecificarRam(this.memoriaRam);
+
   @override
   State<StatefulWidget> createState() => _PaginaEspecificarRam();
 }
@@ -14,8 +19,28 @@ class _PaginaEspecificarRam extends State<PaginaEspecificarRam> {
   TextStyle estiloTituloTexto =
       TextStyle(fontSize: 22, fontWeight: FontWeight.bold);
 
+  TextEditingController controladorCampoMarca = TextEditingController();
+  TextEditingController controladorCampoModelo = TextEditingController();
+  TextEditingController controladorCampoTipoMemoria = TextEditingController();
+  TextEditingController controladorCampoCantidadRam = TextEditingController();
+  TextEditingController controladorCampoNumeroMemorias =
+      TextEditingController();
+  TextEditingController controladorCampoVelocidad = TextEditingController();
+  TextEditingController controladorCampoEcc = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
+    controladorCampoMarca.text = widget.memoriaRam.getMarca();
+    controladorCampoModelo.text = widget.memoriaRam.getModelo();
+    controladorCampoTipoMemoria.text = widget.memoriaRam.getTipoMemoria();
+    controladorCampoCantidadRam.text =
+        widget.memoriaRam.getCantidadMemoria().toString();
+    controladorCampoNumeroMemorias.text =
+        widget.memoriaRam.getCantidadMemorias().toString();
+    controladorCampoVelocidad.text =
+        widget.memoriaRam.getVelocidad().toString();
+    controladorCampoEcc.text = widget.memoriaRam.getEcc().toString();
+
     return Scaffold(
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -54,7 +79,10 @@ class _PaginaEspecificarRam extends State<PaginaEspecificarRam> {
                     SizedBox(
                       width: 200,
                       height: 45,
-                      child: TextField(decoration: decoracionCamposTexto),
+                      child: TextField(
+                        decoration: decoracionCamposTexto,
+                        controller: controladorCampoMarca,
+                      ),
                     )
                   ],
                 ),
@@ -69,7 +97,10 @@ class _PaginaEspecificarRam extends State<PaginaEspecificarRam> {
                     SizedBox(
                       width: 350,
                       height: 45,
-                      child: TextField(decoration: decoracionCamposTexto),
+                      child: TextField(
+                        decoration: decoracionCamposTexto,
+                        controller: controladorCampoModelo,
+                      ),
                     )
                   ],
                 ),
@@ -86,6 +117,7 @@ class _PaginaEspecificarRam extends State<PaginaEspecificarRam> {
                       height: 45,
                       child: TextField(
                         decoration: decoracionCamposTexto,
+                        controller: controladorCampoTipoMemoria,
                       ),
                     ),
                   ],
@@ -100,8 +132,11 @@ class _PaginaEspecificarRam extends State<PaginaEspecificarRam> {
                         margin: EdgeInsets.all(15)),
                     SizedBox(
                       width: 150,
-                      height: 45,
-                      child: TextField(decoration: decoracionCamposTexto),
+                      height: 50,
+                      child: TextField(
+                        decoration: decoracionCamposTexto,
+                        controller: controladorCampoCantidadRam,
+                      ),
                     )
                   ],
                 ),
@@ -116,7 +151,10 @@ class _PaginaEspecificarRam extends State<PaginaEspecificarRam> {
                     SizedBox(
                       width: 150,
                       height: 45,
-                      child: TextField(decoration: decoracionCamposTexto),
+                      child: TextField(
+                        decoration: decoracionCamposTexto,
+                        controller: controladorCampoNumeroMemorias,
+                      ),
                     )
                   ],
                 ),
@@ -131,7 +169,10 @@ class _PaginaEspecificarRam extends State<PaginaEspecificarRam> {
                     SizedBox(
                       width: 150,
                       height: 45,
-                      child: TextField(decoration: decoracionCamposTexto),
+                      child: TextField(
+                        decoration: decoracionCamposTexto,
+                        controller: controladorCampoVelocidad,
+                      ),
                     )
                   ],
                 ),
@@ -146,7 +187,10 @@ class _PaginaEspecificarRam extends State<PaginaEspecificarRam> {
                     SizedBox(
                       width: 150,
                       height: 45,
-                      child: TextField(decoration: decoracionCamposTexto),
+                      child: TextField(
+                        decoration: decoracionCamposTexto,
+                        controller: controladorCampoEcc,
+                      ),
                     )
                   ],
                 ),
@@ -168,7 +212,7 @@ class _PaginaEspecificarRam extends State<PaginaEspecificarRam> {
                           builder: (context) => AlertDialog(
                                 title: Text("Cancelar Registro"),
                                 content: Text(
-                                    "¿Estas seguro de cancelar el registro?\n"
+                                    "¿Estas seguro de cancelar la operacion?\n"
                                     "\nNo se realizan cambios en el sistema"),
                                 actions: [
                                   TextButton(

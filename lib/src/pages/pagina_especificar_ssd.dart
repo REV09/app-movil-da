@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:web_laptops/src/classes/clase_ssd.dart';
 
 class PaginaEspecificarSsd extends StatefulWidget {
+  Ssd ssd;
+
+  PaginaEspecificarSsd(this.ssd);
+
   @override
   State<StatefulWidget> createState() => _PaginaEspecificarSsd();
 }
@@ -13,9 +18,33 @@ class _PaginaEspecificarSsd extends State<PaginaEspecificarSsd> {
       fontSize: 16, fontStyle: FontStyle.italic, fontWeight: FontWeight.bold);
   TextStyle estiloTituloTexto =
       TextStyle(fontSize: 22, fontWeight: FontWeight.bold);
+  TextEditingController controladorCampoMarca = TextEditingController();
+  TextEditingController controladorCampoModelo = TextEditingController();
+  TextEditingController controladorCampoCapacidad = TextEditingController();
+  TextEditingController controladorCampoForma = TextEditingController();
+  TextEditingController controladorCampoDurabilidad = TextEditingController();
+  TextEditingController controladorCampoTipoMemorias = TextEditingController();
+  TextEditingController controladorCampoGeneracion = TextEditingController();
+  TextEditingController controladorCampoVelocidadLectura =
+      TextEditingController();
+  TextEditingController controladorCampoVelocidadEscritura =
+      TextEditingController();
+  TextEditingController controladorCampoProtocolo = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    controladorCampoMarca.text = widget.ssd.getMarca();
+    controladorCampoModelo.text = widget.ssd.getModelo();
+    controladorCampoCapacidad.text = widget.ssd.getCapacidad().toString();
+    controladorCampoForma.text = widget.ssd.getFactorForma();
+    controladorCampoDurabilidad.text = widget.ssd.getDurabilidad();
+    controladorCampoTipoMemorias.text = widget.ssd.getTipoMemorias();
+    controladorCampoGeneracion.text = widget.ssd.getGeneracionMemorias();
+    controladorCampoVelocidadLectura.text = widget.ssd.getVelocidadLectura();
+    controladorCampoVelocidadEscritura.text =
+        widget.ssd.getVelocidadEscritura();
+    controladorCampoProtocolo.text = widget.ssd.getProtocolo();
+
     return Scaffold(
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -54,7 +83,9 @@ class _PaginaEspecificarSsd extends State<PaginaEspecificarSsd> {
                     SizedBox(
                       width: 200,
                       height: 45,
-                      child: TextField(decoration: decoracionCamposTexto),
+                      child: TextField(
+                          decoration: decoracionCamposTexto,
+                          controller: controladorCampoMarca),
                     )
                   ],
                 ),
@@ -69,7 +100,10 @@ class _PaginaEspecificarSsd extends State<PaginaEspecificarSsd> {
                     SizedBox(
                       width: 350,
                       height: 45,
-                      child: TextField(decoration: decoracionCamposTexto),
+                      child: TextField(
+                        decoration: decoracionCamposTexto,
+                        controller: controladorCampoModelo,
+                      ),
                     )
                   ],
                 ),
@@ -85,8 +119,8 @@ class _PaginaEspecificarSsd extends State<PaginaEspecificarSsd> {
                       width: 150,
                       height: 45,
                       child: TextField(
-                        decoration: decoracionCamposTexto,
-                      ),
+                          decoration: decoracionCamposTexto,
+                          controller: controladorCampoCapacidad),
                     ),
                   ],
                 ),
@@ -101,7 +135,9 @@ class _PaginaEspecificarSsd extends State<PaginaEspecificarSsd> {
                     SizedBox(
                       width: 150,
                       height: 45,
-                      child: TextField(decoration: decoracionCamposTexto),
+                      child: TextField(
+                          decoration: decoracionCamposTexto,
+                          controller: controladorCampoForma),
                     )
                   ],
                 ),
@@ -116,7 +152,9 @@ class _PaginaEspecificarSsd extends State<PaginaEspecificarSsd> {
                     SizedBox(
                       width: 150,
                       height: 45,
-                      child: TextField(decoration: decoracionCamposTexto),
+                      child: TextField(
+                          decoration: decoracionCamposTexto,
+                          controller: controladorCampoDurabilidad),
                     )
                   ],
                 ),
@@ -132,7 +170,10 @@ class _PaginaEspecificarSsd extends State<PaginaEspecificarSsd> {
                     SizedBox(
                       width: 150,
                       height: 45,
-                      child: TextField(decoration: decoracionCamposTexto),
+                      child: TextField(
+                        decoration: decoracionCamposTexto,
+                        controller: controladorCampoTipoMemorias,
+                      ),
                     )
                   ],
                 ),
@@ -148,7 +189,10 @@ class _PaginaEspecificarSsd extends State<PaginaEspecificarSsd> {
                     SizedBox(
                       width: 150,
                       height: 45,
-                      child: TextField(decoration: decoracionCamposTexto),
+                      child: TextField(
+                        decoration: decoracionCamposTexto,
+                        controller: controladorCampoGeneracion,
+                      ),
                     )
                   ],
                 ),
@@ -164,7 +208,10 @@ class _PaginaEspecificarSsd extends State<PaginaEspecificarSsd> {
                     SizedBox(
                       width: 150,
                       height: 45,
-                      child: TextField(decoration: decoracionCamposTexto),
+                      child: TextField(
+                        decoration: decoracionCamposTexto,
+                        controller: controladorCampoVelocidadLectura,
+                      ),
                     )
                   ],
                 ),
@@ -180,7 +227,10 @@ class _PaginaEspecificarSsd extends State<PaginaEspecificarSsd> {
                     SizedBox(
                       width: 150,
                       height: 45,
-                      child: TextField(decoration: decoracionCamposTexto),
+                      child: TextField(
+                        decoration: decoracionCamposTexto,
+                        controller: controladorCampoVelocidadEscritura,
+                      ),
                     )
                   ],
                 ),
@@ -196,7 +246,10 @@ class _PaginaEspecificarSsd extends State<PaginaEspecificarSsd> {
                     SizedBox(
                       width: 150,
                       height: 45,
-                      child: TextField(decoration: decoracionCamposTexto),
+                      child: TextField(
+                        decoration: decoracionCamposTexto,
+                        controller: controladorCampoProtocolo,
+                      ),
                     )
                   ],
                 ),

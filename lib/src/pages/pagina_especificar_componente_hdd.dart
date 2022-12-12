@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:web_laptops/src/classes/clase_hdd.dart';
 
 class PaginaEspecificarHdd extends StatefulWidget {
+  Hdd discoDuro;
+
+  PaginaEspecificarHdd(this.discoDuro);
+
   @override
   State<StatefulWidget> createState() => _PaginaEspecificarHdd();
 }
@@ -14,8 +19,25 @@ class _PaginaEspecificarHdd extends State<PaginaEspecificarHdd> {
   TextStyle estiloTituloTexto =
       TextStyle(fontSize: 22, fontWeight: FontWeight.bold);
 
+  TextEditingController controladorCampoMarca = TextEditingController();
+  TextEditingController controladorCampoModelo = TextEditingController();
+  TextEditingController controladorCampoCapacidad = TextEditingController();
+  TextEditingController controladorCampoInterfaz = TextEditingController();
+  TextEditingController controladorCampoCache = TextEditingController();
+  TextEditingController controladorCampoRevoluciones = TextEditingController();
+  TextEditingController controladorCampoTamanio = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
+    controladorCampoMarca.text = widget.discoDuro.getMarca();
+    controladorCampoModelo.text = widget.discoDuro.getModelo();
+    controladorCampoCapacidad.text = widget.discoDuro.getCapacidad().toString();
+    controladorCampoInterfaz.text = widget.discoDuro.getInterfaz();
+    controladorCampoCache.text = widget.discoDuro.getCache().toString();
+    controladorCampoRevoluciones.text =
+        widget.discoDuro.getRevoluciones().toString();
+    controladorCampoTamanio.text = widget.discoDuro.getTamanio();
+
     return Scaffold(
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -54,7 +76,10 @@ class _PaginaEspecificarHdd extends State<PaginaEspecificarHdd> {
                     SizedBox(
                       width: 200,
                       height: 45,
-                      child: TextField(decoration: decoracionCamposTexto),
+                      child: TextField(
+                        decoration: decoracionCamposTexto,
+                        controller: controladorCampoMarca,
+                      ),
                     )
                   ],
                 ),
@@ -69,7 +94,10 @@ class _PaginaEspecificarHdd extends State<PaginaEspecificarHdd> {
                     SizedBox(
                       width: 350,
                       height: 45,
-                      child: TextField(decoration: decoracionCamposTexto),
+                      child: TextField(
+                        decoration: decoracionCamposTexto,
+                        controller: controladorCampoModelo,
+                      ),
                     )
                   ],
                 ),
@@ -86,6 +114,7 @@ class _PaginaEspecificarHdd extends State<PaginaEspecificarHdd> {
                       height: 45,
                       child: TextField(
                         decoration: decoracionCamposTexto,
+                        controller: controladorCampoCapacidad,
                       ),
                     ),
                   ],
@@ -101,7 +130,10 @@ class _PaginaEspecificarHdd extends State<PaginaEspecificarHdd> {
                     SizedBox(
                       width: 150,
                       height: 45,
-                      child: TextField(decoration: decoracionCamposTexto),
+                      child: TextField(
+                        decoration: decoracionCamposTexto,
+                        controller: controladorCampoInterfaz,
+                      ),
                     )
                   ],
                 ),
@@ -116,7 +148,10 @@ class _PaginaEspecificarHdd extends State<PaginaEspecificarHdd> {
                     SizedBox(
                       width: 150,
                       height: 45,
-                      child: TextField(decoration: decoracionCamposTexto),
+                      child: TextField(
+                        decoration: decoracionCamposTexto,
+                        controller: controladorCampoCache,
+                      ),
                     )
                   ],
                 ),
@@ -131,7 +166,10 @@ class _PaginaEspecificarHdd extends State<PaginaEspecificarHdd> {
                     SizedBox(
                       width: 150,
                       height: 45,
-                      child: TextField(decoration: decoracionCamposTexto),
+                      child: TextField(
+                        decoration: decoracionCamposTexto,
+                        controller: controladorCampoRevoluciones,
+                      ),
                     )
                   ],
                 ),
@@ -146,7 +184,10 @@ class _PaginaEspecificarHdd extends State<PaginaEspecificarHdd> {
                     SizedBox(
                       width: 150,
                       height: 45,
-                      child: TextField(decoration: decoracionCamposTexto),
+                      child: TextField(
+                        decoration: decoracionCamposTexto,
+                        controller: controladorCampoTamanio,
+                      ),
                     )
                   ],
                 ),
@@ -168,7 +209,7 @@ class _PaginaEspecificarHdd extends State<PaginaEspecificarHdd> {
                           builder: (context) => AlertDialog(
                                 title: Text("Cancelar Registro"),
                                 content: Text(
-                                    "¿Estas seguro de cancelar el registro?\n"
+                                    "¿Estas seguro de cancelar la operacion?\n"
                                     "\nNo se realizan cambios en el sistema"),
                                 actions: [
                                   TextButton(

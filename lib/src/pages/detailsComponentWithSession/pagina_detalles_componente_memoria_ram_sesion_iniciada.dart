@@ -245,7 +245,8 @@ class _PaginaDetallesMemoriaRamSesionIniciada
                           onPressed: () => {
                             Navigator.of(context).push(
                               MaterialPageRoute(
-                                builder: (context) => PaginaEspecificarRam(),
+                                builder: (context) =>
+                                    PaginaEspecificarRam(_memoriaRam),
                               ),
                             )
                           },

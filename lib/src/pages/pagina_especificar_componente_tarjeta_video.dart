@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:web_laptops/src/classes/clase_tarjeta_video.dart';
 
 class PaginaEspecificarTarjetaVideo extends StatefulWidget {
+  TarjetaVideo tarjetaVideo;
+
+  PaginaEspecificarTarjetaVideo(this.tarjetaVideo);
+
   @override
   State<StatefulWidget> createState() => _PaginaEspecificarTarjetaVideo();
 }
@@ -15,8 +20,26 @@ class _PaginaEspecificarTarjetaVideo
   TextStyle estiloTituloTexto =
       TextStyle(fontSize: 22, fontWeight: FontWeight.bold);
 
+  TextEditingController controladorCampoMarca = TextEditingController();
+  TextEditingController controladorCampoModelo = TextEditingController();
+  TextEditingController controladorCampoCantidadVram = TextEditingController();
+  TextEditingController controladorCampoTipoMemoria = TextEditingController();
+  TextEditingController controladorCampoBits = TextEditingController();
+  TextEditingController controladorCampoVelocidad = TextEditingController();
+  TextEditingController controladorCampoTipo = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
+    controladorCampoMarca.text = widget.tarjetaVideo.getMarca();
+    controladorCampoModelo.text = widget.tarjetaVideo.getModelo();
+    controladorCampoCantidadVram.text =
+        widget.tarjetaVideo.getCantidadVram().toString();
+    controladorCampoTipoMemoria.text = widget.tarjetaVideo.getTipoMemoria();
+    controladorCampoBits.text = widget.tarjetaVideo.getBits().toString();
+    controladorCampoVelocidad.text =
+        widget.tarjetaVideo.getVelocidadReloj().toString();
+    controladorCampoTipo.text = widget.tarjetaVideo.getTipo();
+
     return Scaffold(
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -55,7 +78,10 @@ class _PaginaEspecificarTarjetaVideo
                     SizedBox(
                       width: 200,
                       height: 45,
-                      child: TextField(decoration: decoracionCamposTexto),
+                      child: TextField(
+                        decoration: decoracionCamposTexto,
+                        controller: controladorCampoMarca,
+                      ),
                     )
                   ],
                 ),
@@ -70,7 +96,10 @@ class _PaginaEspecificarTarjetaVideo
                     SizedBox(
                       width: 350,
                       height: 45,
-                      child: TextField(decoration: decoracionCamposTexto),
+                      child: TextField(
+                        decoration: decoracionCamposTexto,
+                        controller: controladorCampoModelo,
+                      ),
                     )
                   ],
                 ),
@@ -87,6 +116,7 @@ class _PaginaEspecificarTarjetaVideo
                       height: 45,
                       child: TextField(
                         decoration: decoracionCamposTexto,
+                        controller: controladorCampoCantidadVram,
                       ),
                     ),
                   ],
@@ -102,7 +132,10 @@ class _PaginaEspecificarTarjetaVideo
                     SizedBox(
                       width: 150,
                       height: 45,
-                      child: TextField(decoration: decoracionCamposTexto),
+                      child: TextField(
+                        decoration: decoracionCamposTexto,
+                        controller: controladorCampoTipoMemoria,
+                      ),
                     )
                   ],
                 ),
@@ -117,7 +150,10 @@ class _PaginaEspecificarTarjetaVideo
                     SizedBox(
                       width: 150,
                       height: 45,
-                      child: TextField(decoration: decoracionCamposTexto),
+                      child: TextField(
+                        decoration: decoracionCamposTexto,
+                        controller: controladorCampoBits,
+                      ),
                     )
                   ],
                 ),
@@ -133,7 +169,10 @@ class _PaginaEspecificarTarjetaVideo
                     SizedBox(
                       width: 150,
                       height: 45,
-                      child: TextField(decoration: decoracionCamposTexto),
+                      child: TextField(
+                        decoration: decoracionCamposTexto,
+                        controller: controladorCampoVelocidad,
+                      ),
                     )
                   ],
                 ),
@@ -148,7 +187,10 @@ class _PaginaEspecificarTarjetaVideo
                     SizedBox(
                       width: 150,
                       height: 45,
-                      child: TextField(decoration: decoracionCamposTexto),
+                      child: TextField(
+                        decoration: decoracionCamposTexto,
+                        controller: controladorCampoTipo,
+                      ),
                     )
                   ],
                 ),
@@ -168,9 +210,9 @@ class _PaginaEspecificarTarjetaVideo
                       await showDialog(
                           context: context,
                           builder: (context) => AlertDialog(
-                                title: Text("Cancelar Registro"),
+                                title: Text("Cancelar operacion"),
                                 content: Text(
-                                    "¿Estas seguro de cancelar el registro?\n"
+                                    "¿Estas seguro de cancelar la operacion?\n"
                                     "\nNo se realizan cambios en el sistema"),
                                 actions: [
                                   TextButton(
