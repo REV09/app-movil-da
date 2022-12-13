@@ -4,6 +4,7 @@ import 'package:web_laptops/src/pages/pagina_detalles_laptop_sesion_no_iniciada.
 import 'package:web_laptops/src/pages/pagina_iniciar_sesion.dart';
 import 'package:web_laptops/src/pages/pagina_registrar_usuario.dart';
 import 'package:web_laptops/src/services/servicios_rest_laptop.dart';
+import 'package:web_laptops/src/logic/validaciones_de_texto.dart';
 
 class PaginaInicio extends StatefulWidget {
   @override
@@ -18,7 +19,7 @@ class _PaginaInicio extends State<PaginaInicio> {
   BorderSide colorBordes = BorderSide(color: Colors.black);
   int selectedIndex = -1;
   Color colorSeleccion = Colors.tealAccent.shade200;
-  static int numItems = 10;
+  static int numItems = 1000;
   List<bool> selected = List<bool>.generate(numItems, (int index) => false);
 
   TextStyle estiloTexto = TextStyle(
@@ -26,6 +27,8 @@ class _PaginaInicio extends State<PaginaInicio> {
 
   TextStyle estiloEncabezadoTabla =
       TextStyle(fontSize: 20, color: Colors.white);
+
+  TextEditingController controladorCampoBuscar = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -59,6 +62,7 @@ class _PaginaInicio extends State<PaginaInicio> {
                             borderRadius: BorderRadius.circular(4.0),
                           ),
                         ),
+                        controller: controladorCampoBuscar,
                       ),
                     ),
                     Container(
@@ -67,7 +71,60 @@ class _PaginaInicio extends State<PaginaInicio> {
                     Container(
                       width: 100,
                       child: ElevatedButton(
-                        onPressed: () => {},
+                        onPressed: () async {
+                          if (!validarCampoAlfanumericoGuiones(
+                                  controladorCampoBuscar.text) ||
+                              !validarCampoAlfanumericoEspacios(
+                                  controladorCampoBuscar.text)) {
+                            showDialog(
+                              context: context,
+                              builder: (context) => AlertDialog(
+                                title: Text("informacion no valida"),
+                                content: Text(
+                                    "Ingresaste informacion no valida\n"
+                                    "intenta con informacion valida nuevamente"),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context, true);
+                                    },
+                                    child: Text("Aceptar"),
+                                  ),
+                                ],
+                              ),
+                              barrierDismissible: false,
+                            );
+                          } else {
+                            String idRegistro = controladorCampoBuscar.text;
+                            laptopsObtenidas.clear();
+                            try {
+                              laptopsObtenidas
+                                  .add(await obtenerLaptopPorId(idRegistro));
+                              print(laptopsObtenidas[0]);
+                            } catch (excepcion) {
+                              showDialog(
+                                context: context,
+                                builder: (context) => AlertDialog(
+                                  title: Text("laptop no encontrada"),
+                                  content: Text(
+                                      "No se encontro la laptop solicitada\n"
+                                      "verifique que el id de registro este\n"
+                                      "escrito correctamente o pruebe buscar\n"
+                                      " por modelo de laptop"),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.pop(context, true);
+                                      },
+                                      child: Text("Aceptar"),
+                                    ),
+                                  ],
+                                ),
+                                barrierDismissible: false,
+                              );
+                            }
+                          }
+                        },
                         child: Text(
                           'Buscar por Id',
                           style: estiloTexto,
@@ -84,7 +141,60 @@ class _PaginaInicio extends State<PaginaInicio> {
                     Container(
                       width: 150,
                       child: ElevatedButton(
-                        onPressed: () => {},
+                        onPressed: () async {
+                          if (!validarCampoAlfanumericoGuiones(
+                                  controladorCampoBuscar.text) ||
+                              !validarCampoAlfanumericoEspacios(
+                                  controladorCampoBuscar.text)) {
+                            showDialog(
+                              context: context,
+                              builder: (context) => AlertDialog(
+                                title: Text("informacion no valida"),
+                                content: Text(
+                                    "Ingresaste informacion no valida\n"
+                                    "intenta con informacion valida nuevamente"),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context, true);
+                                    },
+                                    child: Text("Aceptar"),
+                                  ),
+                                ],
+                              ),
+                              barrierDismissible: false,
+                            );
+                          } else {
+                            String modelo = controladorCampoBuscar.text;
+                            laptopsObtenidas.clear();
+                            try {
+                              laptopsObtenidas
+                                  .addAll(await obtenerLaptopPorModelo(modelo));
+                              print(laptopsObtenidas);
+                            } catch (excepcion) {
+                              showDialog(
+                                context: context,
+                                builder: (context) => AlertDialog(
+                                  title: Text("modelo no encontrado"),
+                                  content: Text(
+                                      "No se encontro el modelo solicitada\n"
+                                      "verifique que se encuentre escrito\n"
+                                      "correctamente o pruebe buscar\n"
+                                      " por id de registro"),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.pop(context, true);
+                                      },
+                                      child: Text("Aceptar"),
+                                    ),
+                                  ],
+                                ),
+                                barrierDismissible: false,
+                              );
+                            }
+                          }
+                        },
                         child: Text(
                           'Buscar por modelo',
                           style: estiloTexto,

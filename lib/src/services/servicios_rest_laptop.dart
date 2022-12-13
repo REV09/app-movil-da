@@ -31,7 +31,7 @@ Future<Laptop> obtenerLaptopPorId(String idRegistro) async {
 }
 
 Future<List<Laptop>> obtenerLaptopPorModelo(String modelo) async {
-  final respuesta = await http.get(Uri.parse('$urlApi/laptop/$modelo'));
+  final respuesta = await http.get(Uri.parse('$urlApi/laptopModelo/$modelo'));
   if (respuesta.statusCode == 200) {
     return convertirLaptops(respuesta.body);
   }

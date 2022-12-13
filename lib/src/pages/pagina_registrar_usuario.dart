@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:web_laptops/src/classes/clase_usuario.dart';
+import 'package:web_laptops/src/logic/validaciones_de_texto.dart';
 import 'package:web_laptops/src/pages/pagina_inicio_sesion_iniciada.dart';
 import 'package:web_laptops/src/services/servicios_rest_usuario.dart';
 
@@ -251,37 +252,89 @@ class _PaginaRegistrarUsuario extends State<PaginaRegistrarUsuario> {
                   alignment: AlignmentDirectional.centerEnd,
                   child: ElevatedButton(
                     onPressed: () async {
-                      Usuario usuario = Usuario(
-                        controladorCampoNombreUsuario.text,
-                        controladorCampoNombre.text,
-                        controladorCampoApellido.text,
-                        controladorCampoCorreo.text,
-                        controladorCampoConfirmarContrasena.text,
-                        asignarPermisos(),
-                      );
-                      if (controladorCampoContrasena.text ==
-                          controladorCampoConfirmarContrasena.text) {
-                        late Usuario usuarioRespuesta;
-                        try {
-                          usuarioRespuesta = await agregarUsuario(usuario);
-                          if (usuarioRespuesta.getCorreoElectronico() ==
-                              usuario.getCorreoElectronico()) {
+                      bool nombreValido = false;
+                      if (validarCampoLetrasEspacios(
+                              controladorCampoNombre.text) ||
+                          validarCampoLetrasSinEspacios(
+                              controladorCampoNombre.text)) {
+                        nombreValido = true;
+                      }
+                      bool apellidoValido = false;
+                      if (validarCampoLetrasEspacios(
+                              controladorCampoApellido.text) ||
+                          validarCampoLetrasSinEspacios(
+                              controladorCampoApellido.text)) {
+                        apellidoValido = true;
+                      }
+                      bool nombreUsuarioValido = false;
+                      if (validarCampoAlfanumericoSinEspacios(
+                              controladorCampoNombreUsuario.text) ||
+                          validarCampoAlfanumericoEspacios(
+                              controladorCampoNombreUsuario.text) ||
+                          validarCampoAlfanumericoGuiones(
+                              controladorCampoNombreUsuario.text)) {
+                        nombreUsuarioValido = true;
+                      }
+
+                      bool correoValido =
+                          validarCorreoElectronico(controladorCampoCorreo.text);
+
+                      if (nombreValido &&
+                          apellidoValido &&
+                          nombreUsuarioValido &&
+                          correoValido) {
+                        Usuario usuario = Usuario(
+                          controladorCampoNombreUsuario.text,
+                          controladorCampoNombre.text,
+                          controladorCampoApellido.text,
+                          controladorCampoCorreo.text,
+                          controladorCampoConfirmarContrasena.text,
+                          asignarPermisos(),
+                        );
+                        if (controladorCampoContrasena.text ==
+                            controladorCampoConfirmarContrasena.text) {
+                          late Usuario usuarioRespuesta;
+                          try {
+                            usuarioRespuesta = await agregarUsuario(usuario);
+                            if (usuarioRespuesta.getCorreoElectronico() ==
+                                usuario.getCorreoElectronico()) {
+                              showDialog(
+                                context: context,
+                                builder: (context) => AlertDialog(
+                                  title:
+                                      Text("Usuario registrado correctamente"),
+                                  content: Text(
+                                      "Se ha registrado la cuenta correctamente"),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                PaginaInicioSesionIniciada(
+                                                    usuario),
+                                          ),
+                                        );
+                                      },
+                                      child: Text("Aceptar"),
+                                    ),
+                                  ],
+                                ),
+                                barrierDismissible: false,
+                              );
+                            }
+                          } catch (excepcion) {
                             showDialog(
                               context: context,
                               builder: (context) => AlertDialog(
-                                title: Text("Usuario registrado correctamente"),
-                                content: Text(
-                                    "Se ha registrado la cuenta correctamente"),
+                                title: Text("Usuario no registrado"),
+                                content:
+                                    Text("Ocurrio un error con el servidor\n"
+                                        "y no se pudo registrar el usuario"),
                                 actions: [
                                   TextButton(
                                     onPressed: () {
-                                      Navigator.of(context).push(
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              PaginaInicioSesionIniciada(
-                                                  usuario),
-                                        ),
-                                      );
+                                      Navigator.pop(context, true);
                                     },
                                     child: Text("Aceptar"),
                                   ),
@@ -290,13 +343,13 @@ class _PaginaRegistrarUsuario extends State<PaginaRegistrarUsuario> {
                               barrierDismissible: false,
                             );
                           }
-                        } catch (excepcion) {
+                        } else {
                           showDialog(
                             context: context,
                             builder: (context) => AlertDialog(
-                              title: Text("Usuario no registrado"),
-                              content: Text("Ocurrio un error con el servidor\n"
-                                  "y no se pudo registrar el usuario"),
+                              title: Text("Contraseñas diferentes"),
+                              content: Text(
+                                  "Las contraseñas ingresadas no coinciden"),
                               actions: [
                                 TextButton(
                                   onPressed: () {
@@ -309,13 +362,102 @@ class _PaginaRegistrarUsuario extends State<PaginaRegistrarUsuario> {
                             barrierDismissible: false,
                           );
                         }
+                      } else if (!nombreValido &&
+                          apellidoValido &&
+                          nombreUsuarioValido &&
+                          correoValido) {
+                        showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: Text("Nombre personal no valido"),
+                            content: Text(
+                                "El nombre ingresado no es valido por favor\n"
+                                "corrigalo"),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context, true);
+                                },
+                                child: Text("Aceptar"),
+                              ),
+                            ],
+                          ),
+                          barrierDismissible: false,
+                        );
+                      } else if (nombreValido &&
+                          !apellidoValido &&
+                          nombreUsuarioValido &&
+                          correoValido) {
+                        showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: Text("Apellido personal no valido"),
+                            content: Text(
+                                "El apellido ingresado no es valido por favor\n"
+                                "corrigalo"),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context, true);
+                                },
+                                child: Text("Aceptar"),
+                              ),
+                            ],
+                          ),
+                          barrierDismissible: false,
+                        );
+                      } else if (nombreValido &&
+                          apellidoValido &&
+                          !nombreUsuarioValido &&
+                          correoValido) {
+                        showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: Text("Nombre de usuario no valido"),
+                            content: Text(
+                                "El usuario ingresado no es valido por favor\n"
+                                "corrigalo"),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context, true);
+                                },
+                                child: Text("Aceptar"),
+                              ),
+                            ],
+                          ),
+                          barrierDismissible: false,
+                        );
+                      } else if (nombreValido &&
+                          apellidoValido &&
+                          nombreUsuarioValido &&
+                          !correoValido) {
+                        showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: Text("Correo electronico no valido"),
+                            content: Text(
+                                "El correo electronico no es valido por favor\n"
+                                "corrigalo"),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context, true);
+                                },
+                                child: Text("Aceptar"),
+                              ),
+                            ],
+                          ),
+                          barrierDismissible: false,
+                        );
                       } else {
                         showDialog(
                           context: context,
                           builder: (context) => AlertDialog(
-                            title: Text("Contraseñas diferentes"),
-                            content:
-                                Text("Las contraseñas ingresadas no coinciden"),
+                            title: Text("informacion invalido"),
+                            content: Text(
+                                "La informacion de registro no es valida \n"
+                                "por favor corriga su informacion completa"),
                             actions: [
                               TextButton(
                                 onPressed: () {

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:web_laptops/src/classes/clase_laptop.dart';
 import 'package:web_laptops/src/classes/clase_usuario.dart';
+import 'package:web_laptops/src/logic/validaciones_de_texto.dart';
 import 'package:web_laptops/src/pages/pagina_detalles_laptop.dart';
 import 'package:web_laptops/src/pages/pagina_mi_perfil.dart';
 import 'package:web_laptops/src/pages/pagina_registrar_laptop.dart';
@@ -23,7 +24,7 @@ class _PaginaInicioSesionIniciada extends State<PaginaInicioSesionIniciada> {
   BorderSide colorBordes = BorderSide(color: Colors.black);
   int selectedIndex = -1;
   Color colorSeleccion = Colors.tealAccent.shade200;
-  static int numItems = 10;
+  static int numItems = 1000;
   List<bool> selected = List<bool>.generate(numItems, (int index) => false);
 
   TextStyle estiloTexto = TextStyle(
@@ -31,6 +32,8 @@ class _PaginaInicioSesionIniciada extends State<PaginaInicioSesionIniciada> {
 
   TextStyle estiloEncabezadoTabla =
       TextStyle(fontSize: 20, color: Colors.white);
+
+  TextEditingController controladorCampoBuscar = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -47,11 +50,11 @@ class _PaginaInicioSesionIniciada extends State<PaginaInicioSesionIniciada> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     Container(
+                      margin: EdgeInsets.all(10),
                       child: Text(
                         'Inicio',
                         style: estiloTexto,
                       ),
-                      margin: EdgeInsets.all(10),
                     ),
                     Container(
                       width: 20,
@@ -64,6 +67,7 @@ class _PaginaInicioSesionIniciada extends State<PaginaInicioSesionIniciada> {
                             borderRadius: BorderRadius.circular(4.0),
                           ),
                         ),
+                        controller: controladorCampoBuscar,
                       ),
                     ),
                     Container(
@@ -72,14 +76,67 @@ class _PaginaInicioSesionIniciada extends State<PaginaInicioSesionIniciada> {
                     Container(
                       width: 100,
                       child: ElevatedButton(
-                        onPressed: () => {},
-                        child: Text(
-                          'Buscar por Id',
-                          style: estiloTexto,
-                        ),
+                        onPressed: () async {
+                          if (!validarCampoAlfanumericoGuiones(
+                                  controladorCampoBuscar.text) ||
+                              !validarCampoAlfanumericoEspacios(
+                                  controladorCampoBuscar.text)) {
+                            showDialog(
+                              context: context,
+                              builder: (context) => AlertDialog(
+                                title: Text("informacion no valida"),
+                                content: Text(
+                                    "Ingresaste informacion no valida\n"
+                                    "intenta con informacion valida nuevamente"),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context, true);
+                                    },
+                                    child: Text("Aceptar"),
+                                  ),
+                                ],
+                              ),
+                              barrierDismissible: false,
+                            );
+                          } else {
+                            String idRegistro = controladorCampoBuscar.text;
+                            laptopsObtenidas.clear();
+                            try {
+                              laptopsObtenidas
+                                  .add(await obtenerLaptopPorId(idRegistro));
+                              print(laptopsObtenidas[0]);
+                            } catch (excepcion) {
+                              showDialog(
+                                context: context,
+                                builder: (context) => AlertDialog(
+                                  title: Text("laptop no encontrada"),
+                                  content: Text(
+                                      "No se encontro la laptop solicitada\n"
+                                      "verifique que el id de registro este\n"
+                                      "escrito correctamente o pruebe buscar\n"
+                                      " por modelo de laptop"),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.pop(context, true);
+                                      },
+                                      child: Text("Aceptar"),
+                                    ),
+                                  ],
+                                ),
+                                barrierDismissible: false,
+                              );
+                            }
+                          }
+                        },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.green,
                           minimumSize: Size(40, 50),
+                        ),
+                        child: Text(
+                          'Buscar por Id',
+                          style: estiloTexto,
                         ),
                       ),
                     ),
@@ -89,14 +146,67 @@ class _PaginaInicioSesionIniciada extends State<PaginaInicioSesionIniciada> {
                     Container(
                       width: 150,
                       child: ElevatedButton(
-                        onPressed: () => {},
-                        child: Text(
-                          'Buscar por modelo',
-                          style: estiloTexto,
-                        ),
+                        onPressed: () async {
+                          if (!validarCampoAlfanumericoGuiones(
+                                  controladorCampoBuscar.text) ||
+                              !validarCampoAlfanumericoEspacios(
+                                  controladorCampoBuscar.text)) {
+                            showDialog(
+                              context: context,
+                              builder: (context) => AlertDialog(
+                                title: Text("informacion no valida"),
+                                content: Text(
+                                    "Ingresaste informacion no valida\n"
+                                    "intenta con informacion valida nuevamente"),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context, true);
+                                    },
+                                    child: Text("Aceptar"),
+                                  ),
+                                ],
+                              ),
+                              barrierDismissible: false,
+                            );
+                          } else {
+                            String modelo = controladorCampoBuscar.text;
+                            laptopsObtenidas.clear();
+                            try {
+                              laptopsObtenidas
+                                  .addAll(await obtenerLaptopPorModelo(modelo));
+                              print(laptopsObtenidas);
+                            } catch (excepcion) {
+                              showDialog(
+                                context: context,
+                                builder: (context) => AlertDialog(
+                                  title: Text("modelo no encontrado"),
+                                  content: Text(
+                                      "No se encontro el modelo solicitada\n"
+                                      "verifique que se encuentre escrito\n"
+                                      "correctamente o pruebe buscar\n"
+                                      " por id de registro"),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.pop(context, true);
+                                      },
+                                      child: Text("Aceptar"),
+                                    ),
+                                  ],
+                                ),
+                                barrierDismissible: false,
+                              );
+                            }
+                          }
+                        },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.green,
                           minimumSize: Size(40, 50),
+                        ),
+                        child: Text(
+                          'Buscar por modelo',
+                          style: estiloTexto,
                         ),
                       ),
                     ),
@@ -113,13 +223,13 @@ class _PaginaInicioSesionIniciada extends State<PaginaInicioSesionIniciada> {
                             ),
                           ),
                         },
-                        child: Text(
-                          'Registrar nueva laptop',
-                          style: estiloTexto,
-                        ),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.green,
                           minimumSize: Size(40, 50),
+                        ),
+                        child: Text(
+                          'Registrar nueva laptop',
+                          style: estiloTexto,
                         ),
                       ),
                     ),
@@ -231,7 +341,6 @@ class _PaginaInicioSesionIniciada extends State<PaginaInicioSesionIniciada> {
                         ),
                         Container(
                           child: ElevatedButton(
-                            child: Text("Ver detalles de laptop"),
                             onPressed: () async {
                               if (detallesLaptop.getIdRegistro() == "ND") {
                                 await showDialog(
@@ -264,6 +373,7 @@ class _PaginaInicioSesionIniciada extends State<PaginaInicioSesionIniciada> {
                             style: ElevatedButton.styleFrom(
                                 padding: EdgeInsets.all(5),
                                 backgroundColor: Colors.lightBlue.shade900),
+                            child: Text("Ver detalles de laptop"),
                           ),
                         ),
                         Container(
@@ -283,10 +393,10 @@ class _PaginaInicioSesionIniciada extends State<PaginaInicioSesionIniciada> {
                           child: Column(
                             children: <Widget>[
                               Container(
-                                child: Icon(Icons.person),
                                 color: Colors.grey,
                                 width: 50,
                                 height: 50,
+                                child: Icon(Icons.person),
                               ),
                               Container(
                                 height: 30,
@@ -295,7 +405,6 @@ class _PaginaInicioSesionIniciada extends State<PaginaInicioSesionIniciada> {
                                 width: 150,
                                 height: 50,
                                 child: ElevatedButton(
-                                  child: Text("Mi perfil"),
                                   onPressed: () {
                                     Navigator.of(context).push(
                                       MaterialPageRoute(
@@ -308,6 +417,7 @@ class _PaginaInicioSesionIniciada extends State<PaginaInicioSesionIniciada> {
                                       padding: EdgeInsets.all(5),
                                       backgroundColor:
                                           Colors.lightBlue.shade900),
+                                  child: Text("Mi perfil"),
                                 ),
                               ),
                               Container(
@@ -317,7 +427,6 @@ class _PaginaInicioSesionIniciada extends State<PaginaInicioSesionIniciada> {
                                 width: 150,
                                 height: 50,
                                 child: ElevatedButton(
-                                  child: Text("Cerrar Sesion"),
                                   onPressed: () {
                                     Navigator.pop(context, false);
                                     Navigator.pop(context, false);
@@ -326,6 +435,7 @@ class _PaginaInicioSesionIniciada extends State<PaginaInicioSesionIniciada> {
                                       padding: EdgeInsets.all(5),
                                       backgroundColor:
                                           Colors.lightBlue.shade900),
+                                  child: Text("Cerrar Sesion"),
                                 ),
                               )
                             ],
