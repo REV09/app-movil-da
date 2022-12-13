@@ -3,6 +3,11 @@ bool validarCampoAlfanumericoEspacios(String textoValidar) {
   return expresionAlfanumerica.hasMatch(textoValidar);
 }
 
+bool validarCampoAlfanumericoDecimalEspacios(String textoValidar) {
+  RegExp expresionAlfanumerica = RegExp(r'([A-Za-z0-9]+( [0-9]*\.[0-9]+)+)');
+  return expresionAlfanumerica.hasMatch(textoValidar);
+}
+
 bool validarCampoAlfanumericoSinEspacios(String textoValidar) {
   RegExp expresionAlfanumerica = RegExp(r'[A-Za-z0-9]+');
   return expresionAlfanumerica.hasMatch(textoValidar);
@@ -44,6 +49,12 @@ bool validarCorreoElectronico(String textoValidar) {
   return expresionCorreo.hasMatch(textoValidar);
 }
 
+bool validadVelocidadSistema(String textoValidar) {
+  RegExp expresionVelocidad =
+      RegExp(r"([+-]?(?=\.\d|\d)(?:\d+)?(?:\.?\d*))(?:[eE]([+-]?\d+))? Mb/s");
+  return expresionVelocidad.hasMatch(textoValidar);
+}
+
 main() {
   print(validarCampoAlfanumericoEspacios("HP Pavilion G4 2805 la"));
   print(validarCampoAlfanumericoGuiones("texto-Validar"));
@@ -56,6 +67,6 @@ main() {
   print(validarCampoNumeroEntero("1234567890"));
   print(validarCampoNumeroDecimal("3.1416"));
   print(validarCorreoElectronico("hector.morelos.607@gmail.com"));
+  print(validadVelocidadSistema("1680.5 Mb/s"));
+  print(validarCampoAlfanumericoDecimalEspacios("Ngff 1.3 PCIe"));
 }
-
-//[a-zA-Z]+/x

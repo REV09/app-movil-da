@@ -529,8 +529,8 @@ class _PaginaModificarLaptop extends State<PaginaModificarLaptop> {
                         showDialog(
                           context: context,
                           builder: (context) => AlertDialog(
-                            title: Text("Modelo de laptop no valido"),
-                            content: Text("El modelo ingresado no es valido\n"
+                            title: Text("Tarjeta de video no valido"),
+                            content: Text("La tarjeta de video no es valida\n"
                                 "corrigalo, asegurese de no combinar guiones y\n"
                                 "espacios solo use 1 de dos"),
                             actions: [

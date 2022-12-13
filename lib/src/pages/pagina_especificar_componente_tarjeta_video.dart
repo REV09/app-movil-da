@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:web_laptops/src/classes/clase_laptop.dart';
 import 'package:web_laptops/src/classes/clase_tarjeta_video.dart';
+import 'package:web_laptops/src/logic/validaciones_de_texto.dart';
 import 'package:web_laptops/src/services/servicios_rest_laptop.dart';
 import 'package:web_laptops/src/services/servicios_rest_tarjeta_video.dart';
 
@@ -247,42 +248,103 @@ class _PaginaEspecificarTarjetaVideo
                   alignment: AlignmentDirectional.centerEnd,
                   child: ElevatedButton(
                     onPressed: () async {
-                      TarjetaVideo tarjetaVideoActualizada = TarjetaVideo(
-                        widget.tarjetaVideo.getIdRegistro(),
-                        controladorCampoModelo.text,
-                        controladorCampoMarca.text,
-                        int.parse(controladorCampoCantidadVram.text),
-                        controladorCampoTipoMemoria.text,
-                        int.parse(controladorCampoBits.text),
-                        double.parse(controladorCampoVelocidad.text),
-                        controladorCampoTipo.text,
-                      );
-                      try {
-                        Laptop laptopNueva = await obtenerLaptopPorId(
-                            widget.tarjetaVideo.getIdRegistro());
-                        laptopNueva.setTarjetaVideo(
-                            " ${tarjetaVideoActualizada.getModelo()}");
-                        TarjetaVideo tarjetaVideoRespuesta =
-                            await modificarTarjetaVideo(tarjetaVideoActualizada,
-                                tarjetaVideoActualizada.getIdRegistro());
-                        if (tarjetaVideoActualizada.getIdRegistro() ==
-                            tarjetaVideoRespuesta.getIdRegistro()) {
-                          modificarLaptop(
-                              laptopNueva, laptopNueva.getIdRegistro());
+                      bool modeloValido = false;
+                      if (validarCampoAlfanumericoGuiones(
+                              controladorCampoModelo.text) ||
+                          validarCampoAlfanumericoEspacios(
+                              controladorCampoModelo.text)) {
+                        modeloValido = true;
+                      }
+                      bool marcaValida = false;
+                      if (validarCampoAlfanumericoGuiones(
+                              controladorCampoMarca.text) ||
+                          validarCampoAlfanumericoEspacios(
+                              controladorCampoMarca.text)) {
+                        marcaValida = true;
+                      }
+                      bool vramValida = false;
+                      if (validarCampoNumeroEntero(
+                          controladorCampoCantidadVram.text)) {
+                        vramValida = true;
+                      }
+                      bool tipoMemoriaValida = false;
+                      if (validarCampoAlfanumericoSinEspacios(
+                          controladorCampoTipoMemoria.text)) {
+                        tipoMemoriaValida = true;
+                      }
+                      bool bitsValidos = false;
+                      if (validarCampoNumeroEntero(controladorCampoBits.text)) {
+                        bitsValidos = true;
+                      }
+                      bool velocidadValida = false;
+                      if (validarCampoNumeroDecimal(
+                          controladorCampoVelocidad.text)) {
+                        velocidadValida = true;
+                      }
+                      if (modeloValido &&
+                          marcaValida &&
+                          vramValida &&
+                          tipoMemoriaValida &&
+                          bitsValidos &&
+                          velocidadValida) {
+                        TarjetaVideo tarjetaVideoActualizada = TarjetaVideo(
+                          widget.tarjetaVideo.getIdRegistro(),
+                          controladorCampoModelo.text,
+                          controladorCampoMarca.text,
+                          int.parse(controladorCampoCantidadVram.text),
+                          controladorCampoTipoMemoria.text,
+                          int.parse(controladorCampoBits.text),
+                          double.parse(controladorCampoVelocidad.text),
+                          controladorCampoTipo.text,
+                        );
+                        try {
+                          Laptop laptopNueva = await obtenerLaptopPorId(
+                              widget.tarjetaVideo.getIdRegistro());
+                          laptopNueva.setTarjetaVideo(
+                              " ${tarjetaVideoActualizada.getModelo()}");
+                          TarjetaVideo tarjetaVideoRespuesta =
+                              await modificarTarjetaVideo(
+                                  tarjetaVideoActualizada,
+                                  tarjetaVideoActualizada.getIdRegistro());
+                          if (tarjetaVideoActualizada.getIdRegistro() ==
+                              tarjetaVideoRespuesta.getIdRegistro()) {
+                            modificarLaptop(
+                                laptopNueva, laptopNueva.getIdRegistro());
+                            showDialog(
+                              context: context,
+                              builder: (context) => AlertDialog(
+                                title: Text(
+                                    "Procesador actualizado correctamente"),
+                                content: Text("Se ha actualizado el procesador"
+                                    " correctamente"),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context, true);
+                                      Navigator.of(context).pop();
+                                      Navigator.of(context).pop();
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: Text("Aceptar"),
+                                  ),
+                                ],
+                              ),
+                              barrierDismissible: false,
+                            );
+                          }
+                        } catch (excepcion) {
                           showDialog(
                             context: context,
                             builder: (context) => AlertDialog(
-                              title:
-                                  Text("Procesador actualizado correctamente"),
-                              content: Text("Se ha actualizado el procesador"
-                                  " correctamente"),
+                              title: Text("Tarjeta de video no actualizada"),
+                              content: Text(
+                                  "ocurrio un error y no se pudo actualizar\n"
+                                  "la tarjeta de video por favor vuelva a "
+                                  "intentar"),
                               actions: [
                                 TextButton(
                                   onPressed: () {
                                     Navigator.pop(context, true);
-                                    Navigator.of(context).pop();
-                                    Navigator.of(context).pop();
-                                    Navigator.of(context).pop();
                                   },
                                   child: Text("Aceptar"),
                                 ),
@@ -291,15 +353,161 @@ class _PaginaEspecificarTarjetaVideo
                             barrierDismissible: false,
                           );
                         }
-                      } catch (excepcion) {
+                      } else if (!modeloValido &&
+                          marcaValida &&
+                          vramValida &&
+                          tipoMemoriaValida &&
+                          bitsValidos &&
+                          velocidadValida) {
                         showDialog(
                           context: context,
                           builder: (context) => AlertDialog(
-                            title: Text("Tarjeta de video no actualizada"),
+                            title: Text("Modelo de tarjeta no valido"),
+                            content: Text("El modelo ingresado no es valido\n"
+                                "corrigalo, asegurese de no combinar guiones y\n"
+                                "espacios solo use 1 de dos"),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context, true);
+                                },
+                                child: Text("Aceptar"),
+                              ),
+                            ],
+                          ),
+                          barrierDismissible: false,
+                        );
+                      } else if (modeloValido &&
+                          !marcaValida &&
+                          vramValida &&
+                          tipoMemoriaValida &&
+                          bitsValidos &&
+                          velocidadValida) {
+                        showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: Text("Marca de tarjeta no valido"),
+                            content: Text("La marca ingresada no es valido\n"
+                                "corrigalo, asegurate de no usar espacios,\n"
+                                "guiones o algun caracter especial"),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context, true);
+                                },
+                                child: Text("Aceptar"),
+                              ),
+                            ],
+                          ),
+                          barrierDismissible: false,
+                        );
+                      } else if (modeloValido &&
+                          marcaValida &&
+                          !vramValida &&
+                          tipoMemoriaValida &&
+                          bitsValidos &&
+                          velocidadValida) {
+                        showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: Text("cantidad de memoria no valida"),
+                            content: Text("La cantidad ingresada no es valida\n"
+                                "asegurate de ingresar solo valores numericos\n"
+                                "enteros"),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context, true);
+                                },
+                                child: Text("Aceptar"),
+                              ),
+                            ],
+                          ),
+                          barrierDismissible: false,
+                        );
+                      } else if (modeloValido &&
+                          marcaValida &&
+                          vramValida &&
+                          !tipoMemoriaValida &&
+                          bitsValidos &&
+                          velocidadValida) {
+                        showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: Text("tipo de memoria no valido"),
+                            content: Text("El tipo de memoria no es valido\n"
+                                "corrigalo, recuerda no usar espacios guiones\n"
+                                "o algun caracterespecial"),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context, true);
+                                },
+                                child: Text("Aceptar"),
+                              ),
+                            ],
+                          ),
+                          barrierDismissible: false,
+                        );
+                      } else if (modeloValido &&
+                          marcaValida &&
+                          vramValida &&
+                          tipoMemoriaValida &&
+                          !bitsValidos &&
+                          velocidadValida) {
+                        showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: Text("bits de memoria no valido"),
+                            content: Text("los bits de memoria no son validos\n"
+                                "corrigalo, asegurate de solo usar numeros\n"
+                                "enteros positivos o en su defecto 0 si no\n"
+                                "conoce esta informacion"),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context, true);
+                                },
+                                child: Text("Aceptar"),
+                              ),
+                            ],
+                          ),
+                          barrierDismissible: false,
+                        );
+                      } else if (modeloValido &&
+                          marcaValida &&
+                          vramValida &&
+                          tipoMemoriaValida &&
+                          bitsValidos &&
+                          !velocidadValida) {
+                        showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: Text("velocidad de memoria no valida"),
                             content: Text(
-                                "ocurrio un error y no se pudo actualizar\n"
-                                "la tarjeta de video por favor vuelva a "
-                                "intentar"),
+                                "la velocidad de memoria no es valida\n"
+                                "corrigala, asegurate de solo usar numeros\n"
+                                "enteros o numeros decimales o en su defecto 0.0\n"
+                                "si no conoce esta informacion"),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context, true);
+                                },
+                                child: Text("Aceptar"),
+                              ),
+                            ],
+                          ),
+                          barrierDismissible: false,
+                        );
+                      } else {
+                        showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: Text("Informacion de registro invalida"),
+                            content: Text(
+                                "Se detectaron uno o mas campos invalidos\n"
+                                "por favor corriga la informacion"),
                             actions: [
                               TextButton(
                                 onPressed: () {

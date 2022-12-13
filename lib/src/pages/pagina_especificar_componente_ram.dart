@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:web_laptops/src/classes/clase_laptop.dart';
 import 'package:web_laptops/src/classes/clase_memoria_ram.dart';
+import 'package:web_laptops/src/logic/validaciones_de_texto.dart';
 import 'package:web_laptops/src/services/servicios_rest_laptop.dart';
 import 'package:web_laptops/src/services/servicios_rest_memoria_ram.dart';
 
@@ -247,42 +248,88 @@ class _PaginaEspecificarRam extends State<PaginaEspecificarRam> {
                   alignment: AlignmentDirectional.centerEnd,
                   child: ElevatedButton(
                     onPressed: () async {
-                      MemoriaRam memoriaRamActualizada = MemoriaRam(
-                        widget.memoriaRam.getIdRegistro(),
-                        controladorCampoModelo.text,
-                        controladorCampoMarca.text,
-                        controladorCampoTipoMemoria.text,
-                        int.parse(controladorCampoCantidadRam.text),
-                        int.parse(controladorCampoNumeroMemorias.text),
-                        int.parse(controladorCampoVelocidad.text),
-                        esEcc(),
-                      );
-                      try {
-                        Laptop laptopNueva = await obtenerLaptopPorId(
-                            widget.memoriaRam.getIdRegistro());
-                        laptopNueva
-                            .setMemoriaRam(memoriaRamActualizada.getModelo());
-                        MemoriaRam memoriaRamRespuesta =
-                            await modificarMemoriaRam(memoriaRamActualizada,
-                                memoriaRamActualizada.getIdRegistro());
-                        if (memoriaRamActualizada.getIdRegistro() ==
-                            memoriaRamRespuesta.getIdRegistro()) {
-                          modificarLaptop(
-                              laptopNueva, laptopNueva.getIdRegistro());
+                      bool modeloValido = false;
+                      if (validarCampoAlfanumericoEspacios(
+                              controladorCampoModelo.text) ||
+                          validarCampoAlfanumericoGuiones(
+                              controladorCampoModelo.text) ||
+                          validarCampoLetrasSinEspacios(
+                              controladorCampoModelo.text)) {
+                        modeloValido = true;
+                      }
+                      bool marcaValida = validarCampoLetrasSinEspacios(
+                          controladorCampoMarca.text);
+                      bool tipoMemoriaValido =
+                          validarCampoAlfanumericoSinEspacios(
+                              controladorCampoTipoMemoria.text);
+                      bool cantidadMemoriaValido = validarCampoNumeroEntero(
+                          controladorCampoCantidadRam.text);
+                      bool numeroMemoriasValido = validarCampoNumeroEntero(
+                          controladorCampoNumeroMemorias.text);
+                      bool velocidadValido = validarCampoNumeroEntero(
+                          controladorCampoVelocidad.text);
+                      if (modeloValido &&
+                          marcaValida &&
+                          tipoMemoriaValido &&
+                          cantidadMemoriaValido &&
+                          numeroMemoriasValido &&
+                          velocidadValido) {
+                        MemoriaRam memoriaRamActualizada = MemoriaRam(
+                          widget.memoriaRam.getIdRegistro(),
+                          controladorCampoModelo.text,
+                          controladorCampoMarca.text,
+                          controladorCampoTipoMemoria.text,
+                          int.parse(controladorCampoCantidadRam.text),
+                          int.parse(controladorCampoNumeroMemorias.text),
+                          int.parse(controladorCampoVelocidad.text),
+                          esEcc(),
+                        );
+                        try {
+                          Laptop laptopNueva = await obtenerLaptopPorId(
+                              widget.memoriaRam.getIdRegistro());
+                          laptopNueva
+                              .setMemoriaRam(memoriaRamActualizada.getModelo());
+                          MemoriaRam memoriaRamRespuesta =
+                              await modificarMemoriaRam(memoriaRamActualizada,
+                                  memoriaRamActualizada.getIdRegistro());
+                          if (memoriaRamActualizada.getIdRegistro() ==
+                              memoriaRamRespuesta.getIdRegistro()) {
+                            modificarLaptop(
+                                laptopNueva, laptopNueva.getIdRegistro());
+                            showDialog(
+                              context: context,
+                              builder: (context) => AlertDialog(
+                                title: Text(
+                                    "memoria ram actualizada correctamente"),
+                                content: Text("Se ha actualizado la memoria ram"
+                                    " correctamente"),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context, true);
+                                      Navigator.of(context).pop();
+                                      Navigator.of(context).pop();
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: Text("Aceptar"),
+                                  ),
+                                ],
+                              ),
+                              barrierDismissible: false,
+                            );
+                          }
+                        } catch (excepcion) {
                           showDialog(
                             context: context,
                             builder: (context) => AlertDialog(
-                              title:
-                                  Text("memoria ram actualizada correctamente"),
-                              content: Text("Se ha actualizado la memoria ram"
-                                  " correctamente"),
+                              title: Text("memoria ram no actualizada"),
+                              content: Text(
+                                  "ocurrio un error y no se pudo actualizar\n"
+                                  "la memoria ram por favor vuelva a intentar"),
                               actions: [
                                 TextButton(
                                   onPressed: () {
                                     Navigator.pop(context, true);
-                                    Navigator.of(context).pop();
-                                    Navigator.of(context).pop();
-                                    Navigator.of(context).pop();
                                   },
                                   child: Text("Aceptar"),
                                 ),
@@ -291,14 +338,148 @@ class _PaginaEspecificarRam extends State<PaginaEspecificarRam> {
                             barrierDismissible: false,
                           );
                         }
-                      } catch (excepcion) {
+                      } else if (!modeloValido &&
+                          marcaValida &&
+                          tipoMemoriaValido &&
+                          cantidadMemoriaValido &&
+                          numeroMemoriasValido &&
+                          velocidadValido) {
                         showDialog(
                           context: context,
                           builder: (context) => AlertDialog(
-                            title: Text("memoria ram no actualizada"),
+                            title: Text("Modelo de memoria ram invalido"),
                             content: Text(
-                                "ocurrio un error y no se pudo actualizar\n"
-                                "la memoria ram por favor vuelva a intentar"),
+                                "El modelo de memoria ram ingresado es invalido\n"
+                                "corrigalo, solo use letras, numeros y espacios\n"
+                                "o guiones, si no conoce esta informacion solo\n"
+                                "escriba ND"),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context, true);
+                                },
+                                child: Text("Aceptar"),
+                              ),
+                            ],
+                          ),
+                          barrierDismissible: false,
+                        );
+                      } else if (modeloValido &&
+                          !marcaValida &&
+                          tipoMemoriaValido &&
+                          cantidadMemoriaValido &&
+                          numeroMemoriasValido &&
+                          velocidadValido) {
+                        showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: Text("marca de memoria ram invalida"),
+                            content: Text(
+                                "El marca de memoria ram ingresado es invalido\n"
+                                "corrigalo, solo use letras para especificarlo\n"
+                                "si no conoce esta informacion solo escriba ND"),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context, true);
+                                },
+                                child: Text("Aceptar"),
+                              ),
+                            ],
+                          ),
+                          barrierDismissible: false,
+                        );
+                      } else if (modeloValido &&
+                          marcaValida &&
+                          !tipoMemoriaValido &&
+                          cantidadMemoriaValido &&
+                          numeroMemoriasValido &&
+                          velocidadValido) {
+                        showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: Text("Tipo de memoria ram invalida"),
+                            content: Text(
+                                "El tipo de memoria ram ingresado es invalido\n"
+                                "corrigalo, solo use letras y numeros para\n"
+                                "especificar;p si no conoce esta informacion\n"
+                                "solo escriba ND"),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context, true);
+                                },
+                                child: Text("Aceptar"),
+                              ),
+                            ],
+                          ),
+                          barrierDismissible: false,
+                        );
+                      } else if (modeloValido &&
+                          marcaValida &&
+                          tipoMemoriaValido &&
+                          !cantidadMemoriaValido &&
+                          numeroMemoriasValido &&
+                          velocidadValido) {
+                        showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: Text("Cantidad de memoria invalida"),
+                            content: Text(
+                                "La cantidad de memoria ingresado es invalida\n"
+                                "corrigalo, solo use numeros para especificarlo\n"
+                                " si no conoce esta informacion escriba ND"),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context, true);
+                                },
+                                child: Text("Aceptar"),
+                              ),
+                            ],
+                          ),
+                          barrierDismissible: false,
+                        );
+                      } else if (modeloValido &&
+                          marcaValida &&
+                          tipoMemoriaValido &&
+                          cantidadMemoriaValido &&
+                          !numeroMemoriasValido &&
+                          velocidadValido) {
+                        showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: Text("Numero de memorias invalida"),
+                            content: Text(
+                                "El numero de memorias ingresado es invalido\n"
+                                "corrigalo, solo use numeros para especificarlo\n"
+                                " si no conoce esta informacion escriba ND"),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context, true);
+                                },
+                                child: Text("Aceptar"),
+                              ),
+                            ],
+                          ),
+                          barrierDismissible: false,
+                        );
+                      } else if (modeloValido &&
+                          marcaValida &&
+                          tipoMemoriaValido &&
+                          cantidadMemoriaValido &&
+                          numeroMemoriasValido &&
+                          !velocidadValido) {
+                        showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: Text("Velocidad de memoria invalida"),
+                            content: Text(
+                                "La velocidad de memoria ingresada es invalida\n"
+                                "corrigalo, solo use numeros enteros para\n"
+                                "especificarlo si no conoce esta informacion\n"
+                                "escriba ND"),
                             actions: [
                               TextButton(
                                 onPressed: () {
