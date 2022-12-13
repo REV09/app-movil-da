@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:web_laptops/src/classes/clase_laptop.dart';
 import 'package:web_laptops/src/classes/clase_pantalla.dart';
+import 'package:web_laptops/src/logic/validaciones_de_texto.dart';
 import 'package:web_laptops/src/services/servicios_rest_laptop.dart';
 import 'package:web_laptops/src/services/servicios_rest_pantalla.dart';
 
@@ -222,40 +223,91 @@ class _PaginaEspecificarPantalla extends State<PaginaEspecificarPantalla> {
                   alignment: AlignmentDirectional.centerEnd,
                   child: ElevatedButton(
                     onPressed: () async {
-                      Pantalla pantallaActualizada = Pantalla(
-                        widget.pantalla.getIdRegistro(),
-                        controladorCampoModelo.text,
-                        controladorCampoResolucion.text,
-                        controladorCampoCalidad.text,
-                        controladorCampoTipoPantalla.text,
-                        controladorCampoTamanio.text,
-                        int.parse(controladorCampoFrecuencia.text),
-                      );
-                      try {
-                        Laptop laptopNueva = await obtenerLaptopPorId(
-                            widget.pantalla.getIdRegistro());
-                        laptopNueva
-                            .setPantalla(pantallaActualizada.getModelo());
-                        Pantalla pantallaRespuesta = await modificarPantalla(
-                            pantallaActualizada,
-                            pantallaActualizada.getIdRegistro());
-                        if (pantallaActualizada.getIdRegistro() ==
-                            pantallaRespuesta.getIdRegistro()) {
-                          modificarLaptop(
-                              laptopNueva, laptopNueva.getIdRegistro());
+                      bool modeloValido = false;
+                      if (validarCampoAlfanumericoEspacios(
+                              controladorCampoModelo.text) ||
+                          validarCampoAlfanumericoGuiones(
+                              controladorCampoModelo.text) ||
+                          validarCampoAlfanumericoSinEspacios(
+                              controladorCampoModelo.text)) {
+                        modeloValido = true;
+                      }
+                      bool resolucionValida = validarCampoAlfanumericoEspacios(
+                          controladorCampoResolucion.text);
+                      bool calidadValida = validarCampoLetrasSinEspacios(
+                          controladorCampoCalidad.text);
+                      bool tipoValido = validarCampoLetrasSinEspacios(
+                          controladorCampoTipoPantalla.text);
+                      bool tamanioValido = false;
+                      if (validarCampoNumeroDecimal(
+                              controladorCampoTamanio.text) ||
+                          validarCampoNumeroEntero(
+                              controladorCampoTamanio.text)) {
+                        tamanioValido = false;
+                      }
+                      bool frecuenciaValida = validarCampoNumeroEntero(
+                          controladorCampoFrecuencia.text);
+                      if (modeloValido &&
+                          resolucionValida &&
+                          calidadValida &&
+                          tipoValido &&
+                          tamanioValido &&
+                          frecuenciaValida) {
+                        Pantalla pantallaActualizada = Pantalla(
+                          widget.pantalla.getIdRegistro(),
+                          controladorCampoModelo.text,
+                          controladorCampoResolucion.text,
+                          controladorCampoCalidad.text,
+                          controladorCampoTipoPantalla.text,
+                          controladorCampoTamanio.text,
+                          int.parse(controladorCampoFrecuencia.text),
+                        );
+                        try {
+                          Laptop laptopNueva = await obtenerLaptopPorId(
+                              widget.pantalla.getIdRegistro());
+                          laptopNueva
+                              .setPantalla(pantallaActualizada.getModelo());
+                          Pantalla pantallaRespuesta = await modificarPantalla(
+                              pantallaActualizada,
+                              pantallaActualizada.getIdRegistro());
+                          if (pantallaActualizada.getIdRegistro() ==
+                              pantallaRespuesta.getIdRegistro()) {
+                            modificarLaptop(
+                                laptopNueva, laptopNueva.getIdRegistro());
+                            showDialog(
+                              context: context,
+                              builder: (context) => AlertDialog(
+                                title:
+                                    Text("Pantalla actualizado correctamente"),
+                                content: Text("Se ha actualizado la pantalla"
+                                    " correctamente"),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context, true);
+                                      Navigator.of(context).pop();
+                                      Navigator.of(context).pop();
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: Text("Aceptar"),
+                                  ),
+                                ],
+                              ),
+                              barrierDismissible: false,
+                            );
+                          }
+                        } catch (excepcion) {
                           showDialog(
                             context: context,
                             builder: (context) => AlertDialog(
-                              title: Text("Pantalla actualizado correctamente"),
-                              content: Text("Se ha actualizado la pantalla"
-                                  " correctamente"),
+                              title: Text("Pantalla no actualizada"),
+                              content: Text(
+                                  "ocurrio un error y no se pudo actualizar\n"
+                                  "la pantalla por favor vuelva a intentarlo"),
                               actions: [
                                 TextButton(
                                   onPressed: () {
                                     Navigator.pop(context, true);
-                                    Navigator.of(context).pop();
-                                    Navigator.of(context).pop();
-                                    Navigator.of(context).pop();
                                   },
                                   child: Text("Aceptar"),
                                 ),
@@ -264,14 +316,157 @@ class _PaginaEspecificarPantalla extends State<PaginaEspecificarPantalla> {
                             barrierDismissible: false,
                           );
                         }
-                      } catch (excepcion) {
+                      } else if (!modeloValido &&
+                          resolucionValida &&
+                          calidadValida &&
+                          tipoValido &&
+                          tamanioValido &&
+                          frecuenciaValida) {
                         showDialog(
                           context: context,
                           builder: (context) => AlertDialog(
-                            title: Text("Pantalla no actualizada"),
+                            title: Text("Modelo de pantalla no valido"),
                             content: Text(
-                                "ocurrio un error y no se pudo actualizar\n"
-                                "la pantalla por favor vuelva a intentarlo"),
+                                "El modelo ingresado no es valido verifique\n"
+                                "que la informacion sea correcta, ingrese\n"
+                                "solo letras y numeros y no combiene espacios\n"
+                                "y guiones si no conoces esta informacion solo\n"
+                                "escriba ND"),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context, true);
+                                },
+                                child: Text("Aceptar"),
+                              ),
+                            ],
+                          ),
+                          barrierDismissible: false,
+                        );
+                      } else if (modeloValido &&
+                          !resolucionValida &&
+                          calidadValida &&
+                          tipoValido &&
+                          tamanioValido &&
+                          frecuenciaValida) {
+                        showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: Text("Resolucion de pantalla no valido"),
+                            content: Text(
+                                "La resolucion ingresada no es valido verifique\n"
+                                "que la informacion sea correcta, ingrese\n"
+                                "solo numeros y una x y no combiene espacios\n"
+                                "y guiones si no conoces esta informacion solo\n"
+                                "escriba ND"),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context, true);
+                                },
+                                child: Text("Aceptar"),
+                              ),
+                            ],
+                          ),
+                          barrierDismissible: false,
+                        );
+                      } else if (modeloValido &&
+                          resolucionValida &&
+                          !calidadValida &&
+                          tipoValido &&
+                          tamanioValido &&
+                          frecuenciaValida) {
+                        showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: Text("Calidad de pantalla no valido"),
+                            content: Text(
+                                "La calidad ingresada no es valido verifique\n"
+                                "que la informacion sea correcta, ingrese\n"
+                                "solo letras y no utilize espacios ni guiones,\n"
+                                " si no conoces esta informacion solo\n"
+                                "escriba ND"),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context, true);
+                                },
+                                child: Text("Aceptar"),
+                              ),
+                            ],
+                          ),
+                          barrierDismissible: false,
+                        );
+                      } else if (modeloValido &&
+                          resolucionValida &&
+                          calidadValida &&
+                          !tipoValido &&
+                          tamanioValido &&
+                          frecuenciaValida) {
+                        showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: Text("Tipo de pantalla no valido"),
+                            content: Text(
+                                "EL tipo ingresado no es valido verifique\n"
+                                "que la informacion sea correcta, ingrese\n"
+                                "solo letras y no utilize espacios ni guiones,\n"
+                                " si no conoces esta informacion solo\n"
+                                "escriba ND"),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context, true);
+                                },
+                                child: Text("Aceptar"),
+                              ),
+                            ],
+                          ),
+                          barrierDismissible: false,
+                        );
+                      } else if (modeloValido &&
+                          resolucionValida &&
+                          calidadValida &&
+                          tipoValido &&
+                          !tamanioValido &&
+                          frecuenciaValida) {
+                        showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: Text("Tamaño de pantalla no valido"),
+                            content: Text(
+                                "EL tamaño ingresado no es valido verifique\n"
+                                "que la informacion sea correcta, ingrese\n"
+                                "solo numeros y no utilize espacios ni guiones,\n"
+                                " si no conoces esta informacion solo\n"
+                                "escriba ND"),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context, true);
+                                },
+                                child: Text("Aceptar"),
+                              ),
+                            ],
+                          ),
+                          barrierDismissible: false,
+                        );
+                      } else if (modeloValido &&
+                          resolucionValida &&
+                          calidadValida &&
+                          tipoValido &&
+                          tamanioValido &&
+                          !frecuenciaValida) {
+                        showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: Text("Frecuencia de pantalla no valido"),
+                            content: Text(
+                                "La frecuencia ingresado no es valido verifique\n"
+                                "que la informacion sea correcta, ingrese\n"
+                                "solo numeros y no utilize espacios ni guiones,\n"
+                                " si no conoces esta informacion solo\n"
+                                "escriba ND"),
                             actions: [
                               TextButton(
                                 onPressed: () {

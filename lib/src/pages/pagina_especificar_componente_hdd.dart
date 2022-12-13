@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:web_laptops/src/classes/clase_hdd.dart';
 import 'package:web_laptops/src/classes/clase_laptop.dart';
+import 'package:web_laptops/src/logic/validaciones_de_texto.dart';
 import 'package:web_laptops/src/services/servicios_rest_hdd.dart';
 import 'package:web_laptops/src/services/servicios_rest_laptop.dart';
 
@@ -244,42 +245,91 @@ class _PaginaEspecificarHdd extends State<PaginaEspecificarHdd> {
                   alignment: AlignmentDirectional.centerEnd,
                   child: ElevatedButton(
                     onPressed: () async {
-                      Hdd discoDuroActualizado = Hdd(
-                        widget.discoDuro.getIdRegistro(),
-                        controladorCampoMarca.text,
-                        controladorCampoModelo.text,
-                        int.parse(controladorCampoCapacidad.text),
-                        controladorCampoInterfaz.text,
-                        int.parse(controladorCampoCache.text),
-                        int.parse(controladorCampoRevoluciones.text),
-                        controladorCampoTamanio.text,
-                      );
-                      try {
-                        Laptop laptopNueva = await obtenerLaptopPorId(
-                            widget.discoDuro.getIdRegistro());
-                        laptopNueva.setAlmacenamiento(
-                            discoDuroActualizado.getModelo());
-                        Hdd hddRespuesta = await modificarHdd(
-                            discoDuroActualizado,
-                            discoDuroActualizado.getIdRegistro());
-                        if (discoDuroActualizado.getIdRegistro() ==
-                            hddRespuesta.getIdRegistro()) {
-                          modificarLaptop(
-                              laptopNueva, laptopNueva.getIdRegistro());
+                      bool marcaValida = validarCampoLetrasSinEspacios(
+                          controladorCampoMarca.text);
+                      bool modeloValido = false;
+                      if (validarCampoAlfanumericoEspacios(
+                              controladorCampoModelo.text) ||
+                          validarCampoAlfanumericoGuiones(
+                              controladorCampoModelo.text) ||
+                          validarCampoAlfanumericoSinEspacios(
+                              controladorCampoModelo.text)) {
+                        modeloValido = true;
+                      }
+                      bool capacidadValida = validarCampoNumeroEntero(
+                          controladorCampoCapacidad.text);
+                      bool interfazValida = validarCampoAlfanumericoSinEspacios(
+                          controladorCampoInterfaz.text);
+                      bool cacheValida =
+                          validarCampoNumeroEntero(controladorCampoCache.text);
+                      bool revolucionesValidas = validarCampoNumeroEntero(
+                          controladorCampoRevoluciones.text);
+                      bool tamanioValido = validarCampoNumeroDecimal(
+                          controladorCampoTamanio.text);
+
+                      if (marcaValida &&
+                          modeloValido &&
+                          capacidadValida &&
+                          interfazValida &&
+                          cacheValida &&
+                          revolucionesValidas &&
+                          tamanioValido) {
+                        Hdd discoDuroActualizado = Hdd(
+                          widget.discoDuro.getIdRegistro(),
+                          controladorCampoMarca.text,
+                          controladorCampoModelo.text,
+                          int.parse(controladorCampoCapacidad.text),
+                          controladorCampoInterfaz.text,
+                          int.parse(controladorCampoCache.text),
+                          int.parse(controladorCampoRevoluciones.text),
+                          controladorCampoTamanio.text,
+                        );
+                        try {
+                          Laptop laptopNueva = await obtenerLaptopPorId(
+                              widget.discoDuro.getIdRegistro());
+                          laptopNueva.setAlmacenamiento(
+                              discoDuroActualizado.getModelo());
+                          Hdd hddRespuesta = await modificarHdd(
+                              discoDuroActualizado,
+                              discoDuroActualizado.getIdRegistro());
+                          if (discoDuroActualizado.getIdRegistro() ==
+                              hddRespuesta.getIdRegistro()) {
+                            modificarLaptop(
+                                laptopNueva, laptopNueva.getIdRegistro());
+                            showDialog(
+                              context: context,
+                              builder: (context) => AlertDialog(
+                                title: Text(
+                                    "Disco duro actualizado correctamente"),
+                                content: Text("Se ha actualizado el disco duro"
+                                    " correctamente"),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context, true);
+                                      Navigator.of(context).pop();
+                                      Navigator.of(context).pop();
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: Text("Aceptar"),
+                                  ),
+                                ],
+                              ),
+                              barrierDismissible: false,
+                            );
+                          }
+                        } catch (excepcion) {
                           showDialog(
                             context: context,
                             builder: (context) => AlertDialog(
-                              title:
-                                  Text("Disco duro actualizado correctamente"),
-                              content: Text("Se ha actualizado el disco duro"
-                                  " correctamente"),
+                              title: Text("disco duro no actualizado"),
+                              content: Text(
+                                  "ocurrio un error y no se pudo actualizar\n"
+                                  "el disco duro por favor vuelva a intentar"),
                               actions: [
                                 TextButton(
                                   onPressed: () {
                                     Navigator.pop(context, true);
-                                    Navigator.of(context).pop();
-                                    Navigator.of(context).pop();
-                                    Navigator.of(context).pop();
                                   },
                                   child: Text("Aceptar"),
                                 ),
@@ -288,14 +338,203 @@ class _PaginaEspecificarHdd extends State<PaginaEspecificarHdd> {
                             barrierDismissible: false,
                           );
                         }
-                      } catch (excepcion) {
+                      } else if (!marcaValida &&
+                          modeloValido &&
+                          capacidadValida &&
+                          interfazValida &&
+                          cacheValida &&
+                          revolucionesValidas &&
+                          tamanioValido) {
                         showDialog(
                           context: context,
                           builder: (context) => AlertDialog(
-                            title: Text("disco duro no actualizado"),
+                            title: Text("Marca de disco duro invalida"),
                             content: Text(
-                                "ocurrio un error y no se pudo actualizar\n"
-                                "el disco duro por favor vuelva a intentar"),
+                                "La marca del disco duro ingresada es invalida\n"
+                                "verfique, recuerde que solo debe escribir letras\n"
+                                "y sin guiones o espacios sino conoce este\n"
+                                "dato escriba ND"),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context, true);
+                                },
+                                child: Text("Aceptar"),
+                              ),
+                            ],
+                          ),
+                          barrierDismissible: false,
+                        );
+                      } else if (marcaValida &&
+                          !modeloValido &&
+                          capacidadValida &&
+                          interfazValida &&
+                          cacheValida &&
+                          revolucionesValidas &&
+                          tamanioValido) {
+                        showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: Text("Modelo de disco duro invalido"),
+                            content: Text(
+                                "El modelo del disco duro ingresada es invalida\n"
+                                "verfique, recuerde que solo debe escribir letras\n"
+                                "y numeros, no combine espacios y guiones, sino\n"
+                                "conoce este dato escriba ND"),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context, true);
+                                },
+                                child: Text("Aceptar"),
+                              ),
+                            ],
+                          ),
+                          barrierDismissible: false,
+                        );
+                      } else if (marcaValida &&
+                          modeloValido &&
+                          !capacidadValida &&
+                          interfazValida &&
+                          cacheValida &&
+                          revolucionesValidas &&
+                          tamanioValido) {
+                        showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: Text("Capacidad de disco duro invalido"),
+                            content: Text(
+                                "La capacidad del disco duro ingresada es invalida\n"
+                                "verfique, recuerde que solo debe escribir\n"
+                                "numeros, no utilize espacios y guiones, sino\n"
+                                "conoce este dato escriba 0"),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context, true);
+                                },
+                                child: Text("Aceptar"),
+                              ),
+                            ],
+                          ),
+                          barrierDismissible: false,
+                        );
+                      } else if (marcaValida &&
+                          modeloValido &&
+                          capacidadValida &&
+                          !interfazValida &&
+                          cacheValida &&
+                          revolucionesValidas &&
+                          tamanioValido) {
+                        showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: Text("Interfaz de disco duro invalida"),
+                            content: Text(
+                                "La intefaz del disco duro ingresada es invalida\n"
+                                "verfique, recuerde que solo debe escribir\n"
+                                "letras, no utilize espacios y guiones, sino\n"
+                                "conoce este dato escriba 0"),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context, true);
+                                },
+                                child: Text("Aceptar"),
+                              ),
+                            ],
+                          ),
+                          barrierDismissible: false,
+                        );
+                      } else if (marcaValida &&
+                          modeloValido &&
+                          capacidadValida &&
+                          interfazValida &&
+                          !cacheValida &&
+                          revolucionesValidas &&
+                          tamanioValido) {
+                        showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: Text("Cache de disco duro invalida"),
+                            content: Text(
+                                "La cache del disco duro ingresada es invalida\n"
+                                "verfique, recuerde que solo debe escribir\n"
+                                "numeros, no utilize espacios y guiones, sino\n"
+                                "conoce este dato escriba 0"),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context, true);
+                                },
+                                child: Text("Aceptar"),
+                              ),
+                            ],
+                          ),
+                          barrierDismissible: false,
+                        );
+                      } else if (marcaValida &&
+                          modeloValido &&
+                          capacidadValida &&
+                          interfazValida &&
+                          cacheValida &&
+                          !revolucionesValidas &&
+                          tamanioValido) {
+                        showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: Text("Revoluciones de disco duro invalida"),
+                            content: Text(
+                                "Las RPM del disco duro ingresada es invalida\n"
+                                "verfique, recuerde que solo debe escribir\n"
+                                "numeros, no utilize espacios y guiones, sino\n"
+                                "conoce este dato escriba 0"),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context, true);
+                                },
+                                child: Text("Aceptar"),
+                              ),
+                            ],
+                          ),
+                          barrierDismissible: false,
+                        );
+                      } else if (marcaValida &&
+                          modeloValido &&
+                          capacidadValida &&
+                          interfazValida &&
+                          cacheValida &&
+                          revolucionesValidas &&
+                          !tamanioValido) {
+                        showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: Text("Tamaño de disco duro invalida"),
+                            content: Text(
+                                "El tamaño del disco duro ingresada es invalida\n"
+                                "verfique, recuerde que solo debe escribir\n"
+                                "numeros decimales, no utilize espacios y guiones\n"
+                                "sino conoce este dato escriba 0"),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context, true);
+                                },
+                                child: Text("Aceptar"),
+                              ),
+                            ],
+                          ),
+                          barrierDismissible: false,
+                        );
+                      } else {
+                        showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: Text("Operacion invalida"),
+                            content: Text(
+                                "Se ha detectado uno o mas campos invalidos\n"
+                                "por favor corriga la informacion para continuar"),
                             actions: [
                               TextButton(
                                 onPressed: () {
