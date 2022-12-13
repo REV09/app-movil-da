@@ -15,6 +15,7 @@ import 'package:web_laptops/src/services/servicios_rest_pantalla.dart';
 import 'package:web_laptops/src/services/servicios_rest_procesador.dart';
 import 'package:web_laptops/src/services/servicios_rest_ssd.dart';
 import 'package:web_laptops/src/services/servicios_rest_tarjeta_video.dart';
+import 'package:web_laptops/src/logic/validaciones_de_texto.dart';
 
 class PaginaRegistrarLaptop extends StatefulWidget {
   @override
@@ -259,67 +260,146 @@ class _PaginaRegistrarLaptop extends State<PaginaRegistrarLaptop> {
                   alignment: AlignmentDirectional.centerEnd,
                   child: ElevatedButton(
                     onPressed: () async {
-                      Laptop laptop = Laptop(
-                        "idRegistro",
-                        controladorCampoModelo.text,
-                        controladorCampoMemoriaRam.text,
-                        controladorCampoTarjetaVideo.text,
-                        controladorCampoPantalla.text,
-                        controladorCampoProcesador.text,
-                        controladorCampoAlmacenamiento.text,
-                      );
-                      late Laptop respuestaLaptop;
-                      late Pantalla pantalla;
-                      late MemoriaRam memoriaRam;
-                      late Procesador procesador;
-                      late Almacenamiento almacenamiento;
-                      late TarjetaVideo tarjetaVideo;
-                      late Hdd discoDuro;
-                      late Ssd estadoSolido;
-                      try {
-                        respuestaLaptop = await agregarLaptop(laptop);
-                        if (respuestaLaptop.getModelo() == laptop.getModelo()) {
-                          String tipoAlmacenamiento;
-                          String idRegistro = respuestaLaptop.getIdRegistro();
-                          if (checkValue == true) {
-                            estadoSolido = Ssd.ssdVacio();
-                            estadoSolido.setIdRegistro(idRegistro);
-                            tipoAlmacenamiento = "SSD";
-                            agregarSsd(estadoSolido);
-                          } else {
-                            discoDuro = Hdd.vacio();
-                            discoDuro.setIdRegistro(idRegistro);
-                            tipoAlmacenamiento = "HDD";
-                            agregarHdd(discoDuro);
+                      bool modeloValido = false;
+                      if (validarCampoAlfanumericoGuiones(
+                              controladorCampoModelo.text) ||
+                          validarCampoAlfanumericoEspacios(
+                              controladorCampoModelo.text)) {
+                        modeloValido = true;
+                      }
+                      bool memoriaValida = false;
+                      if (validarCampoAlfanumericoGuiones(
+                            controladorCampoMemoriaRam.text,
+                          ) ||
+                          validarCampoAlfanumericoEspacios(
+                            controladorCampoMemoriaRam.text,
+                          )) {
+                        memoriaValida = true;
+                      }
+                      bool tarjetaValida = false;
+                      if (validarCampoAlfanumericoGuiones(
+                            controladorCampoTarjetaVideo.text,
+                          ) ||
+                          validarCampoAlfanumericoEspacios(
+                            controladorCampoTarjetaVideo.text,
+                          )) {
+                        tarjetaValida = true;
+                      }
+                      bool pantallaValida = false;
+                      if (validarCampoAlfanumericoGuiones(
+                            controladorCampoPantalla.text,
+                          ) ||
+                          validarCampoAlfanumericoEspacios(
+                            controladorCampoPantalla.text,
+                          )) {
+                        pantallaValida = true;
+                      }
+                      bool procesadorValido = false;
+                      if (validarCampoAlfanumericoGuiones(
+                            controladorCampoProcesador.text,
+                          ) ||
+                          validarCampoAlfanumericoEspacios(
+                            controladorCampoProcesador.text,
+                          )) {
+                        procesadorValido = true;
+                      }
+                      bool almacenamientoValido = false;
+                      if (validarCampoAlfanumericoGuiones(
+                            controladorCampoAlmacenamiento.text,
+                          ) ||
+                          validarCampoAlfanumericoEspacios(
+                            controladorCampoAlmacenamiento.text,
+                          )) {
+                        almacenamientoValido = true;
+                      }
+                      if (modeloValido &&
+                          memoriaValida &&
+                          tarjetaValida &&
+                          pantallaValida &&
+                          procesadorValido &&
+                          almacenamientoValido) {
+                        Laptop laptop = Laptop(
+                          "idRegistro",
+                          controladorCampoModelo.text,
+                          controladorCampoMemoriaRam.text,
+                          controladorCampoTarjetaVideo.text,
+                          controladorCampoPantalla.text,
+                          controladorCampoProcesador.text,
+                          controladorCampoAlmacenamiento.text,
+                        );
+                        late Laptop respuestaLaptop;
+                        late Pantalla pantalla;
+                        late MemoriaRam memoriaRam;
+                        late Procesador procesador;
+                        late Almacenamiento almacenamiento;
+                        late TarjetaVideo tarjetaVideo;
+                        late Hdd discoDuro;
+                        late Ssd estadoSolido;
+                        try {
+                          respuestaLaptop = await agregarLaptop(laptop);
+                          if (respuestaLaptop.getModelo() ==
+                              laptop.getModelo()) {
+                            String tipoAlmacenamiento;
+                            String idRegistro = respuestaLaptop.getIdRegistro();
+                            if (checkValue == true) {
+                              estadoSolido = Ssd.ssdVacio();
+                              estadoSolido.setIdRegistro(idRegistro);
+                              tipoAlmacenamiento = "SSD";
+                              agregarSsd(estadoSolido);
+                            } else {
+                              discoDuro = Hdd.vacio();
+                              discoDuro.setIdRegistro(idRegistro);
+                              tipoAlmacenamiento = "HDD";
+                              agregarHdd(discoDuro);
+                            }
+                            tarjetaVideo = TarjetaVideo.tarjetaVideoVacia();
+                            tarjetaVideo.setIdRegistro(idRegistro);
+                            almacenamiento =
+                                Almacenamiento(idRegistro, tipoAlmacenamiento);
+                            procesador = Procesador.procesadorVacio();
+                            procesador.setIdRegistro(idRegistro);
+                            memoriaRam = MemoriaRam.memoriaVacia();
+                            memoriaRam.setIdRegistro(idRegistro);
+                            pantalla = Pantalla.pantallaVacia();
+                            pantalla.setIdRegistro(idRegistro);
+                            agregarTarjetaVideo(tarjetaVideo);
+                            agregarAlmacenamiento(almacenamiento);
+                            agregarProcesador(procesador);
+                            agregarMemoriaRam(memoriaRam);
+                            agregarPantalla(pantalla);
+                            showDialog(
+                              context: context,
+                              builder: (context) => AlertDialog(
+                                title: Text("Laptop registrada correctamente"),
+                                content: Text(
+                                    "Se ha registrado la laptop correctamente"
+                                    "con\nel siguiente id de registro:\n"
+                                    "${respuestaLaptop.getIdRegistro()}"),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context, true);
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: Text("Aceptar"),
+                                  ),
+                                ],
+                              ),
+                              barrierDismissible: false,
+                            );
                           }
-                          tarjetaVideo = TarjetaVideo.tarjetaVideoVacia();
-                          tarjetaVideo.setIdRegistro(idRegistro);
-                          almacenamiento =
-                              Almacenamiento(idRegistro, tipoAlmacenamiento);
-                          procesador = Procesador.procesadorVacio();
-                          procesador.setIdRegistro(idRegistro);
-                          memoriaRam = MemoriaRam.memoriaVacia();
-                          memoriaRam.setIdRegistro(idRegistro);
-                          pantalla = Pantalla.pantallaVacia();
-                          pantalla.setIdRegistro(idRegistro);
-                          agregarTarjetaVideo(tarjetaVideo);
-                          agregarAlmacenamiento(almacenamiento);
-                          agregarProcesador(procesador);
-                          agregarMemoriaRam(memoriaRam);
-                          agregarPantalla(pantalla);
+                        } catch (excepcion) {
                           showDialog(
                             context: context,
                             builder: (context) => AlertDialog(
-                              title: Text("Laptop registrada correctamente"),
+                              title: Text("Laptop no registrada"),
                               content: Text(
-                                  "Se ha registrado la laptop correctamente"
-                                  "con\nel siguiente id de registro:\n"
-                                  "${respuestaLaptop.getIdRegistro()}"),
+                                  "ocurrio un error y no se pudo registrar\n"
+                                  "la laptop por favor vuelva a intentar"),
                               actions: [
                                 TextButton(
                                   onPressed: () {
                                     Navigator.pop(context, true);
-                                    Navigator.of(context).pop();
                                   },
                                   child: Text("Aceptar"),
                                 ),
@@ -328,14 +408,161 @@ class _PaginaRegistrarLaptop extends State<PaginaRegistrarLaptop> {
                             barrierDismissible: false,
                           );
                         }
-                      } catch (excepcion) {
+                      } else if (!modeloValido &&
+                          memoriaValida &&
+                          tarjetaValida &&
+                          pantallaValida &&
+                          procesadorValido &&
+                          almacenamientoValido) {
                         showDialog(
                           context: context,
                           builder: (context) => AlertDialog(
-                            title: Text("Laptop no registrada"),
-                            content:
-                                Text("ocurrio un error y no se pudo registrar\n"
-                                    "la laptop por favor vuelva a intentar"),
+                            title: Text("Modelo de laptop no valido"),
+                            content: Text("El modelo ingresado no es valido\n"
+                                "corrigalo, asegurese de no combinar guiones y\n"
+                                "espacios solo use 1 de dos"),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context, true);
+                                },
+                                child: Text("Aceptar"),
+                              ),
+                            ],
+                          ),
+                          barrierDismissible: false,
+                        );
+                      } else if (modeloValido &&
+                          !memoriaValida &&
+                          tarjetaValida &&
+                          pantallaValida &&
+                          procesadorValido &&
+                          almacenamientoValido) {
+                        showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: Text("Memoria ram no valida"),
+                            content: Text(
+                                "la memoria ram ingresada no es valida\n"
+                                "corrigala, asegurese de no combinar guiones y\n"
+                                "espacios solo use 1 de dos"),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context, true);
+                                },
+                                child: Text("Aceptar"),
+                              ),
+                            ],
+                          ),
+                          barrierDismissible: false,
+                        );
+                      } else if (modeloValido &&
+                          memoriaValida &&
+                          !tarjetaValida &&
+                          pantallaValida &&
+                          procesadorValido &&
+                          almacenamientoValido) {
+                        showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: Text("Modelo de laptop no valido"),
+                            content: Text("El modelo ingresado no es valido\n"
+                                "corrigalo, asegurese de no combinar guiones y\n"
+                                "espacios solo use 1 de dos"),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context, true);
+                                },
+                                child: Text("Aceptar"),
+                              ),
+                            ],
+                          ),
+                          barrierDismissible: false,
+                        );
+                      } else if (modeloValido &&
+                          memoriaValida &&
+                          tarjetaValida &&
+                          !pantallaValida &&
+                          procesadorValido &&
+                          almacenamientoValido) {
+                        showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: Text("Pantalla de laptop no valida"),
+                            content: Text("La pantalla ingresada no es valida\n"
+                                "corrigalo, asegurese de no combinar guiones y\n"
+                                "espacios solo use 1 de dos"),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context, true);
+                                },
+                                child: Text("Aceptar"),
+                              ),
+                            ],
+                          ),
+                          barrierDismissible: false,
+                        );
+                      } else if (modeloValido &&
+                          memoriaValida &&
+                          tarjetaValida &&
+                          pantallaValida &&
+                          !procesadorValido &&
+                          almacenamientoValido) {
+                        showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: Text("Procesador de laptop no valido"),
+                            content: Text(
+                                "El modelo de procesador ingresado no es valido\n"
+                                "corrigalo, asegurese de no combinar guiones y\n"
+                                "espacios solo use 1 de dos"),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context, true);
+                                },
+                                child: Text("Aceptar"),
+                              ),
+                            ],
+                          ),
+                          barrierDismissible: false,
+                        );
+                      } else if (modeloValido &&
+                          memoriaValida &&
+                          tarjetaValida &&
+                          pantallaValida &&
+                          procesadorValido &&
+                          !almacenamientoValido) {
+                        showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: Text("almacenamiento de laptop no valido"),
+                            content: Text(
+                                "El almacenamiento ingresado no es valido\n"
+                                "corrigalo, asegurese de no combinar guiones y\n"
+                                "espacios solo use 1 de dos"),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context, true);
+                                },
+                                child: Text("Aceptar"),
+                              ),
+                            ],
+                          ),
+                          barrierDismissible: false,
+                        );
+                      } else {
+                        showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: Text("Registro de laptop no valido"),
+                            content: Text(
+                                "Mas de un campo contiene infomacion no valida\n"
+                                "Por favor verfique y corriga esta informacion"),
                             actions: [
                               TextButton(
                                 onPressed: () {
