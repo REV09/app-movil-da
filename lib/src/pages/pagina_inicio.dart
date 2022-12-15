@@ -73,7 +73,9 @@ class _PaginaInicio extends State<PaginaInicio> {
                       child: ElevatedButton(
                         onPressed: () async {
                           if (!validarCampoAlfanumericoGuiones(
-                                  controladorCampoBuscar.text) ||
+                                  controladorCampoBuscar.text) &&
+                              !validarCampoAlfanumericoSinEspacios(
+                                  controladorCampoBuscar.text) &&
                               !validarCampoAlfanumericoEspacios(
                                   controladorCampoBuscar.text)) {
                             showDialog(
@@ -100,7 +102,13 @@ class _PaginaInicio extends State<PaginaInicio> {
                             try {
                               laptopsObtenidas
                                   .add(await obtenerLaptopPorId(idRegistro));
-                              print(laptopsObtenidas[0]);
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      PaginaDetallesLaptopSesionNoIniciada(
+                                          laptopsObtenidas[0]),
+                                ),
+                              );
                             } catch (excepcion) {
                               showDialog(
                                 context: context,
